@@ -2,4 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="blue">#1F6888</color>
+    <color name="background_color">#0D1F6888</color>
+    <color name="edit_text_asosijacije">#1F6888</color>
+    <color name="question_text_color">#1F6888</color>
+    <color name="light_blue">#ADD8E6</color>
+    <color name="green_button">#00C853</color>
+
 </resources>
