@@ -6,12 +6,7 @@ import android.os.Bundle
 import com.deksi.graduationquiz.authentication.LogInActivity
 import com.deksi.graduationquiz.authentication.SignUpActivity
 import com.deksi.graduationquiz.databinding.ActivityMainBinding
-import com.deksi.graduationquiz.slagalica.activities.Asosijacije
-import com.deksi.graduationquiz.slagalica.activities.KoZnaZna
-import com.deksi.graduationquiz.slagalica.activities.KorakPoKorak
-import com.deksi.graduationquiz.slagalica.activities.MojBroj
-import com.deksi.graduationquiz.slagalica.activities.Skocko
-import com.deksi.graduationquiz.slagalica.activities.Spojnice
+import com.deksi.graduationquiz.home.HomeActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,10 +17,27 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        binding.testButton.setOnClickListener {
+        setupListeners()
+
+    }
+
+    private fun setupListeners() {
+        binding.buttonMainLogin.setOnClickListener {
+            //treba menjati/samo test
             val intent = Intent(this, LogInActivity::class.java)
             startActivity(intent)
         }
 
+        binding.buttonMainSignup.setOnClickListener {
+            //treba menjati/samo test
+            val intent = Intent(this, SignUpActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.buttonMainPlayAsGuest.setOnClickListener {
+            //treba menjati/samo test
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

@@ -6,4 +6,13 @@
     </style>
 
     <style name="Theme.GraduationQuiz" parent="Base.Theme.GraduationQuiz" />
+
+    <style name="Theme.GraduationQuiz.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.GraduationQuiz.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.GraduationQuiz.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
