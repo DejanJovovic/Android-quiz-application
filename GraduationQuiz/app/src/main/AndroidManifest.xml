@@ -13,6 +13,18 @@
         android:theme="@style/Theme.GraduationQuiz"
         tools:targetApi="31">
         <activity
+            android:name=".password.ResetPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".password.ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".authentication.SignUpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".authentication.LogInActivity"
+            android:exported="false" />
+        <activity
             android:name=".slagalica.activities.MojBroj"
             android:exported="false" />
         <activity

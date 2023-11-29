@@ -53,4 +53,25 @@
     <string name="close_brackets">)</string>
     <string name="delete"><![CDATA[<]]></string>
     <string name="the_subject">The subject</string>
+    <string name="login">Login</string>
+    <string name="login_to_your_account_to_continue_from_where_you_stopped">Login to your account to continue from where you stopped</string>
+    <string name="email_address">Email address</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="enter_your_details_in_the_fields_below_to_create_your_account">Enter your details in the fields below to create your account</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="repeat_password">Repeat password</string>
+    <string name="get_started">Get started</string>
+    <string name="have_an_account">Have an account?</string>
+    <string name="forgot_passwordd">Forgot password</string>
+    <string name="please_provide_your_registered_email_address_to_receive_instructions_on_how_to_reset_your_password">Please provide your registered email address to receive instructions on how to reset your password</string>
+    <string name="submit">Submit</string>
+    <string name="back_to_login">Back to login</string>
+    <string name="retype_password">Retype password</string>
+    <string name="reset_password">Reset password</string>
+    <string name="enter_a_new_password_to_your_account">Enter a new password to your account.</string>
+    <string name="new_password">New password</string>
+    <string name="retype_new_password">Retype new password</string>
 </resources>
