@@ -7,6 +7,9 @@ import com.deksi.graduationquiz.databinding.ActivityMainBinding
 import com.deksi.graduationquiz.slagalica.activities.Asosijacije
 import com.deksi.graduationquiz.slagalica.activities.KoZnaZna
 import com.deksi.graduationquiz.slagalica.activities.KorakPoKorak
+import com.deksi.graduationquiz.slagalica.activities.MojBroj
+import com.deksi.graduationquiz.slagalica.activities.Skocko
+import com.deksi.graduationquiz.slagalica.activities.Spojnice
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,7 +21,7 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.testButton.setOnClickListener {
-            val intent = Intent(this, KorakPoKorak::class.java)
+            val intent = Intent(this, Spojnice::class.java)
             startActivity(intent)
         }
 

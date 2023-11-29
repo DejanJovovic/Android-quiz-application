@@ -4,6 +4,222 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_color"
+    android:padding="16dp"
     tools:context=".slagalica.activities.MojBroj">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/button_required_combination"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="184dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/edit_text_asosijacije"
+            android:enabled="false"
+            android:text=""
+            android:textColor="@color/white" />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_first_single_digit"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/edit_text_asosijacije"
+                android:enabled="false"
+                android:text=""
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/button_second_single_digit"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:backgroundTint="@color/edit_text_asosijacije"
+                android:enabled="false"
+                android:text=""
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/button_third_single_digit"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:backgroundTint="@color/edit_text_asosijacije"
+                android:enabled="false"
+                android:text=""
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/button_fourth_single_digit"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:backgroundTint="@color/edit_text_asosijacije"
+                android:enabled="false"
+                android:text=""
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/button_first_medium_digit"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="184dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/edit_text_asosijacije"
+                android:enabled="false"
+                android:text=""
+                android:textColor="@color/white" />
+
+
+            <Button
+                android:id="@+id/button_second_medium_digit"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="186dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:backgroundTint="@color/edit_text_asosijacije"
+                android:enabled="false"
+                android:text=""
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_plus"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:backgroundTint="@color/green_button"
+                android:enabled="false"
+                android:text="@string/plus" />
+
+            <Button
+                android:id="@+id/button_minus"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="5dp"
+                android:backgroundTint="@color/green_button"
+                android:enabled="false"
+                android:text="@string/minus" />
+
+            <Button
+                android:id="@+id/button_multiply"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="5dp"
+                android:backgroundTint="@color/green_button"
+                android:enabled="false"
+                android:text="@string/multiply" />
+
+            <Button
+                android:id="@+id/button_divide"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="5dp"
+                android:backgroundTint="@color/green_button"
+                android:enabled="false"
+                android:text="@string/divider" />
+
+            <Button
+                android:id="@+id/button_open_brackets"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="5dp"
+                android:backgroundTint="@color/green_button"
+                android:enabled="false"
+                android:text="@string/open_brackets" />
+
+            <Button
+                android:id="@+id/button_close_brackets"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="5dp"
+                android:backgroundTint="@color/green_button"
+                android:enabled="false"
+                android:text="@string/close_brackets" />
+
+            <Button
+                android:id="@+id/button_delete"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="4dp"
+                android:backgroundTint="@color/green_button"
+                android:enabled="false"
+                android:text="@string/delete" />
+        </LinearLayout>
+
+
+        <EditText
+            android:id="@+id/edit_text_user_input"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/edit_text_asosijacije"
+            android:textColor="@color/white" />
+
+
+        <Button
+            android:id="@+id/button_stop_digits"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/green_button"
+            android:text="@string/stop"
+            android:textAllCaps="true"
+            android:textColor="@color/white" />
+
+
+        <Button
+            android:id="@+id/button_done"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="84dp"
+            android:backgroundTint="@color/edit_text_asosijacije"
+            android:text="@string/done"
+            android:textColor="@color/white" />
+
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

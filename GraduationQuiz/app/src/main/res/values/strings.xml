@@ -43,4 +43,14 @@
     <string name="_10">10</string>
     <string name="_8">8</string>
     <string name="konacno_korak_po_korak">KONACNO</string>
+    <string name="stop">Stop</string>
+    <string name="done">Done</string>
+    <string name="plus">+</string>
+    <string name="minus">-</string>
+    <string name="multiply">*</string>
+    <string name="divider">/</string>
+    <string name="open_brackets">(</string>
+    <string name="close_brackets">)</string>
+    <string name="delete"><![CDATA[<]]></string>
+    <string name="the_subject">The subject</string>
 </resources>
