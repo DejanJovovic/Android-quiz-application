@@ -42,7 +42,6 @@ class SignUpActivity : AppCompatActivity() {
             val password = binding.editTextPasswordSignup.text.toString()
             val retypePassword = binding.editTextRetypePassword.text.toString()
 
-
             if (email.isEmpty()) {
                 binding.editTextEmailAddressSignup.error = "Email required"
                 binding.editTextEmailAddressSignup.requestFocus()
@@ -68,7 +67,7 @@ class SignUpActivity : AppCompatActivity() {
 
 
             val retrofit = Retrofit.Builder()
-                .baseUrl("https://localhost:8080/api/users") // Update with your server's IP
+                .baseUrl("https://192.168.1.2:8080/api/users/") // Update with your server's IP
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
@@ -78,8 +77,8 @@ class SignUpActivity : AppCompatActivity() {
 
             val user = User(email, username, password)
             val call = signUpService.signUp(user)
-            call.enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+            call.enqueue(object : Callback<User> {
+                override fun onResponse(call: Call<User>, response: Response<User>) {
                     if (response.isSuccessful) {
                         Toast.makeText(applicationContext, "User signed up successfully!", Toast.LENGTH_LONG).show()
 //                        Snackbar.make(
@@ -97,7 +96,7 @@ class SignUpActivity : AppCompatActivity() {
 
                 }
 
-                override fun onFailure(call: Call<Void>, t: Throwable) {
+                override fun onFailure(call: Call<User>, t: Throwable) {
                     Log.e("Error", "Failed to make the API request", t)
                 }
 

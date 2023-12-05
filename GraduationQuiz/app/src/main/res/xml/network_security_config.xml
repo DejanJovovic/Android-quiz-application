@@ -1,10 +1,7 @@
 <network-security-config>
-    <base-config cleartextTrafficPermitted="true">
-        <!-- Additional configurations go here -->
-
-        <!-- Include your SSL certificate -->
+    <base-config cleartextTrafficPermitted="false">
         <trust-anchors>
-            <certificates src="@raw/keystore"/>
+            <certificates src="@raw/your_certificate"/>
         </trust-anchors>
     </base-config>
 </network-security-config>
