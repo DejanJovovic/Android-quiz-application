@@ -37,28 +37,28 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/text_view_email_address"
+            android:id="@+id/text_view_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:fontFamily="sans-serif-light"
-            android:text="@string/email_address"
+            android:text="@string/username"
             android:textColor="@color/black"
             android:textStyle="bold" />
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_input_email"
+            android:id="@+id/text_input_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp">
 
             <EditText
-                android:id="@+id/edit_text_email_address"
+                android:id="@+id/edit_text_username"
                 style="@style/NoUnderlineEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress" />
+                android:inputType="textCapWords" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

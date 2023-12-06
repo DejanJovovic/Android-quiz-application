@@ -86,7 +86,7 @@ class SignUpActivity : AppCompatActivity() {
 //                            "User signed up successfully!",
 //                            Snackbar.LENGTH_LONG
 //                        ).show()
-                        val intent = Intent(applicationContext, HomeActivity::class.java)
+                        val intent = Intent(applicationContext, LogInActivity::class.java)
                         startActivity(intent)
                     }
                     else{
