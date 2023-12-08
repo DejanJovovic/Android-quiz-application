@@ -41,7 +41,7 @@
             android:name=".slagalica.activities.Skocko"
             android:exported="false" />
         <activity
-            android:name=".slagalica.activities.Asosijacije"
+            android:name=".slagalica.activities.Asocijacije"
             android:exported="false" />
         <activity
             android:name=".slagalica.activities.Spojnice"

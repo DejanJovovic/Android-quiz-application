@@ -59,6 +59,7 @@ class SignUpActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            //needs fixing
 //            if(retypePassword == password) {
 //                binding.editTextRetypePassword.error = "Password does not match"
 //                binding.editTextRetypePassword.requestFocus()
