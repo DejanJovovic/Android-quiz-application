@@ -1,7 +1,7 @@
 <network-security-config>
     <base-config cleartextTrafficPermitted="false">
         <trust-anchors>
-            <certificates src="@raw/your_certificate"/>
+            <certificates src="@raw/certificate"/>
         </trust-anchors>
     </base-config>
 </network-security-config>

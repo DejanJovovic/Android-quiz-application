@@ -26,16 +26,9 @@ public class AsocijacijeServiceImpl implements AsocijacijeService {
     //probably needs fixing
     @Override
     public Long getRandomAsosijacijeRound() {
-        long count = asocijacijeRepository.count();
+        Optional<AsocijacijeEntity> randomEntity = asocijacijeRepository.getRandomEntity();
+        return randomEntity.map(AsocijacijeEntity::getId).orElse(null);
 
-        if (count > 0) {
-            int randomRound = (int) (Math.random() * count);
-            Pageable pageable = PageRequest.of(randomRound, 1);
-
-            return asocijacijeRepository.findAll(pageable).getContent().get(0).getId();
-        }
-
-        return null; // Or throw an exception if you prefer
     }
 
 }
