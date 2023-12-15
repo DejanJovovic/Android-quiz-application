@@ -314,7 +314,16 @@
 
             </androidx.appcompat.widget.AppCompatButton>
 
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_submit"
+                android:layout_marginTop="24dp"
+                android:layout_width="175dp"
+                android:layout_height="50dp"
+                android:background="@drawable/round_white"
+                android:text="@string/submit"
+                android:textColor="@color/blue"/>
         </LinearLayout>
+
 
     </LinearLayout>
 
