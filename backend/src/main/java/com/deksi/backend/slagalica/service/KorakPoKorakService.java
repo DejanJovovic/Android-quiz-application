@@ -2,7 +2,11 @@ package com.deksi.backend.slagalica.service;
 
 import com.deksi.backend.slagalica.model.KorakPoKorakEntity;
 
+import java.util.Optional;
+
 public interface KorakPoKorakService {
 
-    KorakPoKorakEntity findOneById(Long id);
+    Optional<KorakPoKorakEntity> findOneById(Long id);
+
+    Long getRandomKorakPoKorakRound();
 }

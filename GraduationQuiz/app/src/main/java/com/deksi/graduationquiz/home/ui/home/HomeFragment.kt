@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.deksi.graduationquiz.databinding.FragmentHomeBinding
 import com.deksi.graduationquiz.slagalica.activities.Asocijacije
 import com.deksi.graduationquiz.slagalica.activities.KoZnaZna
+import com.deksi.graduationquiz.slagalica.activities.KorakPoKorak
 
 class HomeFragment : Fragment() {
 
@@ -37,7 +38,7 @@ class HomeFragment : Fragment() {
 
     private fun setUpListeners() {
         binding.buttonPlay.setOnClickListener {
-            val intent = Intent(context, Asocijacije::class.java)
+            val intent = Intent(context, KorakPoKorak::class.java)
             startActivity(intent)
 
         }
