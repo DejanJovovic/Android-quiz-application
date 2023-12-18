@@ -18,16 +18,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/button_required_combination"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="184dp"
+        <TextView
+            android:id="@+id/text_view_time_left"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginBottom="48dp"
+             />
+
+        <Button
+            android:id="@+id/button_final_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:backgroundTint="@color/edit_text_asosijacije"
-            android:enabled="false"
-            android:text=""
-            android:textColor="@color/white" />
+            android:layout_marginTop="16dp"
+            android:textColor="@color/white"/>
 
 
         <LinearLayout
@@ -188,12 +194,24 @@
         </LinearLayout>
 
 
-        <EditText
-            android:id="@+id/edit_text_user_input"
+        <TextView
+            android:id="@+id/text_view_user_input"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="16dp"
             android:background="@color/edit_text_asosijacije"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/button_required_combination"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/edit_text_asosijacije"
+            android:enabled="false"
+            android:text=""
+            android:layout_marginTop="16dp"
             android:textColor="@color/white" />
 
 
