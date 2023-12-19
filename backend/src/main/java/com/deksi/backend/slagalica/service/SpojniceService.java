@@ -2,7 +2,11 @@ package com.deksi.backend.slagalica.service;
 
 import com.deksi.backend.slagalica.model.SpojniceEntity;
 
+import java.util.Optional;
+
 public interface SpojniceService {
 
-    SpojniceEntity findOneById(Long id);
+    Optional<SpojniceEntity> findOneById(Long id);
+
+    Long getRandomSpojniceRound();
 }

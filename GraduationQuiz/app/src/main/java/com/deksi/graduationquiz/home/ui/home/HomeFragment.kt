@@ -13,6 +13,7 @@ import com.deksi.graduationquiz.slagalica.activities.Asocijacije
 import com.deksi.graduationquiz.slagalica.activities.KoZnaZna
 import com.deksi.graduationquiz.slagalica.activities.KorakPoKorak
 import com.deksi.graduationquiz.slagalica.activities.MojBroj
+import com.deksi.graduationquiz.slagalica.activities.Spojnice
 
 class HomeFragment : Fragment() {
 
@@ -39,7 +40,7 @@ class HomeFragment : Fragment() {
 
     private fun setUpListeners() {
         binding.buttonPlay.setOnClickListener {
-            val intent = Intent(context, MojBroj::class.java)
+            val intent = Intent(context, Spojnice::class.java)
             startActivity(intent)
 
         }
