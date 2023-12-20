@@ -81,6 +81,7 @@
 
 
         <LinearLayout
+            android:id="@+id/linear_layout_fields_0"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -122,6 +123,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linear_layout_fields_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -164,6 +166,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linear_layout_fields_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -206,6 +209,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linear_layout_fields_3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -248,6 +252,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linear_layout_fields_4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -290,6 +295,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linear_layout_fields_5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -332,6 +338,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linear_layout_fields_6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -375,6 +382,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linear_layout_fields_7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
