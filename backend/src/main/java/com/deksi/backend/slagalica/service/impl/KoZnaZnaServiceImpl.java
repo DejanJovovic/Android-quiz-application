@@ -5,6 +5,10 @@ import com.deksi.backend.slagalica.repository.KoZnaZnaRepository;
 import com.deksi.backend.slagalica.service.KoZnaZnaService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Service
 public class KoZnaZnaServiceImpl implements KoZnaZnaService {
 
@@ -15,7 +19,15 @@ public class KoZnaZnaServiceImpl implements KoZnaZnaService {
     }
 
     @Override
-    public KoZnaZnaEntity findOneById(Long id) {
+    public Optional<KoZnaZnaEntity> findOneById(Long id) {
         return koZnaZnaRepository.findOneById(id);
+    }
+
+    @Override
+    public List<Long> getRandomKoZnaZnaRounds(int count) {
+        List<KoZnaZnaEntity> randomEntities = koZnaZnaRepository.getRandomEntities(count);
+        return randomEntities.stream()
+                .map(KoZnaZnaEntity::getId)
+                .collect(Collectors.toList());
     }
 }

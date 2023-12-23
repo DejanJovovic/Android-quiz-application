@@ -8,6 +8,7 @@ import javax.persistence.*;
 @Entity
 @Data
 @NoArgsConstructor
+@Table(name = "koznazna")
 public class KoZnaZnaEntity {
 
     @Id
@@ -32,3 +33,4 @@ public class KoZnaZnaEntity {
     @Column(name = "answer")
     private String answer;
 }
+    

@@ -40,10 +40,10 @@
             android:layout_marginTop="48dp"
             android:background="@color/edit_text_asosijacije"
             android:gravity="center"
-            android:hint="@string/question_will_come_here"
+            tools:text="@string/question_will_come_here"
             android:minHeight="100dp"
             android:padding="20dp"
-            android:textColorHint="@color/white"
+            android:textColor="@color/white"
             android:textSize="16sp" />
 
 

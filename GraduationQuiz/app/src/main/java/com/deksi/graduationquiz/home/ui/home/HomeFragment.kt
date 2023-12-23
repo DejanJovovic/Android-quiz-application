@@ -41,7 +41,7 @@ class HomeFragment : Fragment() {
 
     private fun setUpListeners() {
         binding.buttonPlay.setOnClickListener {
-            val intent = Intent(context, Skocko::class.java)
+            val intent = Intent(context, KoZnaZna::class.java)
             startActivity(intent)
 
         }
