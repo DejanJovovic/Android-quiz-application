@@ -11,50 +11,53 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
 
         <Button
             android:id="@+id/button_main_login"
+            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/edit_text_asosijacije"
             android:text="@string/login"
-            style="@style/Widget.MaterialComponents.Button"
-            android:backgroundTint="@color/edit_text_asosijacije"/>
+            android:textColor="@color/white" />
 
 
         <Button
             android:id="@+id/button_main_signup"
+            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/edit_text_asosijacije"
             android:text="@string/sign_up"
-            style="@style/Widget.MaterialComponents.Button"
-            android:backgroundTint="@color/edit_text_asosijacije"/>
+            android:textColor="@color/white" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
 
         <Button
             android:id="@+id/button_main_play_as_guest"
+            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/green_button"
             android:text="@string/play_as_guest"
-            style="@style/Widget.MaterialComponents.Button"
-            android:backgroundTint="@color/green_button"/>
+            android:textColor="@color/white" />
 
     </LinearLayout>
 

@@ -8,75 +8,13 @@
     android:padding="16dp"
     tools:context=".slagalica.activities.Skocko">
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linear_layout_fields">
-
-        <ImageButton
-            android:id="@+id/image_view_tref"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/tref" />
-
-        <ImageButton
-            android:id="@+id/image_viewherc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/herc" />
-
-        <ImageButton
-            android:id="@+id/image_view_karo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/karo" />
-
-        <ImageButton
-            android:id="@+id/image_view_pik"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/pik" />
-
-        <ImageButton
-            android:id="@+id/image_view_cd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/cd" />
-
-        <ImageButton
-            android:id="@+id/image_view_zvezda"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/zvezda" />
-
-        <ImageButton
-            android:id="@+id/image_view_delete"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
-            android:layout_weight="1"
-            android:scaleType="fitXY"
-            android:src="@drawable/delete" />
-    </LinearLayout>
-
-
     <LinearLayout
         android:id="@+id/linear_layout_fields"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/linear_layout_image_buttons"
         app:layout_constraintTop_toTopOf="parent">
 
 
@@ -426,6 +364,68 @@
         </LinearLayout>
 
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_image_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linear_layout_fields">
+
+        <ImageButton
+            android:id="@+id/image_view_tref"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/tref" />
+
+        <ImageButton
+            android:id="@+id/image_viewherc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/herc" />
+
+        <ImageButton
+            android:id="@+id/image_view_karo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/karo" />
+
+        <ImageButton
+            android:id="@+id/image_view_pik"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/pik" />
+
+        <ImageButton
+            android:id="@+id/image_view_cd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/cd" />
+
+        <ImageButton
+            android:id="@+id/image_view_zvezda"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/zvezda" />
+
+        <ImageButton
+            android:id="@+id/image_view_delete"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            android:src="@drawable/delete" />
     </LinearLayout>
 
 

@@ -1,5 +1,6 @@
 package com.deksi.graduationquiz.slagalica.activities
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
@@ -35,9 +36,6 @@ class KoZnaZna : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityKoZnaZnaBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
-        val actionBar = supportActionBar
-        actionBar?.setDisplayHomeAsUpEnabled(true)
 
         getRoundData()
     }
@@ -108,7 +106,16 @@ class KoZnaZna : AppCompatActivity() {
                 // Display the next question
                 displayData()
             } else {
-                Toast.makeText(this@KoZnaZna, "End of questions", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this@KoZnaZna, "End of questions", Toast.LENGTH_SHORT).show()
+                val buttonNext = binding.buttonNextQuestion
+                buttonNext.text = "Submit"
+
+                buttonNext.setOnClickListener {
+                    val intent = Intent(this@KoZnaZna, Spojnice::class.java)
+                    startActivity(intent)
+
+                    finish()
+                }
             }
         }
 
@@ -148,7 +155,7 @@ class KoZnaZna : AppCompatActivity() {
         val sslSocketFactory = sslContext.socketFactory
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.1.9:8080/api/koznazna/")
+            .baseUrl("https://192.168.197.66:8080/api/koznazna/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -160,7 +167,6 @@ class KoZnaZna : AppCompatActivity() {
 
         val koZnaZnaApiService = retrofit.create(KoZnaZnaApiService::class.java)
 
-        // Make the API call to get random rounds
         val call = koZnaZnaApiService.getRandomRounds()
 
         call.enqueue(object : Callback<List<KoZnaZnaModel>> {

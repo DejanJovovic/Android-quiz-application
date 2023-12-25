@@ -1,7 +1,9 @@
 package com.deksi.graduationquiz.slagalica.activities
 
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
@@ -39,9 +41,6 @@ class Skocko : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySkockoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val actionBar = supportActionBar
-        actionBar?.setDisplayHomeAsUpEnabled(true)
 
         initResult()
         initSlots()
@@ -129,7 +128,23 @@ class Skocko : AppCompatActivity() {
         }
         if (row == slots.size) {
             showResult()
+
+            moveToNextActivityWithDelay()
         }
+    }
+
+    private fun moveToNextActivityWithDelay() {
+
+        val delayMilis = 5000L
+        val handler = Handler()
+
+        handler.postDelayed({
+            val intent = Intent(this@Skocko, KorakPoKorak::class.java)
+            startActivity(intent)
+
+            finish()
+        }, delayMilis)
+
     }
 
     private fun handleDelete() {
@@ -170,10 +185,13 @@ class Skocko : AppCompatActivity() {
                 }
             }
         }
-        results[row]!!.text = "correct:$correct\nmisplaced:$misplaced"
+        "correct:$correct\nmisplaced:$misplaced".also { results[row]!!.text = it }
         if (correct == 4) {
             showResult()
             showScore()
+
+            moveToNextActivityWithDelay()
+
         }
     }
 

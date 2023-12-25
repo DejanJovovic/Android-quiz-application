@@ -11,21 +11,22 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:gravity="center">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
 
         <Button
             android:id="@+id/button_play"
+            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.Button"
             android:backgroundTint="@color/edit_text_asosijacije"
-            android:text="@string/play"/>
+            android:text="@string/play"
+            android:textColor="@color/white" />
 
 
     </LinearLayout>

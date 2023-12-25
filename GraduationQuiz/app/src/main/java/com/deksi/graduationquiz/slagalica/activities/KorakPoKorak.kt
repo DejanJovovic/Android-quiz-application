@@ -1,7 +1,9 @@
 package com.deksi.graduationquiz.slagalica.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.util.Log
 import android.widget.Button
@@ -29,15 +31,12 @@ class KorakPoKorak : AppCompatActivity() {
 
     private lateinit var binding: ActivityKorakPoKorakBinding
     private var korakPoKorakResponse: KorakPoKorakModel? = null
-    private var konacno:EditText? = null
+    private var konacno: EditText? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityKorakPoKorakBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val actionBar = supportActionBar
-        actionBar?.setDisplayHomeAsUpEnabled(true)
 
         getRoundData()
         findViewsById()
@@ -71,7 +70,7 @@ class KorakPoKorak : AppCompatActivity() {
         binding.buttonHint5.setOnClickListener { onButtonClick(binding.buttonHint5, "hint5") }
         binding.buttonHint6.setOnClickListener { onButtonClick(binding.buttonHint6, "hint6") }
         binding.buttonHint7.setOnClickListener { onButtonClick(binding.buttonHint7, "hint7") }
-        binding.buttonSubmitKorakpokorak.setOnClickListener { updateAsosijacije() }
+        binding.buttonSubmitKorakpokorak.setOnClickListener { updateKorakPoKorak() }
     }
 
     private fun findViewsById() {
@@ -82,21 +81,25 @@ class KorakPoKorak : AppCompatActivity() {
     private fun checkAndUpdateField(editText: EditText?, expectedValue: String, points: Int) {
         if (editText?.text.toString() == expectedValue) {
             editText?.setBackgroundResource(R.drawable.round_green_reveal)
-            Toast.makeText(applicationContext, "Osvojili ste $points poena", Toast.LENGTH_LONG).show()
+            Toast.makeText(applicationContext, "Osvojili ste $points poena", Toast.LENGTH_LONG)
+                .show()
 
             // Automatically show corresponding values when the user enters the right value
             when (editText) {
                 konacno -> {
-                    showValues(korakPoKorakResponse?.hint1,
+                    showValues(
+                        korakPoKorakResponse?.hint1,
                         korakPoKorakResponse?.hint2,
                         korakPoKorakResponse?.hint3,
                         korakPoKorakResponse?.hint4,
                         korakPoKorakResponse?.hint5,
                         korakPoKorakResponse?.hint6,
-                        korakPoKorakResponse?.hint7,)
+                        korakPoKorakResponse?.hint7,
+                    )
                 }
 
             }
+            moveToNextActivityWithDelay()
 
 
         } else {
@@ -122,23 +125,42 @@ class KorakPoKorak : AppCompatActivity() {
 
     }
 
-    private fun updateAsosijacije() {
+    private fun updateKorakPoKorak() {
         val getKonacno: String? = korakPoKorakResponse?.konacno
 
         if (!konacno?.text.isNullOrEmpty()) {
             checkAndUpdateField(konacno, getKonacno ?: "", 20)
         }
-        }
+    }
 
+    private fun moveToNextActivityWithDelay() {
+        val delayMilis = 5000L
+        val handler = Handler()
+
+        handler.postDelayed({
+            val intent = Intent(this@KorakPoKorak, MojBroj::class.java)
+            startActivity(intent)
+
+            finish()
+        }, delayMilis)
+    }
 
 
     private fun getRoundData() {
 
         val trustAllCerts = arrayOf<TrustManager>(
             object : X509TrustManager {
-                override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
+                override fun checkClientTrusted(
+                    chain: Array<out X509Certificate>?,
+                    authType: String?
+                ) {
+                }
 
-                override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
+                override fun checkServerTrusted(
+                    chain: Array<out X509Certificate>?,
+                    authType: String?
+                ) {
+                }
 
                 override fun getAcceptedIssuers(): Array<X509Certificate> {
                     return arrayOf()
@@ -152,7 +174,7 @@ class KorakPoKorak : AppCompatActivity() {
         val sslSocketFactory = sslContext.socketFactory
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.1.9:8080/api/korakPoKorak/")
+            .baseUrl("https://192.168.197.66:8080/api/korakPoKorak/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -166,14 +188,17 @@ class KorakPoKorak : AppCompatActivity() {
 
         val call = korakPoKorakService.getRandomRound()
 
-        call.enqueue(object: Callback<KorakPoKorakModel> {
-            override fun onResponse(call: Call<KorakPoKorakModel>, response: Response<KorakPoKorakModel>) {
-                if(response.isSuccessful){
+        call.enqueue(object : Callback<KorakPoKorakModel> {
+            override fun onResponse(
+                call: Call<KorakPoKorakModel>,
+                response: Response<KorakPoKorakModel>
+            ) {
+                if (response.isSuccessful) {
                     korakPoKorakResponse = response.body()
 
-                }
-                else {
-                    Toast.makeText(applicationContext, "Error fetching data", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(applicationContext, "Error fetching data", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
 

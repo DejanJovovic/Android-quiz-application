@@ -33,21 +33,27 @@
             android:exported="false" />
         <activity
             android:name=".slagalica.activities.MojBroj"
+            android:label="Moj broj"
             android:exported="false" />
         <activity
             android:name=".slagalica.activities.KorakPoKorak"
+            android:label="Korak po korak"
             android:exported="false" />
         <activity
             android:name=".slagalica.activities.Skocko"
+            android:label="Skocko"
             android:exported="false" />
         <activity
             android:name=".slagalica.activities.Asocijacije"
+            android:label="Asocijacije"
             android:exported="false" />
         <activity
             android:name=".slagalica.activities.Spojnice"
+            android:label="Spojnice"
             android:exported="false" />
         <activity
             android:name=".slagalica.activities.KoZnaZna"
+            android:label="Ko zna zna"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

@@ -1,6 +1,8 @@
 package com.deksi.graduationquiz.slagalica.activities
 
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +28,7 @@ class Spojnice : AppCompatActivity() {
     private var spojniceResponse: SpojniceModel? = null
     private var selectedLeft: String? = null
     private var selectedRight: String? = null
+    private val connectedPairs: MutableSet<Pair<String, String>> = mutableSetOf()
     private val correctConnections: List<Pair<String, String>> = listOf(
         "button_left1" to "button_right5",
         "button_left2" to "button_right4",
@@ -41,14 +44,8 @@ class Spojnice : AppCompatActivity() {
         binding = ActivitySpojniceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val actionBar = supportActionBar
-        actionBar?.setDisplayHomeAsUpEnabled(true)
-
-
         getRoundData()
         onClickListeners()
-
-
     }
 
     private fun onClickListeners() {
@@ -101,23 +98,25 @@ class Spojnice : AppCompatActivity() {
             selectedRight = "button_right5"
             checkConnection()
         }
+
     }
 
 
     private fun checkConnection() {
         if (selectedLeft != null && selectedRight != null) {
             val selectedPair = Pair(selectedLeft!!, selectedRight!!)
+            connectedPairs.add(selectedPair)
 
             if (correctConnections.contains(selectedPair)) {
                 // Correct connection logic
                 changeButtonColorToGreen(selectedLeft)
                 changeButtonColorToGreen(selectedRight)
-                Toast.makeText(applicationContext, "2 points", Toast.LENGTH_LONG).show()
+
+
             } else {
                 // Incorrect connection logic
                 changeButtonColorToRed(selectedLeft)
                 changeButtonColorToRed(selectedRight)
-                Toast.makeText(applicationContext, "Incorrect", Toast.LENGTH_LONG).show()
 
             }
 
@@ -129,6 +128,22 @@ class Spojnice : AppCompatActivity() {
             selectedLeft = null
             selectedRight = null
         }
+
+        if (connectedPairs.size == correctConnections.size) {
+            moveToNextActivityWithDelay()
+        }
+    }
+
+    private fun moveToNextActivityWithDelay() {
+        val delayMilis = 5000L
+        val handler = Handler()
+
+        handler.postDelayed({
+            val intent = Intent(this@Spojnice, Asocijacije::class.java)
+            startActivity(intent)
+
+            finish()
+        }, delayMilis)
     }
 
     private fun changeButtonColorToRed(buttonId: String?) {
@@ -142,8 +157,6 @@ class Spojnice : AppCompatActivity() {
     }
 
     private fun findButtonByIdentifier(identifier: String?): Button? {
-        // Assuming you have a map or some logic to map identifiers to actual Button instances
-        // Replace the logic below with your actual implementation
         return when (identifier) {
             "button_left1" -> binding.buttonLeft1
             "button_left2" -> binding.buttonLeft2
@@ -187,7 +200,7 @@ class Spojnice : AppCompatActivity() {
 
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.1.9:8080/api/spojnice/")
+            .baseUrl("https://192.168.197.66:8080/api/spojnice/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()

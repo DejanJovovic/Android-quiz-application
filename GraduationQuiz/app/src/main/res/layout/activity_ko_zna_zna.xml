@@ -40,11 +40,11 @@
             android:layout_marginTop="48dp"
             android:background="@color/edit_text_asosijacije"
             android:gravity="center"
-            tools:text="@string/question_will_come_here"
             android:minHeight="100dp"
             android:padding="20dp"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            tools:text="@string/question_will_come_here" />
 
 
         <androidx.appcompat.widget.AppCompatButton
@@ -53,9 +53,9 @@
             android:layout_height="50dp"
             android:layout_marginTop="40dp"
             android:background="@drawable/round_white"
-            android:hint="@string/option_1"
             android:textAllCaps="false"
-            android:textColorHint="@color/blue">
+            android:textColor="@color/edit_text_asosijacije"
+            tools:text="@string/option_1">
 
         </androidx.appcompat.widget.AppCompatButton>
 
@@ -66,9 +66,9 @@
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/round_white"
-            android:hint="@string/option_2"
             android:textAllCaps="false"
-            android:textColorHint="@color/blue">
+            android:textColor="@color/edit_text_asosijacije"
+            tools:text="@string/option_2">
 
         </androidx.appcompat.widget.AppCompatButton>
 
@@ -79,9 +79,9 @@
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/round_white"
-            android:hint="@string/option_3"
             android:textAllCaps="false"
-            android:textColorHint="@color/blue">
+            android:textColor="@color/edit_text_asosijacije"
+            tools:text="@string/option_3">
 
         </androidx.appcompat.widget.AppCompatButton>
 
@@ -91,9 +91,9 @@
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/round_white"
-            android:hint="@string/option_4"
             android:textAllCaps="false"
-            android:textColorHint="@color/blue">
+            android:textColor="@color/edit_text_asosijacije"
+            tools:text="@string/option_4">
 
         </androidx.appcompat.widget.AppCompatButton>
 
@@ -105,9 +105,9 @@
             android:layout_marginTop="88dp"
             android:background="@drawable/round_green"
             android:elevation="0dp"
-            android:hint="@string/next"
+            android:text="@string/next"
             android:textAllCaps="false"
-            android:textColorHint="@color/white">
+            android:textColor="@color/white">
 
         </androidx.appcompat.widget.AppCompatButton>
 

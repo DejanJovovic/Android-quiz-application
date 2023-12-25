@@ -34,6 +34,7 @@
                 android:background="@drawable/round_white"
                 android:hint="@string/_1"
                 android:textAllCaps="false"
+                android:textColor="@color/edit_text_asosijacije"
                 android:textColorHint="@color/blue">
 
             </androidx.appcompat.widget.AppCompatButton>
@@ -46,6 +47,7 @@
                 android:background="@drawable/round_white"
                 android:hint="@string/_2"
                 android:textAllCaps="false"
+                android:textColor="@color/edit_text_asosijacije"
                 android:textColorHint="@color/blue">
 
             </androidx.appcompat.widget.AppCompatButton>
@@ -58,6 +60,7 @@
                 android:background="@drawable/round_white"
                 android:hint="@string/_3"
                 android:textAllCaps="false"
+                android:textColor="@color/edit_text_asosijacije"
                 android:textColorHint="@color/blue">
 
             </androidx.appcompat.widget.AppCompatButton>
@@ -70,6 +73,7 @@
                 android:background="@drawable/round_white"
                 android:hint="@string/_4"
                 android:textAllCaps="false"
+                android:textColor="@color/edit_text_asosijacije"
                 android:textColorHint="@color/blue">
 
             </androidx.appcompat.widget.AppCompatButton>
@@ -82,6 +86,7 @@
                 android:background="@drawable/round_white"
                 android:hint="@string/_5"
                 android:textAllCaps="false"
+                android:textColor="@color/edit_text_asosijacije"
                 android:textColorHint="@color/blue">
 
             </androidx.appcompat.widget.AppCompatButton>
@@ -94,6 +99,7 @@
                 android:background="@drawable/round_white"
                 android:hint="@string/_6"
                 android:textAllCaps="false"
+                android:textColor="@color/edit_text_asosijacije"
                 android:textColorHint="@color/blue">
 
             </androidx.appcompat.widget.AppCompatButton>
@@ -106,6 +112,7 @@
                 android:background="@drawable/round_white"
                 android:hint="@string/_7"
                 android:textAllCaps="false"
+                android:textColor="@color/edit_text_asosijacije"
                 android:textColorHint="@color/blue">
 
             </androidx.appcompat.widget.AppCompatButton>
@@ -115,15 +122,14 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_points_20"
                 android:layout_width="60dp"
                 android:layout_height="50dp"
-                android:layout_marginStart="5dp"
                 android:layout_marginTop="30dp"
-                android:layout_marginEnd="10dp"
                 android:background="@color/edit_text_asosijacije"
                 android:hint="@string/_20"
                 android:textAllCaps="false"
@@ -135,9 +141,7 @@
                 android:id="@+id/button_points_18"
                 android:layout_width="60dp"
                 android:layout_height="50dp"
-                android:layout_marginStart="5dp"
                 android:layout_marginTop="30dp"
-                android:layout_marginEnd="10dp"
                 android:background="@color/edit_text_asosijacije"
                 android:hint="@string/_18"
                 android:textAllCaps="false"
@@ -149,9 +153,7 @@
                 android:id="@+id/button_points_16"
                 android:layout_width="60dp"
                 android:layout_height="50dp"
-                android:layout_marginStart="5dp"
                 android:layout_marginTop="30dp"
-                android:layout_marginEnd="10dp"
                 android:background="@color/edit_text_asosijacije"
                 android:hint="@string/_16"
                 android:textAllCaps="false"
@@ -163,9 +165,7 @@
                 android:id="@+id/button_points_14"
                 android:layout_width="60dp"
                 android:layout_height="50dp"
-                android:layout_marginStart="5dp"
                 android:layout_marginTop="30dp"
-                android:layout_marginEnd="10dp"
                 android:background="@color/edit_text_asosijacije"
                 android:hint="@string/_14"
                 android:textAllCaps="false"
@@ -177,9 +177,7 @@
                 android:id="@+id/button_points_12"
                 android:layout_width="60dp"
                 android:layout_height="50dp"
-                android:layout_marginStart="5dp"
                 android:layout_marginTop="30dp"
-                android:layout_marginEnd="10dp"
                 android:background="@color/edit_text_asosijacije"
                 android:hint="@string/_12"
                 android:textAllCaps="false"
@@ -191,9 +189,7 @@
                 android:id="@+id/button_points_10"
                 android:layout_width="60dp"
                 android:layout_height="50dp"
-                android:layout_marginStart="5dp"
                 android:layout_marginTop="30dp"
-                android:layout_marginEnd="10dp"
                 android:background="@color/edit_text_asosijacije"
                 android:hint="@string/_10"
                 android:textAllCaps="false"
@@ -205,9 +201,7 @@
                 android:id="@+id/button_points_8"
                 android:layout_width="60dp"
                 android:layout_height="50dp"
-                android:layout_marginStart="5dp"
                 android:layout_marginTop="30dp"
-                android:layout_marginEnd="10dp"
                 android:background="@color/edit_text_asosijacije"
                 android:hint="@string/_8"
                 android:textAllCaps="false"
@@ -223,28 +217,27 @@
         android:id="@+id/edit_text_konacno_korak_po_korak"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="4dp"
+        android:layout_marginTop="30dp"
         android:background="@color/edit_text_asosijacije"
         android:hint="@string/konacno_korak_po_korak"
         android:textAlignment="center"
-        android:textColorHint="@color/white"
         android:textColor="@color/white"
+        android:textColorHint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linear_layout_hints_points" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_submit_korakpokorak"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/edit_text_asosijacije"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:layout_marginTop="12dp"
+        android:background="@drawable/round_white"
         android:text="@string/submit"
-        android:textColor="@color/white"
+        android:textColor="@color/edit_text_asosijacije"
         android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_konacno_korak_po_korak"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_konacno_korak_po_korak" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

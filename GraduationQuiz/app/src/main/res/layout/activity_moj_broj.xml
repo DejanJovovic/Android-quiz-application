@@ -23,17 +23,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="48dp"
-             />
+            android:layout_marginBottom="48dp" />
 
         <Button
             android:id="@+id/button_final_result"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:backgroundTint="@color/edit_text_asosijacije"
             android:layout_marginTop="16dp"
-            android:textColor="@color/white"/>
+            android:backgroundTint="@color/edit_text_asosijacije"
+            android:textColor="@color/white" />
 
 
         <LinearLayout
@@ -208,10 +207,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="16dp"
             android:backgroundTint="@color/edit_text_asosijacije"
             android:enabled="false"
             android:text=""
-            android:layout_marginTop="16dp"
             android:textColor="@color/white" />
 
 

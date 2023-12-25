@@ -2,6 +2,7 @@ package com.deksi.graduationquiz.slagalica.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.util.Log
 import android.widget.Button
@@ -39,10 +40,6 @@ class Asocijacije : AppCompatActivity() {
         binding = ActivityAsocijacijeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val actionBar = supportActionBar
-        actionBar?.setDisplayHomeAsUpEnabled(true)
-
-
         getRoundData()
         setOnClickButtonListeners()
         findViewsById()
@@ -74,7 +71,10 @@ class Asocijacije : AppCompatActivity() {
         binding.buttonD2.setOnClickListener { onButtonClick(binding.buttonD2, "d2") }
         binding.buttonD3.setOnClickListener { onButtonClick(binding.buttonD3, "d3") }
         binding.buttonD4.setOnClickListener { onButtonClick(binding.buttonD4, "d4") }
-        binding.buttonSubmit.setOnClickListener { updateAsosijacije() }
+        val buttonSubmit = binding.buttonSubmit
+        buttonSubmit.setOnClickListener {
+            buttonSubmit.isEnabled = true
+            updateAsosijacije() }
     }
 
     private fun onButtonClick(button: Button, buttonId: String) {
@@ -159,6 +159,7 @@ class Asocijacije : AppCompatActivity() {
         val getKonacno: String? = asocijacijeResponse?.konacno
 
 
+
         if (!konacnoA?.text.isNullOrEmpty()) {
             checkAndUpdateField(konacnoA, getKonacnoA ?: "", 5)
         }
@@ -173,6 +174,10 @@ class Asocijacije : AppCompatActivity() {
         }
         if (!konacno?.text.isNullOrEmpty()) {
             checkAndUpdateField(konacno, getKonacno ?: "", 20)
+            if (konacno?.text.toString() == getKonacno) {
+                moveToNextActivityWithDelay()
+            }
+
         }
 
 //        if (konacnoA?.text.toString() == getKonacnoA) {
@@ -214,6 +219,18 @@ class Asocijacije : AppCompatActivity() {
 //        }
 
 
+    }
+
+    private fun moveToNextActivityWithDelay() {
+        val delayMillis = 5000L
+        val handler = Handler()
+
+        handler.postDelayed({
+            val intent = Intent(this@Asocijacije, Skocko::class.java)
+            startActivity(intent)
+
+            finish()
+        }, delayMillis)
     }
 
     private fun showValues(vararg values: String?) {
@@ -267,7 +284,7 @@ class Asocijacije : AppCompatActivity() {
             val sslSocketFactory = sslContext.socketFactory
 
             val retrofit = Retrofit.Builder()
-                .baseUrl("https://192.168.1.9:8080/api/slagalica/")
+                .baseUrl("https://192.168.197.66:8080/api/slagalica/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(
                     OkHttpClient.Builder()

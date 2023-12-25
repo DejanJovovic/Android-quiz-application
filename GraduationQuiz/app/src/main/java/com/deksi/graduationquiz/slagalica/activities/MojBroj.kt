@@ -1,12 +1,15 @@
 package com.deksi.graduationquiz.slagalica.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.deksi.graduationquiz.databinding.ActivityMojBrojBinding
+import com.deksi.graduationquiz.home.HomeActivity
 import org.mozilla.javascript.Context
 import org.mozilla.javascript.Scriptable
 import java.util.LinkedList
@@ -27,8 +30,6 @@ class MojBroj : AppCompatActivity() {
         binding = ActivityMojBrojBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val actionBar = supportActionBar
-        actionBar?.setDisplayHomeAsUpEnabled(true)
 
         init()
         initTimer()
@@ -49,8 +50,10 @@ class MojBroj : AppCompatActivity() {
 
             if (actual == guess) {
                 Toast.makeText(applicationContext, "Osvojili ste 20 poena", Toast.LENGTH_LONG).show()
+                goBackToTheHomeActivityWithDelay()
             } else {
                 Toast.makeText(applicationContext, "Osvojili ste 5 poena", Toast.LENGTH_LONG).show()
+                goBackToTheHomeActivityWithDelay()
 
             }
 
@@ -61,6 +64,18 @@ class MojBroj : AppCompatActivity() {
             generateTimer?.cancel()
             generateTimer?.start()
         }
+    }
+
+    private fun goBackToTheHomeActivityWithDelay() {
+        val delayMilis = 5000L
+        val handler = Handler()
+
+        handler.postDelayed({
+            val intent = Intent(this@MojBroj, HomeActivity::class.java)
+            startActivity(intent)
+
+            finish()
+        }, delayMilis)
     }
 
 
@@ -76,7 +91,9 @@ class MojBroj : AppCompatActivity() {
                 timerText.text = (millisUntilFinished / 1000).toString()
             }
 
-            override fun onFinish() {}
+            override fun onFinish() {
+                goBackToTheHomeActivityWithDelay()
+            }
         }
         (timeLeft as CountDownTimer).start()
     }
@@ -153,7 +170,7 @@ class MojBroj : AppCompatActivity() {
         delete.setOnClickListener { v: View? ->
             if (input.size == 0) {
             } else {
-                input.get(input.size - 1)?.isEnabled = true
+                input[input.size - 1]?.isEnabled = true
                 input.removeAt(input.size - 1)
                 displayInput()
             }
@@ -177,19 +194,27 @@ class MojBroj : AppCompatActivity() {
         val secondMediumDigits = arrayOf("25", "50", "75", "100")
         var idx = 0
         var generatedNumber: String? = null
-        if (currentNumber == 0) {
-            generatedNumber = "" + (Random().nextInt(998) + 2)
-        } else if (currentNumber in 1..4) {
-            idx = Random().nextInt(singleDigits.size)
-            generatedNumber = singleDigits[idx]
-        } else if (currentNumber == 5) {
-            idx = Random().nextInt(firstMediumDigits.size)
-            generatedNumber = firstMediumDigits[idx]
-        } else if (currentNumber == 6) {
-            idx = Random().nextInt(secondMediumDigits.size)
-            generatedNumber = secondMediumDigits[idx]
+        when (currentNumber) {
+            0 -> {
+                generatedNumber = "" + (Random().nextInt(998) + 2)
+                setNumber(generatedNumber, currentNumber)
+            }
+            in 1..4 -> {
+                idx = Random().nextInt(singleDigits.size)
+                generatedNumber = singleDigits[idx]
+                setNumber(generatedNumber, currentNumber)
+            }
+            5 -> {
+                idx = Random().nextInt(firstMediumDigits.size)
+                generatedNumber = firstMediumDigits[idx]
+                setNumber(generatedNumber, currentNumber)
+            }
+            6 -> {
+                idx = Random().nextInt(secondMediumDigits.size)
+                generatedNumber = secondMediumDigits[idx]
+                setNumber(generatedNumber, currentNumber)
+            }
         }
-        setNumber(generatedNumber, currentNumber)
 
         currentNumber++
     }
