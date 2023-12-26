@@ -1,15 +1,13 @@
 package com.deksi.graduationquiz.slagalica.activities
 
+import android.app.ProgressDialog
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
-import android.os.Looper
 import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatButton
 import com.deksi.graduationquiz.R
 import com.deksi.graduationquiz.databinding.ActivityKoZnaZnaBinding
 import com.deksi.graduationquiz.slagalica.api.KoZnaZnaApiService
@@ -22,7 +20,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
-import java.util.LinkedList
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
@@ -32,14 +29,20 @@ class KoZnaZna : AppCompatActivity() {
     private lateinit var binding: ActivityKoZnaZnaBinding
     private var questions: List<KoZnaZnaModel> = emptyList()
     private var currentQuestionIndex:Int = 0
+    private var timeLeft: CountDownTimer? = null
+    private var progressDialog: ProgressDialog? = null
+    private var countDownTimer: CountDownTimer? = null
+    private val totalTime: Long = 5000
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityKoZnaZnaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         getRoundData()
-    }
+        initTimer()
+        showProgressDialog()
 
+    }
     private fun displayData() {
         val question = binding.textViewQuestion
         val option1 = binding.buttonOption1
@@ -71,6 +74,48 @@ class KoZnaZna : AppCompatActivity() {
             handleButtonClick(currentQuestion, currentQuestion.option4, option4)
         }
     }
+
+
+    private fun showProgressDialog() {
+        progressDialog = ProgressDialog.show(this, "Please wait", "Loading questions..", true, false)
+
+    }
+
+    private fun dismissProgressDialog() {
+        progressDialog?.dismiss()
+    }
+
+    private fun showProgressDialog1() {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setTitle("Time is up!")
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.show()
+
+        startTimerProgressDialog()
+    }
+
+    private fun stopTimer() {
+        timeLeft?.cancel()
+    }
+
+    private fun startTimerProgressDialog() {
+        countDownTimer = object : CountDownTimer(totalTime, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
+
+                val secondsRemaining = millisUntilFinished / 1000
+                progressDialog?.setMessage("$secondsRemaining")
+            }
+
+            override fun onFinish() {
+                dismissProgressDialog()
+            }
+        }
+
+        (countDownTimer as CountDownTimer).start()
+    }
+
 
     private fun handleButtonClick(question: KoZnaZnaModel, selectedOption: String, clickedButton: Button) {
         if (selectedOption == question.answer) {
@@ -106,7 +151,7 @@ class KoZnaZna : AppCompatActivity() {
                 // Display the next question
                 displayData()
             } else {
-//                Toast.makeText(this@KoZnaZna, "End of questions", Toast.LENGTH_SHORT).show()
+                stopTimer()
                 val buttonNext = binding.buttonNextQuestion
                 buttonNext.text = "Submit"
 
@@ -119,6 +164,41 @@ class KoZnaZna : AppCompatActivity() {
             }
         }
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        timeLeft?.cancel()
+    }
+
+    private fun initTimer() {
+        val timerText = binding.textViewTimeLeft
+        timeLeft = object : CountDownTimer(25000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                timerText.text = (millisUntilFinished / 1000).toString()
+            }
+
+            override fun onFinish() {
+                showProgressDialog1()
+                moveToTheNextActivityWithDelay()
+
+
+            }
+        }
+        (timeLeft as CountDownTimer).start()
+    }
+
+
+    private fun moveToTheNextActivityWithDelay() {
+        val delayMilis = 5000L
+        val handler = Handler()
+
+        handler.postDelayed({
+            val intent = Intent(this@KoZnaZna, Spojnice::class.java)
+            startActivity(intent)
+
+            finish()
+        }, delayMilis)
     }
 
     private fun resetButtonBackgrounds() {
@@ -155,7 +235,7 @@ class KoZnaZna : AppCompatActivity() {
         val sslSocketFactory = sslContext.socketFactory
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.197.66:8080/api/koznazna/")
+            .baseUrl("https://192.168.1.9:8080/api/koznazna/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -177,6 +257,7 @@ class KoZnaZna : AppCompatActivity() {
                 if (response.isSuccessful) {
                     questions = response.body() ?: emptyList()
                     displayData()
+                    dismissProgressDialog()
 
 
                 } else {

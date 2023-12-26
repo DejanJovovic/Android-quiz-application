@@ -1,7 +1,9 @@
 package com.deksi.graduationquiz.slagalica.activities
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
 import android.widget.Button
 import android.widget.Toast
@@ -28,6 +30,10 @@ class Spojnice : AppCompatActivity() {
     private var spojniceResponse: SpojniceModel? = null
     private var selectedLeft: String? = null
     private var selectedRight: String? = null
+    private var timeLeft: CountDownTimer? = null
+    private var progressDialog: ProgressDialog? = null
+    private var countDownTimer: CountDownTimer? = null
+    private val totalTime: Long = 5000
     private val connectedPairs: MutableSet<Pair<String, String>> = mutableSetOf()
     private val correctConnections: List<Pair<String, String>> = listOf(
         "button_left1" to "button_right5",
@@ -46,6 +52,62 @@ class Spojnice : AppCompatActivity() {
 
         getRoundData()
         onClickListeners()
+        initTimer()
+        showProgressDialog()
+    }
+
+
+
+    private fun showProgressDialog() {
+        progressDialog = ProgressDialog.show(this, "Please wait", "Loading game..", true, false)
+
+    }
+
+    private fun dismissProgressDialog() {
+        progressDialog?.dismiss()
+    }
+
+    private fun showProgressDialog1() {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setTitle("Time is up!")
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.show()
+
+        startTimerProgressDialog()
+    }
+
+
+    private fun showProgressDialog2() {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setTitle("Game is finished. Please wait..")
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.show()
+
+        startTimerProgressDialog()
+    }
+
+    private fun stopTimer() {
+        timeLeft?.cancel()
+    }
+
+    private fun startTimerProgressDialog() {
+        countDownTimer = object : CountDownTimer(totalTime, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
+
+                val secondsRemaining = millisUntilFinished / 1000
+                progressDialog?.setMessage("$secondsRemaining")
+
+            }
+
+            override fun onFinish() {
+                dismissProgressDialog()
+            }
+        }
+
+        (countDownTimer as CountDownTimer).start()
     }
 
     private fun onClickListeners() {
@@ -130,6 +192,8 @@ class Spojnice : AppCompatActivity() {
         }
 
         if (connectedPairs.size == correctConnections.size) {
+            stopTimer()
+            showProgressDialog2()
             moveToNextActivityWithDelay()
         }
     }
@@ -179,6 +243,27 @@ class Spojnice : AppCompatActivity() {
     }
 
 
+    override fun onDestroy() {
+        super.onDestroy()
+        timeLeft?.cancel()
+    }
+
+    private fun initTimer() {
+        val timerText = binding.textViewTimeLeft
+        timeLeft = object : CountDownTimer(30000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                timerText.text = (millisUntilFinished / 1000).toString()
+            }
+
+            override fun onFinish() {
+                showProgressDialog1()
+                moveToNextActivityWithDelay()
+            }
+        }
+        (timeLeft as CountDownTimer).start()
+    }
+
+
     private fun getRoundData() {
 
         val trustAllCerts = arrayOf<TrustManager>(
@@ -200,7 +285,7 @@ class Spojnice : AppCompatActivity() {
 
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.197.66:8080/api/spojnice/")
+            .baseUrl("https://192.168.1.9:8080/api/spojnice/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -241,6 +326,8 @@ class Spojnice : AppCompatActivity() {
                     right3.text = spojniceResponse?.right3
                     right4.text = spojniceResponse?.right4
                     right5.text = spojniceResponse?.right5
+
+                    dismissProgressDialog()
 
                 }
                 else {

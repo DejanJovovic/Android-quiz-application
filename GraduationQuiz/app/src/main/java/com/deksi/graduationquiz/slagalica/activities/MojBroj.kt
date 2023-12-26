@@ -1,5 +1,6 @@
 package com.deksi.graduationquiz.slagalica.activities
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -23,6 +24,9 @@ class MojBroj : AppCompatActivity() {
     private var currentNumber = 0
     private var timeLeft: CountDownTimer? = null
     private var generateTimer: CountDownTimer? = null
+    private var progressDialog: ProgressDialog? = null
+    private var countDownTimer: CountDownTimer? = null
+    private val totalTime: Long = 5000
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,22 +41,72 @@ class MojBroj : AppCompatActivity() {
 
     }
 
+
+    private fun dismissProgressDialog() {
+        progressDialog?.dismiss()
+    }
+
+    private fun showProgressDialog1() {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setTitle("Time is up!")
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.show()
+
+        startTimerProgressDialog()
+    }
+
+
+    private fun showProgressDialog2() {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setTitle("Game is finished. Please wait..")
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.show()
+
+        startTimerProgressDialog()
+    }
+
+    private fun stopTimer() {
+        timeLeft?.cancel()
+    }
+
+    private fun startTimerProgressDialog() {
+        countDownTimer = object : CountDownTimer(totalTime, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
+
+                val secondsRemaining = millisUntilFinished / 1000
+                progressDialog?.setMessage("$secondsRemaining")
+
+            }
+
+            override fun onFinish() {
+                dismissProgressDialog()
+            }
+        }
+
+        (countDownTimer as CountDownTimer).start()
+    }
+
     private fun setUpFinalResultButtons() {
         val result = binding.buttonFinalResult
         val finish = binding.buttonDone
         val stopBtn = binding.buttonStopDigits
 
         finish.setOnClickListener{
-            timeLeft?.cancel()
+            stopTimer()
             val solution = binding.textViewUserInput
             val guess = evalSolution(solution.text.toString())
             val actual = result.text.toString().toDouble()
 
             if (actual == guess) {
                 Toast.makeText(applicationContext, "Osvojili ste 20 poena", Toast.LENGTH_LONG).show()
+                showProgressDialog2()
                 goBackToTheHomeActivityWithDelay()
             } else {
                 Toast.makeText(applicationContext, "Osvojili ste 5 poena", Toast.LENGTH_LONG).show()
+                showProgressDialog2()
                 goBackToTheHomeActivityWithDelay()
 
             }
@@ -92,6 +146,8 @@ class MojBroj : AppCompatActivity() {
             }
 
             override fun onFinish() {
+                // treba dodati da kad istekne vreme da prikaze vrednost
+                showProgressDialog1()
                 goBackToTheHomeActivityWithDelay()
             }
         }

@@ -1,7 +1,9 @@
 package com.deksi.graduationquiz.slagalica.activities
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
 import android.text.Editable
 import android.util.Log
@@ -34,6 +36,10 @@ class Asocijacije : AppCompatActivity() {
     private var konacnoC:EditText? = null
     private var konacnoD:EditText? = null
     private var konacno: EditText? = null
+    private var timeLeft: CountDownTimer? = null
+    private var progressDialog: ProgressDialog? = null
+    private var countDownTimer: CountDownTimer? = null
+    private val totalTime: Long = 5000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +49,62 @@ class Asocijacije : AppCompatActivity() {
         getRoundData()
         setOnClickButtonListeners()
         findViewsById()
+        initTimer()
+        showProgressDialog()
 
+    }
+
+
+    private fun showProgressDialog() {
+        progressDialog = ProgressDialog.show(this, "Please wait", "Loading game..", true, false)
+
+    }
+
+    private fun dismissProgressDialog() {
+        progressDialog?.dismiss()
+    }
+
+    private fun showProgressDialog1() {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setTitle("Time is up!")
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.show()
+
+        startTimerProgressDialog()
+    }
+
+
+    private fun showProgressDialog2() {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setTitle("Game is finished. Please wait..")
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.show()
+
+        startTimerProgressDialog()
+    }
+
+    private fun stopTimer() {
+        timeLeft?.cancel()
+    }
+
+    private fun startTimerProgressDialog() {
+        countDownTimer = object : CountDownTimer(totalTime, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
+
+                val secondsRemaining = millisUntilFinished / 1000
+                progressDialog?.setMessage("$secondsRemaining")
+
+            }
+
+            override fun onFinish() {
+                dismissProgressDialog()
+            }
+        }
+
+        (countDownTimer as CountDownTimer).start()
     }
 
     private fun findViewsById() {
@@ -175,6 +236,8 @@ class Asocijacije : AppCompatActivity() {
         if (!konacno?.text.isNullOrEmpty()) {
             checkAndUpdateField(konacno, getKonacno ?: "", 20)
             if (konacno?.text.toString() == getKonacno) {
+                stopTimer()
+                showProgressDialog2()
                 moveToNextActivityWithDelay()
             }
 
@@ -219,6 +282,26 @@ class Asocijacije : AppCompatActivity() {
 //        }
 
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        timeLeft?.cancel()
+    }
+
+    private fun initTimer() {
+        val timerText = binding.textViewTimeLeft
+        timeLeft = object : CountDownTimer(120000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                timerText.text = (millisUntilFinished / 1000).toString()
+            }
+
+            override fun onFinish() {
+                showProgressDialog1()
+                moveToNextActivityWithDelay()
+            }
+        }
+        (timeLeft as CountDownTimer).start()
     }
 
     private fun moveToNextActivityWithDelay() {
@@ -284,7 +367,7 @@ class Asocijacije : AppCompatActivity() {
             val sslSocketFactory = sslContext.socketFactory
 
             val retrofit = Retrofit.Builder()
-                .baseUrl("https://192.168.197.66:8080/api/slagalica/")
+                .baseUrl("https://192.168.1.9:8080/api/slagalica/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(
                     OkHttpClient.Builder()
@@ -302,6 +385,7 @@ class Asocijacije : AppCompatActivity() {
             override fun onResponse(call: Call<AsocijacijeModel>, response: Response<AsocijacijeModel>) {
                 if(response.isSuccessful){
                     asocijacijeResponse = response.body()
+                    dismissProgressDialog()
 
                 }
                 else {

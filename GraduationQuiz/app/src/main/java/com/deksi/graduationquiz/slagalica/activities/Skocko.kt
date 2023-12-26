@@ -1,8 +1,10 @@
 package com.deksi.graduationquiz.slagalica.activities
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
 import android.view.View
 import android.view.ViewGroup
@@ -33,7 +35,11 @@ class Skocko : AppCompatActivity() {
     }
     private var row = 0
     private var column = 0
+    private var timeLeft: CountDownTimer? = null
     private var solution: IntArray = intArrayOf()
+    private var progressDialog: ProgressDialog? = null
+    private var countDownTimer: CountDownTimer? = null
+    private val totalTime: Long = 5000
 //    private lateinit var resultTextArray: Array<TextView?>
 //    private lateinit var resultLayoutArray: Array<LinearLayout?>
 
@@ -44,9 +50,56 @@ class Skocko : AppCompatActivity() {
 
         initResult()
         initSlots()
+        initTimer()
         initButtons()
         generateSolution()
 //        initArrays()
+    }
+    private fun dismissProgressDialog() {
+        progressDialog?.dismiss()
+    }
+
+    private fun showProgressDialog1() {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setTitle("Time is up!")
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.show()
+
+        startTimerProgressDialog()
+    }
+
+
+    private fun showProgressDialog2() {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setTitle("Game is finished. Please wait..")
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.show()
+
+        startTimerProgressDialog()
+    }
+
+    private fun stopTimer() {
+        timeLeft?.cancel()
+    }
+
+    private fun startTimerProgressDialog() {
+        countDownTimer = object : CountDownTimer(totalTime, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
+
+                val secondsRemaining = millisUntilFinished / 1000
+                progressDialog?.setMessage("$secondsRemaining")
+
+            }
+
+            override fun onFinish() {
+                dismissProgressDialog()
+            }
+        }
+
+        (countDownTimer as CountDownTimer).start()
     }
 
 //    private fun initArrays() {
@@ -72,6 +125,40 @@ class Skocko : AppCompatActivity() {
 //            findViewById(R.id.linear_layout_fields_7)
 //        )
 //    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        timeLeft?.cancel()
+    }
+
+    private fun initTimer() {
+        val timerText = binding.textViewTimeLeft
+        timeLeft = object : CountDownTimer(30000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                timerText.text = (millisUntilFinished / 1000).toString()
+            }
+
+            override fun onFinish() {
+                showResult()
+                showProgressDialog1()
+                moveToTheNextActivityWithDelay()
+            }
+        }
+        (timeLeft as CountDownTimer).start()
+    }
+
+    private fun moveToTheNextActivityWithDelay() {
+        val delayMilis = 5000L
+        val handler = Handler()
+
+        handler.postDelayed({
+            val intent = Intent(this@Skocko, KorakPoKorak::class.java)
+            startActivity(intent)
+
+            finish()
+        }, delayMilis)
+    }
 
     private fun initResult() {
         results[0] = binding.result0
@@ -128,7 +215,8 @@ class Skocko : AppCompatActivity() {
         }
         if (row == slots.size) {
             showResult()
-
+            stopTimer()
+            showProgressDialog2()
             moveToNextActivityWithDelay()
         }
     }
@@ -189,7 +277,8 @@ class Skocko : AppCompatActivity() {
         if (correct == 4) {
             showResult()
             showScore()
-
+            stopTimer()
+            showProgressDialog2()
             moveToNextActivityWithDelay()
 
         }

@@ -1,8 +1,10 @@
 package com.deksi.graduationquiz.slagalica.activities
 
+import android.app.ProgressDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
 import android.text.Editable
 import android.util.Log
@@ -32,6 +34,10 @@ class KorakPoKorak : AppCompatActivity() {
     private lateinit var binding: ActivityKorakPoKorakBinding
     private var korakPoKorakResponse: KorakPoKorakModel? = null
     private var konacno: EditText? = null
+    private var timeLeft: CountDownTimer? = null
+    private var progressDialog: ProgressDialog? = null
+    private var countDownTimer: CountDownTimer? = null
+    private val totalTime: Long = 5000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +47,61 @@ class KorakPoKorak : AppCompatActivity() {
         getRoundData()
         findViewsById()
         onClickListeners()
+        initTimer()
+        showProgressDialog()
+    }
+
+
+    private fun showProgressDialog() {
+        progressDialog = ProgressDialog.show(this, "Please wait", "Loading game..", true, false)
+
+    }
+
+    private fun dismissProgressDialog() {
+        progressDialog?.dismiss()
+    }
+
+    private fun showProgressDialog1() {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setTitle("Time is up!")
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.show()
+
+        startTimerProgressDialog()
+    }
+
+
+    private fun showProgressDialog2() {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setTitle("Game is finished. Please wait..")
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.show()
+
+        startTimerProgressDialog()
+    }
+
+    private fun stopTimer() {
+        timeLeft?.cancel()
+    }
+
+    private fun startTimerProgressDialog() {
+        countDownTimer = object : CountDownTimer(totalTime, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
+
+                val secondsRemaining = millisUntilFinished / 1000
+                progressDialog?.setMessage("$secondsRemaining")
+
+            }
+
+            override fun onFinish() {
+                dismissProgressDialog()
+            }
+        }
+
+        (countDownTimer as CountDownTimer).start()
     }
 
     private fun onButtonClick(button: Button, buttonId: String) {
@@ -78,6 +139,51 @@ class KorakPoKorak : AppCompatActivity() {
     }
 
 
+    override fun onDestroy() {
+        super.onDestroy()
+        timeLeft?.cancel()
+    }
+
+    private fun initTimer() {
+        val timerText = binding.textViewTimeLeft
+        timeLeft = object : CountDownTimer(70000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                timerText.text = (millisUntilFinished / 1000).toString()
+            }
+
+            override fun onFinish() {
+                // i ovde da pozovem
+//                showHintsAndFinalField()
+                showProgressDialog1()
+                moveToNextActivityWithDelay()
+            }
+        }
+        (timeLeft as CountDownTimer).start()
+    }
+
+    //  treba ovde da dodam da kad istekne vreme da popuni sve vrednosti (isto tako i za asocijacije)
+//    private fun showHintsAndFinalField() {
+//        val hint1 = binding.buttonHint1
+//        val hint2 = binding.buttonHint2
+//        val hint3 = binding.buttonHint3
+//        val hint4 = binding.buttonHint4
+//        val hint5 = binding.buttonHint5
+//        val hint6 = binding.buttonHint6
+//        val hint7 = binding.buttonHint7
+//
+//
+//        hint1.text = korakPoKorakResponse?.hint1
+//        hint2.text = korakPoKorakResponse?.hint2
+//        hint3.text = korakPoKorakResponse?.hint3
+//        hint4.text = korakPoKorakResponse?.hint4
+//        hint5.text = korakPoKorakResponse?.hint5
+//        hint6.text = korakPoKorakResponse?.hint6
+//        hint7.text = korakPoKorakResponse?.hint7
+//        konacno?.text = korakPoKorakResponse?.konacno
+//
+//    }
+
+
     private fun checkAndUpdateField(editText: EditText?, expectedValue: String, points: Int) {
         if (editText?.text.toString() == expectedValue) {
             editText?.setBackgroundResource(R.drawable.round_green_reveal)
@@ -99,6 +205,8 @@ class KorakPoKorak : AppCompatActivity() {
                 }
 
             }
+            stopTimer()
+            showProgressDialog2()
             moveToNextActivityWithDelay()
 
 
@@ -174,7 +282,7 @@ class KorakPoKorak : AppCompatActivity() {
         val sslSocketFactory = sslContext.socketFactory
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.197.66:8080/api/korakPoKorak/")
+            .baseUrl("https://192.168.1.9:8080/api/korakPoKorak/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -195,6 +303,7 @@ class KorakPoKorak : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     korakPoKorakResponse = response.body()
+                    dismissProgressDialog()
 
                 } else {
                     Toast.makeText(applicationContext, "Error fetching data", Toast.LENGTH_SHORT)
