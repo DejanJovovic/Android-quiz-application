@@ -37,6 +37,7 @@ class KoZnaZna : AppCompatActivity() {
     private var progressDialog: ProgressDialog? = null
     private var countDownTimer: CountDownTimer? = null
     private val totalTime: Long = 5000
+    private var userAnswered: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityKoZnaZnaBinding.inflate(layoutInflater)
@@ -77,30 +78,14 @@ class KoZnaZna : AppCompatActivity() {
         option4.setOnClickListener {
             handleButtonClick(currentQuestion, currentQuestion.option4, option4)
         }
-    }
-
-    private fun handleButtonClick(
-        question: KoZnaZnaModel,
-        selectedOption: String,
-        clickedButton: Button
-    ) {
-        if (selectedOption == question.answer) {
-            // Correct answer, update UI (change color to green)
-            clickedButton.setBackgroundResource(R.drawable.round_green_reveal)
-        } else {
-            // Incorrect answer, update UI (change color to red)
-            clickedButton.setBackgroundResource(R.drawable.round_red)
-
-            // Display the correct answer (change color to green)
-            when (question.answer) {
-                question.option1 -> binding.buttonOption1.setBackgroundResource(R.drawable.round_green_reveal)
-                question.option2 -> binding.buttonOption2.setBackgroundResource(R.drawable.round_green_reveal)
-                question.option3 -> binding.buttonOption3.setBackgroundResource(R.drawable.round_green_reveal)
-                question.option4 -> binding.buttonOption4.setBackgroundResource(R.drawable.round_green_reveal)
-            }
-        }
+        userAnswered = false
 
         binding.buttonNextQuestion.setOnClickListener {
+
+            if (!userAnswered) {
+//                Toast.makeText(this@KoZnaZna, "Please select an option", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
             // Reset the background of all buttons to their default state
             resetButtonBackgrounds()
@@ -128,7 +113,34 @@ class KoZnaZna : AppCompatActivity() {
                 }
             }
         }
+    }
 
+    private fun handleButtonClick(
+        question: KoZnaZnaModel,
+        selectedOption: String,
+        clickedButton: Button
+    ) {
+        if (userAnswered) {
+            // Ignore the click if the user has already answered
+            return
+        }
+
+        if (selectedOption == question.answer) {
+            // Correct answer, update UI (change color to green)
+            clickedButton.setBackgroundResource(R.drawable.round_green_reveal)
+        } else {
+            // Incorrect answer, update UI (change color to red)
+            clickedButton.setBackgroundResource(R.drawable.round_red)
+
+            // Display the correct answer (change color to green)
+            when (question.answer) {
+                question.option1 -> binding.buttonOption1.setBackgroundResource(R.drawable.round_green_reveal)
+                question.option2 -> binding.buttonOption2.setBackgroundResource(R.drawable.round_green_reveal)
+                question.option3 -> binding.buttonOption3.setBackgroundResource(R.drawable.round_green_reveal)
+                question.option4 -> binding.buttonOption4.setBackgroundResource(R.drawable.round_green_reveal)
+            }
+        }
+        userAnswered = true
     }
 
     private fun resetButtonBackgrounds() {
@@ -136,6 +148,8 @@ class KoZnaZna : AppCompatActivity() {
         binding.buttonOption2.setBackgroundResource(R.drawable.round_white)
         binding.buttonOption3.setBackgroundResource(R.drawable.round_white)
         binding.buttonOption4.setBackgroundResource(R.drawable.round_white)
+
+        userAnswered = false
     }
 
     private fun initTimer() {
