@@ -1,12 +1,16 @@
 package com.deksi.graduationquiz.slagalica.activities
 
+
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
+import android.view.Gravity
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import com.deksi.graduationquiz.R
 import com.deksi.graduationquiz.databinding.ActivityKoZnaZnaBinding
@@ -28,7 +32,7 @@ class KoZnaZna : AppCompatActivity() {
 
     private lateinit var binding: ActivityKoZnaZnaBinding
     private var questions: List<KoZnaZnaModel> = emptyList()
-    private var currentQuestionIndex:Int = 0
+    private var currentQuestionIndex: Int = 0
     private var timeLeft: CountDownTimer? = null
     private var progressDialog: ProgressDialog? = null
     private var countDownTimer: CountDownTimer? = null
@@ -37,12 +41,12 @@ class KoZnaZna : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityKoZnaZnaBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         getRoundData()
-        initTimer()
-        showProgressDialog()
+        onCreateProgressDialog()
+        setUpActionBar()
 
     }
+
     private fun displayData() {
         val question = binding.textViewQuestion
         val option1 = binding.buttonOption1
@@ -75,49 +79,11 @@ class KoZnaZna : AppCompatActivity() {
         }
     }
 
-
-    private fun showProgressDialog() {
-        progressDialog = ProgressDialog.show(this, "Please wait", "Loading questions..", true, false)
-
-    }
-
-    private fun dismissProgressDialog() {
-        progressDialog?.dismiss()
-    }
-
-    private fun showProgressDialog1() {
-        progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle("Time is up!")
-        progressDialog!!.setCancelable(false)
-        progressDialog!!.max = totalTime.toInt()
-        progressDialog!!.show()
-
-        startTimerProgressDialog()
-    }
-
-    private fun stopTimer() {
-        timeLeft?.cancel()
-    }
-
-    private fun startTimerProgressDialog() {
-        countDownTimer = object : CountDownTimer(totalTime, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
-
-                val secondsRemaining = millisUntilFinished / 1000
-                progressDialog?.setMessage("$secondsRemaining")
-            }
-
-            override fun onFinish() {
-                dismissProgressDialog()
-            }
-        }
-
-        (countDownTimer as CountDownTimer).start()
-    }
-
-
-    private fun handleButtonClick(question: KoZnaZnaModel, selectedOption: String, clickedButton: Button) {
+    private fun handleButtonClick(
+        question: KoZnaZnaModel,
+        selectedOption: String,
+        clickedButton: Button
+    ) {
         if (selectedOption == question.answer) {
             // Correct answer, update UI (change color to green)
             clickedButton.setBackgroundResource(R.drawable.round_green_reveal)
@@ -133,7 +99,6 @@ class KoZnaZna : AppCompatActivity() {
                 question.option4 -> binding.buttonOption4.setBackgroundResource(R.drawable.round_green_reveal)
             }
         }
-
 
         binding.buttonNextQuestion.setOnClickListener {
 
@@ -166,9 +131,11 @@ class KoZnaZna : AppCompatActivity() {
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        timeLeft?.cancel()
+    private fun resetButtonBackgrounds() {
+        binding.buttonOption1.setBackgroundResource(R.drawable.round_white)
+        binding.buttonOption2.setBackgroundResource(R.drawable.round_white)
+        binding.buttonOption3.setBackgroundResource(R.drawable.round_white)
+        binding.buttonOption4.setBackgroundResource(R.drawable.round_white)
     }
 
     private fun initTimer() {
@@ -179,15 +146,34 @@ class KoZnaZna : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                showProgressDialog1()
+                showProgressDialogOnTimeout()
                 moveToTheNextActivityWithDelay()
-
-
             }
         }
         (timeLeft as CountDownTimer).start()
     }
 
+
+    private fun startTimerForProgressDialog() {
+        countDownTimer = object : CountDownTimer(totalTime, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
+
+                val secondsRemaining = millisUntilFinished / 1000
+                progressDialog?.setMessage("$secondsRemaining")
+            }
+
+            override fun onFinish() {
+                dismissProgressDialog()
+            }
+        }
+
+        (countDownTimer as CountDownTimer).start()
+    }
+
+    private fun stopTimer() {
+        timeLeft?.cancel()
+    }
 
     private fun moveToTheNextActivityWithDelay() {
         val delayMilis = 5000L
@@ -201,11 +187,24 @@ class KoZnaZna : AppCompatActivity() {
         }, delayMilis)
     }
 
-    private fun resetButtonBackgrounds() {
-        binding.buttonOption1.setBackgroundResource(R.drawable.round_white)
-        binding.buttonOption2.setBackgroundResource(R.drawable.round_white)
-        binding.buttonOption3.setBackgroundResource(R.drawable.round_white)
-        binding.buttonOption4.setBackgroundResource(R.drawable.round_white)
+    private fun onCreateProgressDialog() {
+        progressDialog =
+            ProgressDialog.show(this, "Please wait", "Loading questions..", true, false)
+
+    }
+
+    private fun dismissProgressDialog() {
+        progressDialog?.dismiss()
+    }
+
+    private fun showProgressDialogOnTimeout() {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setTitle("Time is up!")
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.show()
+
+        startTimerForProgressDialog()
     }
 
     private fun getRoundData() {
@@ -258,6 +257,7 @@ class KoZnaZna : AppCompatActivity() {
                     questions = response.body() ?: emptyList()
                     displayData()
                     dismissProgressDialog()
+                    initTimer()
 
 
                 } else {
@@ -270,5 +270,23 @@ class KoZnaZna : AppCompatActivity() {
             }
         })
 
+    }
+
+    private fun setUpActionBar() {
+        val actionBar = supportActionBar
+
+        actionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        actionBar?.setCustomView(R.layout.action_bar_custom_title)
+
+        val titleTextView =
+            actionBar?.customView?.findViewById<TextView>(R.id.text_view_custom_title)
+
+        titleTextView?.text = "Ko zna zna"
+        titleTextView?.gravity = Gravity.CENTER
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        timeLeft?.cancel()
     }
 }

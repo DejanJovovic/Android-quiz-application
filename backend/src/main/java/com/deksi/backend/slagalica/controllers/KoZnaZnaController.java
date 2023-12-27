@@ -52,7 +52,7 @@ public class KoZnaZnaController {
 
     @GetMapping("/random-rounds")
     public ResponseEntity<List<KoZnaZnaEntity>> getRandomRounds() {
-        int count = 4; // specify the number of random rounds you want
+        int count = 5;
         List<Long> randomRoundIds = koZnaZnaService.getRandomKoZnaZnaRounds(count);
 
         if (!randomRoundIds.isEmpty()) {

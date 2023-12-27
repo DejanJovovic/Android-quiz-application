@@ -5,8 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
+import android.view.Gravity
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import com.deksi.graduationquiz.R
 import com.deksi.graduationquiz.databinding.ActivitySpojniceBinding
@@ -41,8 +44,6 @@ class Spojnice : AppCompatActivity() {
         "button_left3" to "button_right2",
         "button_left4" to "button_right3",
         "button_left5" to "button_right1",
-
-
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,62 +53,8 @@ class Spojnice : AppCompatActivity() {
 
         getRoundData()
         onClickListeners()
-        initTimer()
-        showProgressDialog()
-    }
-
-
-
-    private fun showProgressDialog() {
-        progressDialog = ProgressDialog.show(this, "Please wait", "Loading game..", true, false)
-
-    }
-
-    private fun dismissProgressDialog() {
-        progressDialog?.dismiss()
-    }
-
-    private fun showProgressDialog1() {
-        progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle("Time is up!")
-        progressDialog!!.setCancelable(false)
-        progressDialog!!.max = totalTime.toInt()
-        progressDialog!!.show()
-
-        startTimerProgressDialog()
-    }
-
-
-    private fun showProgressDialog2() {
-        progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle("Game is finished. Please wait..")
-        progressDialog!!.setCancelable(false)
-        progressDialog!!.max = totalTime.toInt()
-        progressDialog!!.show()
-
-        startTimerProgressDialog()
-    }
-
-    private fun stopTimer() {
-        timeLeft?.cancel()
-    }
-
-    private fun startTimerProgressDialog() {
-        countDownTimer = object : CountDownTimer(totalTime, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
-
-                val secondsRemaining = millisUntilFinished / 1000
-                progressDialog?.setMessage("$secondsRemaining")
-
-            }
-
-            override fun onFinish() {
-                dismissProgressDialog()
-            }
-        }
-
-        (countDownTimer as CountDownTimer).start()
+        onCreateProgressDialog()
+        setUpActionBar()
     }
 
     private fun onClickListeners() {
@@ -163,7 +110,6 @@ class Spojnice : AppCompatActivity() {
 
     }
 
-
     private fun checkConnection() {
         if (selectedLeft != null && selectedRight != null) {
             val selectedPair = Pair(selectedLeft!!, selectedRight!!)
@@ -193,31 +139,9 @@ class Spojnice : AppCompatActivity() {
 
         if (connectedPairs.size == correctConnections.size) {
             stopTimer()
-            showProgressDialog2()
+            showProgressDialogOnGameFinish()
             moveToNextActivityWithDelay()
         }
-    }
-
-    private fun moveToNextActivityWithDelay() {
-        val delayMilis = 5000L
-        val handler = Handler()
-
-        handler.postDelayed({
-            val intent = Intent(this@Spojnice, Asocijacije::class.java)
-            startActivity(intent)
-
-            finish()
-        }, delayMilis)
-    }
-
-    private fun changeButtonColorToRed(buttonId: String?) {
-        val button = findButtonByIdentifier(buttonId)
-        button?.setBackgroundResource(R.drawable.round_red_reveal)
-    }
-
-    private fun changeButtonColorToGreen(buttonId: String?) {
-        val button = findButtonByIdentifier(buttonId)
-        button?.setBackgroundResource(R.drawable.round_green_reveal)
     }
 
     private fun findButtonByIdentifier(identifier: String?): Button? {
@@ -242,11 +166,16 @@ class Spojnice : AppCompatActivity() {
         button?.isEnabled = false
     }
 
-
-    override fun onDestroy() {
-        super.onDestroy()
-        timeLeft?.cancel()
+    private fun changeButtonColorToRed(buttonId: String?) {
+        val button = findButtonByIdentifier(buttonId)
+        button?.setBackgroundResource(R.drawable.round_red_reveal)
     }
+
+    private fun changeButtonColorToGreen(buttonId: String?) {
+        val button = findButtonByIdentifier(buttonId)
+        button?.setBackgroundResource(R.drawable.round_green_reveal)
+    }
+
 
     private fun initTimer() {
         val timerText = binding.textViewTimeLeft
@@ -256,21 +185,118 @@ class Spojnice : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                showProgressDialog1()
+                showProgressDialogOnTimeout()
                 moveToNextActivityWithDelay()
             }
         }
         (timeLeft as CountDownTimer).start()
     }
 
+    private fun startTimerProgressDialog() {
+        countDownTimer = object : CountDownTimer(totalTime, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
+
+                val secondsRemaining = millisUntilFinished / 1000
+                progressDialog?.setMessage("$secondsRemaining")
+
+            }
+
+            override fun onFinish() {
+                dismissProgressDialog()
+            }
+        }
+
+        (countDownTimer as CountDownTimer).start()
+    }
+
+    private fun stopTimer() {
+        timeLeft?.cancel()
+    }
+
+    private fun onCreateProgressDialog() {
+        progressDialog = ProgressDialog.show(this, "Please wait", "Loading game..", true, false)
+
+    }
+
+    private fun dismissProgressDialog() {
+        progressDialog?.dismiss()
+    }
+
+    private fun showProgressDialogOnTimeout() {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setTitle("Time is up!")
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.show()
+
+        startTimerProgressDialog()
+    }
+
+
+    private fun showProgressDialogOnGameFinish() {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setTitle("Game is finished. Please wait..")
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.show()
+
+        startTimerProgressDialog()
+    }
+
+    private fun moveToNextActivityWithDelay() {
+        val delayMilis = 5000L
+        val handler = Handler()
+
+        handler.postDelayed({
+            val intent = Intent(this@Spojnice, Asocijacije::class.java)
+            startActivity(intent)
+
+            finish()
+        }, delayMilis)
+    }
+
+    private fun setupData() {
+        val subject = binding.buttonSubject
+        val left1 = binding.buttonLeft1
+        val left2 = binding.buttonLeft2
+        val left3 = binding.buttonLeft3
+        val left4 = binding.buttonLeft4
+        val left5 = binding.buttonLeft5
+        val right1 = binding.buttonRight1
+        val right2 = binding.buttonRight2
+        val right3 = binding.buttonRight3
+        val right4 = binding.buttonRight4
+        val right5 = binding.buttonRight5
+
+        subject.text = spojniceResponse?.subject
+        left1.text = spojniceResponse?.left1
+        left2.text = spojniceResponse?.left2
+        left3.text = spojniceResponse?.left3
+        left4.text = spojniceResponse?.left4
+        left5.text = spojniceResponse?.left5
+        right1.text = spojniceResponse?.right1
+        right2.text = spojniceResponse?.right2
+        right3.text = spojniceResponse?.right3
+        right4.text = spojniceResponse?.right4
+        right5.text = spojniceResponse?.right5
+    }
 
     private fun getRoundData() {
 
         val trustAllCerts = arrayOf<TrustManager>(
             object : X509TrustManager {
-                override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
+                override fun checkClientTrusted(
+                    chain: Array<out X509Certificate>?,
+                    authType: String?
+                ) {
+                }
 
-                override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
+                override fun checkServerTrusted(
+                    chain: Array<out X509Certificate>?,
+                    authType: String?
+                ) {
+                }
 
                 override fun getAcceptedIssuers(): Array<X509Certificate> {
                     return arrayOf()
@@ -299,39 +325,17 @@ class Spojnice : AppCompatActivity() {
 
         val call = spojniceService.getRandomRound()
 
-        call.enqueue(object: Callback<SpojniceModel> {
+        call.enqueue(object : Callback<SpojniceModel> {
             override fun onResponse(call: Call<SpojniceModel>, response: Response<SpojniceModel>) {
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     spojniceResponse = response.body()
-                    val subject = binding.buttonSubject
-                    val left1 = binding.buttonLeft1
-                    val left2 = binding.buttonLeft2
-                    val left3 = binding.buttonLeft3
-                    val left4 = binding.buttonLeft4
-                    val left5 = binding.buttonLeft5
-                    val right1 = binding.buttonRight1
-                    val right2 = binding.buttonRight2
-                    val right3 = binding.buttonRight3
-                    val right4 = binding.buttonRight4
-                    val right5 = binding.buttonRight5
-
-                    subject.text = spojniceResponse?.subject
-                    left1.text = spojniceResponse?.left1
-                    left2.text = spojniceResponse?.left2
-                    left3.text = spojniceResponse?.left3
-                    left4.text = spojniceResponse?.left4
-                    left5.text = spojniceResponse?.left5
-                    right1.text = spojniceResponse?.right1
-                    right2.text = spojniceResponse?.right2
-                    right3.text = spojniceResponse?.right3
-                    right4.text = spojniceResponse?.right4
-                    right5.text = spojniceResponse?.right5
-
+                    setupData()
                     dismissProgressDialog()
+                    initTimer()
 
-                }
-                else {
-                    Toast.makeText(applicationContext, "Error fetching data", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(applicationContext, "Error fetching data", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
 
@@ -341,5 +345,23 @@ class Spojnice : AppCompatActivity() {
 
         })
 
+    }
+
+    private fun setUpActionBar() {
+        val actionBar = supportActionBar
+
+        actionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        actionBar?.setCustomView(R.layout.action_bar_custom_title)
+
+        val titleTextView =
+            actionBar?.customView?.findViewById<TextView>(R.id.text_view_custom_title)
+
+        titleTextView?.text = "Spojnice"
+        titleTextView?.gravity = Gravity.CENTER
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        timeLeft?.cancel()
     }
 }

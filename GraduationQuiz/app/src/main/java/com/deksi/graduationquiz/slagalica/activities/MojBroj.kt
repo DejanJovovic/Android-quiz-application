@@ -5,10 +5,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
+import android.view.Gravity
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import com.deksi.graduationquiz.R
 import com.deksi.graduationquiz.databinding.ActivityMojBrojBinding
 import com.deksi.graduationquiz.home.HomeActivity
 import org.mozilla.javascript.Context
@@ -34,126 +38,12 @@ class MojBroj : AppCompatActivity() {
         binding = ActivityMojBrojBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         init()
         initTimer()
         setUpFinalResultButtons()
+        setUpActionBar()
 
     }
-
-
-    private fun dismissProgressDialog() {
-        progressDialog?.dismiss()
-    }
-
-    private fun showProgressDialog1() {
-        progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle("Time is up!")
-        progressDialog!!.setCancelable(false)
-        progressDialog!!.max = totalTime.toInt()
-        progressDialog!!.show()
-
-        startTimerProgressDialog()
-    }
-
-
-    private fun showProgressDialog2() {
-        progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle("Game is finished. Please wait..")
-        progressDialog!!.setCancelable(false)
-        progressDialog!!.max = totalTime.toInt()
-        progressDialog!!.show()
-
-        startTimerProgressDialog()
-    }
-
-    private fun stopTimer() {
-        timeLeft?.cancel()
-    }
-
-    private fun startTimerProgressDialog() {
-        countDownTimer = object : CountDownTimer(totalTime, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
-
-                val secondsRemaining = millisUntilFinished / 1000
-                progressDialog?.setMessage("$secondsRemaining")
-
-            }
-
-            override fun onFinish() {
-                dismissProgressDialog()
-            }
-        }
-
-        (countDownTimer as CountDownTimer).start()
-    }
-
-    private fun setUpFinalResultButtons() {
-        val result = binding.buttonFinalResult
-        val finish = binding.buttonDone
-        val stopBtn = binding.buttonStopDigits
-
-        finish.setOnClickListener{
-            stopTimer()
-            val solution = binding.textViewUserInput
-            val guess = evalSolution(solution.text.toString())
-            val actual = result.text.toString().toDouble()
-
-            if (actual == guess) {
-                Toast.makeText(applicationContext, "Osvojili ste 20 poena", Toast.LENGTH_LONG).show()
-                showProgressDialog2()
-                goBackToTheHomeActivityWithDelay()
-            } else {
-                Toast.makeText(applicationContext, "Osvojili ste 5 poena", Toast.LENGTH_LONG).show()
-                showProgressDialog2()
-                goBackToTheHomeActivityWithDelay()
-
-            }
-
-        }
-
-        stopBtn.setOnClickListener {
-            generateNumbers()
-            generateTimer?.cancel()
-            generateTimer?.start()
-        }
-    }
-
-    private fun goBackToTheHomeActivityWithDelay() {
-        val delayMilis = 5000L
-        val handler = Handler()
-
-        handler.postDelayed({
-            val intent = Intent(this@MojBroj, HomeActivity::class.java)
-            startActivity(intent)
-
-            finish()
-        }, delayMilis)
-    }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-        timeLeft?.cancel()
-    }
-
-    private fun initTimer() {
-        val timerText = binding.textViewTimeLeft
-        timeLeft = object : CountDownTimer(60000, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                timerText.text = (millisUntilFinished / 1000).toString()
-            }
-
-            override fun onFinish() {
-                // treba dodati da kad istekne vreme da prikaze vrednost
-                showProgressDialog1()
-                goBackToTheHomeActivityWithDelay()
-            }
-        }
-        (timeLeft as CountDownTimer).start()
-    }
-
 
     private fun init() {
         val firstSingleDigit = binding.buttonFirstSingleDigit
@@ -233,15 +123,46 @@ class MojBroj : AppCompatActivity() {
         }
     }
 
-    private fun displayInput() {
-        val buffer = StringBuffer()
-        for (value in input) {
-            buffer.append(value?.text.toString())
-        }
-        val inputText = binding.textViewUserInput
-        inputText.text = buffer.toString()
+    private fun enableButtons() {
+        val firstSingleDigit = binding.buttonFirstSingleDigit
+        val secondSingleDigit = binding.buttonSecondSingleDigit
+        val thirdSingleDigit = binding.buttonThirdSingleDigit
+        val fourthSingleDigit = binding.buttonFourthSingleDigit
+        val firstMediumDigit = binding.buttonFirstMediumDigit
+        val secondMediumDigit = binding.buttonSecondMediumDigit
+        val minus = binding.buttonMinus
+        val plus = binding.buttonPlus
+        val multiply = binding.buttonMultiply
+        val divide = binding.buttonDivide
+        val openBracket = binding.buttonOpenBrackets
+        val closedBracket = binding.buttonCloseBrackets
+        val delete = binding.buttonDelete
+        firstSingleDigit.isEnabled = true
+        secondSingleDigit.isEnabled = true
+        thirdSingleDigit.isEnabled = true
+        fourthSingleDigit.isEnabled = true
+        firstMediumDigit.isEnabled = true
+        secondMediumDigit.isEnabled = true
+        minus.isEnabled = true
+        plus.isEnabled = true
+        multiply.isEnabled = true
+        divide.isEnabled = true
+        openBracket.isEnabled = true
+        closedBracket.isEnabled = true
+        delete.isEnabled = true
     }
 
+    private fun evalSolution(solution: String?): Double? {
+        val rhino: Context = Context.enter()
+        rhino.optimizationLevel = -1
+        return try {
+            val scope: Scriptable = rhino.initStandardObjects()
+            val result: Any = rhino.evaluateString(scope, solution, "JavaScript", 1, null)
+            Context.toString(result).toDouble()
+        } finally {
+            Context.exit()
+        }
+    }
 
     private fun generateNumbers() {
         if (generated) return
@@ -255,16 +176,19 @@ class MojBroj : AppCompatActivity() {
                 generatedNumber = "" + (Random().nextInt(998) + 2)
                 setNumber(generatedNumber, currentNumber)
             }
+
             in 1..4 -> {
                 idx = Random().nextInt(singleDigits.size)
                 generatedNumber = singleDigits[idx]
                 setNumber(generatedNumber, currentNumber)
             }
+
             5 -> {
                 idx = Random().nextInt(firstMediumDigits.size)
                 generatedNumber = firstMediumDigits[idx]
                 setNumber(generatedNumber, currentNumber)
             }
+
             6 -> {
                 idx = Random().nextInt(secondMediumDigits.size)
                 generatedNumber = secondMediumDigits[idx]
@@ -274,7 +198,6 @@ class MojBroj : AppCompatActivity() {
 
         currentNumber++
     }
-
 
     private fun setNumber(number: String?, idx: Int) {
         val firstSingleDigit = binding.buttonFirstSingleDigit
@@ -317,46 +240,138 @@ class MojBroj : AppCompatActivity() {
         }
     }
 
+    private fun setUpFinalResultButtons() {
+        val result = binding.buttonFinalResult
+        val finish = binding.buttonDone
+        val stopBtn = binding.buttonStopDigits
 
-    private fun enableButtons() {
-        val firstSingleDigit = binding.buttonFirstSingleDigit
-        val secondSingleDigit = binding.buttonSecondSingleDigit
-        val thirdSingleDigit = binding.buttonThirdSingleDigit
-        val fourthSingleDigit = binding.buttonFourthSingleDigit
-        val firstMediumDigit = binding.buttonFirstMediumDigit
-        val secondMediumDigit = binding.buttonSecondMediumDigit
-        val minus = binding.buttonMinus
-        val plus = binding.buttonPlus
-        val multiply = binding.buttonMultiply
-        val divide = binding.buttonDivide
-        val openBracket = binding.buttonOpenBrackets
-        val closedBracket = binding.buttonCloseBrackets
-        val delete = binding.buttonDelete
-        firstSingleDigit.isEnabled = true
-        secondSingleDigit.isEnabled = true
-        thirdSingleDigit.isEnabled = true
-        fourthSingleDigit.isEnabled = true
-        firstMediumDigit.isEnabled = true
-        secondMediumDigit.isEnabled = true
-        minus.isEnabled = true
-        plus.isEnabled = true
-        multiply.isEnabled = true
-        divide.isEnabled = true
-        openBracket.isEnabled = true
-        closedBracket.isEnabled = true
-        delete.isEnabled = true
+        finish.setOnClickListener {
+            stopTimer()
+            val solution = binding.textViewUserInput
+            val guess = evalSolution(solution.text.toString())
+            val actual = result.text.toString().toDouble()
+
+            if (actual == guess) {
+                Toast.makeText(applicationContext, "Osvojili ste 20 poena", Toast.LENGTH_LONG)
+                    .show()
+                showProgressDialogOnGameFinish()
+                goBackToTheHomeActivityWithDelay()
+            } else {
+                Toast.makeText(applicationContext, "Osvojili ste 5 poena", Toast.LENGTH_LONG).show()
+                showProgressDialogOnGameFinish()
+                goBackToTheHomeActivityWithDelay()
+
+            }
+
+        }
+
+        stopBtn.setOnClickListener {
+            generateNumbers()
+            generateTimer?.cancel()
+            generateTimer?.start()
+        }
     }
 
-    private fun evalSolution(solution: String?): Double? {
-        val rhino: Context = Context.enter()
-        rhino.optimizationLevel = -1
-        return try {
-            val scope: Scriptable = rhino.initStandardObjects()
-            val result: Any = rhino.evaluateString(scope, solution, "JavaScript", 1, null)
-            Context.toString(result).toDouble()
-        } finally {
-            Context.exit()
+    private fun displayInput() {
+        val buffer = StringBuffer()
+        for (value in input) {
+            buffer.append(value?.text.toString())
         }
+        val inputText = binding.textViewUserInput
+        inputText.text = buffer.toString()
+    }
+
+    private fun initTimer() {
+        val timerText = binding.textViewTimeLeft
+        timeLeft = object : CountDownTimer(60000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                timerText.text = (millisUntilFinished / 1000).toString()
+            }
+
+            override fun onFinish() {
+                // treba dodati da kad istekne vreme da prikaze zavrsnu kombinaciju
+                showProgressDialogOnTimeout()
+                goBackToTheHomeActivityWithDelay()
+            }
+        }
+        (timeLeft as CountDownTimer).start()
+    }
+
+    private fun startTimerProgressDialog() {
+        countDownTimer = object : CountDownTimer(totalTime, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
+
+                val secondsRemaining = millisUntilFinished / 1000
+                progressDialog?.setMessage("$secondsRemaining")
+
+            }
+
+            override fun onFinish() {
+                dismissProgressDialog()
+            }
+        }
+
+        (countDownTimer as CountDownTimer).start()
+    }
+
+    private fun stopTimer() {
+        timeLeft?.cancel()
+    }
+
+    private fun showProgressDialogOnTimeout() {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setTitle("Time is up!")
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.show()
+
+        startTimerProgressDialog()
+    }
+
+
+    private fun showProgressDialogOnGameFinish() {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setTitle("Game is finished. Please wait..")
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.show()
+
+        startTimerProgressDialog()
+    }
+
+    private fun dismissProgressDialog() {
+        progressDialog?.dismiss()
+    }
+
+    private fun goBackToTheHomeActivityWithDelay() {
+        val delayMilis = 5000L
+        val handler = Handler()
+
+        handler.postDelayed({
+            val intent = Intent(this@MojBroj, HomeActivity::class.java)
+            startActivity(intent)
+
+            finish()
+        }, delayMilis)
+    }
+
+    private fun setUpActionBar() {
+        val actionBar = supportActionBar
+
+        actionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        actionBar?.setCustomView(R.layout.action_bar_custom_title)
+
+        val titleTextView =
+            actionBar?.customView?.findViewById<TextView>(R.id.text_view_custom_title)
+
+        titleTextView?.text = "Moj broj"
+        titleTextView?.gravity = Gravity.CENTER
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        timeLeft?.cancel()
     }
 
 }

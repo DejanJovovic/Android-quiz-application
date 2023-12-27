@@ -7,9 +7,12 @@ import android.os.CountDownTimer
 import android.os.Handler
 import android.text.Editable
 import android.util.Log
+import android.view.Gravity
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import com.deksi.graduationquiz.R
 import com.deksi.graduationquiz.databinding.ActivityAsocijacijeBinding
@@ -32,9 +35,9 @@ class Asocijacije : AppCompatActivity() {
     private lateinit var binding: ActivityAsocijacijeBinding
     private var asocijacijeResponse: AsocijacijeModel? = null
     private var konacnoA: EditText? = null
-    private var konacnoB:EditText? = null
-    private var konacnoC:EditText? = null
-    private var konacnoD:EditText? = null
+    private var konacnoB: EditText? = null
+    private var konacnoC: EditText? = null
+    private var konacnoD: EditText? = null
     private var konacno: EditText? = null
     private var timeLeft: CountDownTimer? = null
     private var progressDialog: ProgressDialog? = null
@@ -49,62 +52,9 @@ class Asocijacije : AppCompatActivity() {
         getRoundData()
         setOnClickButtonListeners()
         findViewsById()
-        initTimer()
-        showProgressDialog()
+        onCreateProgressDialog()
+        setUpActionBar()
 
-    }
-
-
-    private fun showProgressDialog() {
-        progressDialog = ProgressDialog.show(this, "Please wait", "Loading game..", true, false)
-
-    }
-
-    private fun dismissProgressDialog() {
-        progressDialog?.dismiss()
-    }
-
-    private fun showProgressDialog1() {
-        progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle("Time is up!")
-        progressDialog!!.setCancelable(false)
-        progressDialog!!.max = totalTime.toInt()
-        progressDialog!!.show()
-
-        startTimerProgressDialog()
-    }
-
-
-    private fun showProgressDialog2() {
-        progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle("Game is finished. Please wait..")
-        progressDialog!!.setCancelable(false)
-        progressDialog!!.max = totalTime.toInt()
-        progressDialog!!.show()
-
-        startTimerProgressDialog()
-    }
-
-    private fun stopTimer() {
-        timeLeft?.cancel()
-    }
-
-    private fun startTimerProgressDialog() {
-        countDownTimer = object : CountDownTimer(totalTime, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
-
-                val secondsRemaining = millisUntilFinished / 1000
-                progressDialog?.setMessage("$secondsRemaining")
-
-            }
-
-            override fun onFinish() {
-                dismissProgressDialog()
-            }
-        }
-
-        (countDownTimer as CountDownTimer).start()
     }
 
     private fun findViewsById() {
@@ -135,7 +85,8 @@ class Asocijacije : AppCompatActivity() {
         val buttonSubmit = binding.buttonSubmit
         buttonSubmit.setOnClickListener {
             buttonSubmit.isEnabled = true
-            updateAsosijacije() }
+            updateAsosijacije()
+        }
     }
 
     private fun onButtonClick(button: Button, buttonId: String) {
@@ -160,57 +111,85 @@ class Asocijacije : AppCompatActivity() {
                 "d4" -> asocijacijeResponse?.d4
                 else -> null
             }
-
-            // Set the button text
             buttonText?.let { button.text = it }
         }
     }
+
     private fun checkAndUpdateField(editText: EditText?, expectedValue: String, points: Int) {
         if (editText?.text.toString() == expectedValue) {
             editText?.setBackgroundResource(R.drawable.round_green_reveal)
-            Toast.makeText(applicationContext, "Osvojili ste $points poena", Toast.LENGTH_LONG).show()
+            // treba menjati
+            Toast.makeText(applicationContext, "Osvojili ste $points poena", Toast.LENGTH_LONG)
+                .show()
 
             // Automatically show corresponding values when the user enters the right value
             when (editText) {
                 konacnoA -> {
-                    showValues(asocijacijeResponse?.a1, asocijacijeResponse?.a2, asocijacijeResponse?.a3, asocijacijeResponse?.a4)
+                    showValues(
+                        asocijacijeResponse?.a1,
+                        asocijacijeResponse?.a2,
+                        asocijacijeResponse?.a3,
+                        asocijacijeResponse?.a4
+                    )
                 }
+
                 konacnoB -> {
-                    showValues(asocijacijeResponse?.b1, asocijacijeResponse?.b2, asocijacijeResponse?.b3, asocijacijeResponse?.b4)
+                    showValues(
+                        asocijacijeResponse?.b1,
+                        asocijacijeResponse?.b2,
+                        asocijacijeResponse?.b3,
+                        asocijacijeResponse?.b4
+                    )
                 }
+
                 konacnoC -> {
-                    showValues(asocijacijeResponse?.c1, asocijacijeResponse?.c2, asocijacijeResponse?.c3, asocijacijeResponse?.c4)
+                    showValues(
+                        asocijacijeResponse?.c1,
+                        asocijacijeResponse?.c2,
+                        asocijacijeResponse?.c3,
+                        asocijacijeResponse?.c4
+                    )
                 }
+
                 konacnoD -> {
-                    showValues(asocijacijeResponse?.d1, asocijacijeResponse?.d2, asocijacijeResponse?.d3, asocijacijeResponse?.d4)
+                    showValues(
+                        asocijacijeResponse?.d1,
+                        asocijacijeResponse?.d2,
+                        asocijacijeResponse?.d3,
+                        asocijacijeResponse?.d4
+                    )
                 }
+
                 konacno -> {
                     showValues(
-                        asocijacijeResponse?.a1, asocijacijeResponse?.a2, asocijacijeResponse?.a3, asocijacijeResponse?.a4,
-                        asocijacijeResponse?.b1, asocijacijeResponse?.b2, asocijacijeResponse?.b3, asocijacijeResponse?.b4,
-                        asocijacijeResponse?.c1, asocijacijeResponse?.c2, asocijacijeResponse?.c3, asocijacijeResponse?.c4,
-                        asocijacijeResponse?.d1, asocijacijeResponse?.d2, asocijacijeResponse?.d3, asocijacijeResponse?.d4,
-                        asocijacijeResponse?.konacnoA, asocijacijeResponse?.konacnoB, asocijacijeResponse?.konacnoC, asocijacijeResponse?.konacnoD
+                        asocijacijeResponse?.a1,
+                        asocijacijeResponse?.a2,
+                        asocijacijeResponse?.a3,
+                        asocijacijeResponse?.a4,
+                        asocijacijeResponse?.b1,
+                        asocijacijeResponse?.b2,
+                        asocijacijeResponse?.b3,
+                        asocijacijeResponse?.b4,
+                        asocijacijeResponse?.c1,
+                        asocijacijeResponse?.c2,
+                        asocijacijeResponse?.c3,
+                        asocijacijeResponse?.c4,
+                        asocijacijeResponse?.d1,
+                        asocijacijeResponse?.d2,
+                        asocijacijeResponse?.d3,
+                        asocijacijeResponse?.d4,
+                        asocijacijeResponse?.konacnoA,
+                        asocijacijeResponse?.konacnoB,
+                        asocijacijeResponse?.konacnoC,
+                        asocijacijeResponse?.konacnoD
                     )
                 }
             }
 
-
         } else {
-            Toast.makeText(applicationContext, "Nije tacno", Toast.LENGTH_LONG).show()
+            Toast.makeText(applicationContext, "Wrong!", Toast.LENGTH_LONG).show()
         }
     }
-
-//    private fun checkAndUpdateField(editText: EditText?, expectedValue: String, points: Int): Boolean {
-//        return if (editText?.text.toString() == expectedValue) {
-//            editText?.setBackgroundResource(R.drawable.round_green_reveal)
-//            Toast.makeText(applicationContext, "Osvojili ste $points poena", Toast.LENGTH_LONG).show()
-//            true
-//        } else {
-//            Toast.makeText(applicationContext, "Nije tacno", Toast.LENGTH_LONG).show()
-//            false
-//        }
-//    }
 
     private fun updateAsosijacije() {
         val getKonacnoA: String? = asocijacijeResponse?.konacnoA
@@ -218,8 +197,6 @@ class Asocijacije : AppCompatActivity() {
         val getKonacnoC: String? = asocijacijeResponse?.konacnoC
         val getKonacnoD: String? = asocijacijeResponse?.konacnoD
         val getKonacno: String? = asocijacijeResponse?.konacno
-
-
 
         if (!konacnoA?.text.isNullOrEmpty()) {
             checkAndUpdateField(konacnoA, getKonacnoA ?: "", 5)
@@ -237,83 +214,11 @@ class Asocijacije : AppCompatActivity() {
             checkAndUpdateField(konacno, getKonacno ?: "", 20)
             if (konacno?.text.toString() == getKonacno) {
                 stopTimer()
-                showProgressDialog2()
+                showProgressDialogOnGameFinish()
                 moveToNextActivityWithDelay()
             }
 
         }
-
-//        if (konacnoA?.text.toString() == getKonacnoA) {
-//            konacnoA?.setBackgroundResource(R.drawable.round_green_reveal)
-//            Toast.makeText(applicationContext, "Osvojili ste 5 poena", Toast.LENGTH_LONG).show()
-//        } else {
-//            Toast.makeText(applicationContext, "Nije tacno", Toast.LENGTH_LONG).show()
-//
-//        }
-//        if (konacnoB?.text.toString() == getKonacnoB) {
-//            konacnoB?.setBackgroundResource(R.drawable.round_green_reveal)
-//            Toast.makeText(applicationContext, "Osvojili ste 5 poena", Toast.LENGTH_LONG).show()
-//        } else {
-//            Toast.makeText(applicationContext, "Nije tacno", Toast.LENGTH_LONG).show()
-//
-//        }
-//        if (konacnoC?.text.toString() == getKonacnoC) {
-//            konacnoC?.setBackgroundResource(R.drawable.round_green_reveal)
-//            Toast.makeText(applicationContext, "Osvojili ste 5 poena", Toast.LENGTH_LONG).show()
-//        } else {
-//            Toast.makeText(applicationContext, "Nije tacno", Toast.LENGTH_LONG).show()
-//
-//        }
-//        if (konacnoD?.text.toString() == getKonacnoD) {
-//            konacnoD?.setBackgroundResource(R.drawable.round_green_reveal)
-//            Toast.makeText(applicationContext, "Osvojili ste 5 poena", Toast.LENGTH_LONG).show()
-//        } else {
-//            Toast.makeText(applicationContext, "Nije tacno", Toast.LENGTH_LONG).show()
-//
-//        }
-//        if (konacno?.text.toString() == getKonacno) {
-//            konacno?.setBackgroundResource(R.drawable.round_green_reveal)
-//            Toast.makeText(applicationContext, "Osvojili ste 20 poena", Toast.LENGTH_LONG).show()
-//        }
-//
-//        else {
-//            Toast.makeText(applicationContext, "Nije tacno", Toast.LENGTH_LONG).show()
-//
-//        }
-
-
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        timeLeft?.cancel()
-    }
-
-    private fun initTimer() {
-        val timerText = binding.textViewTimeLeft
-        timeLeft = object : CountDownTimer(120000, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                timerText.text = (millisUntilFinished / 1000).toString()
-            }
-
-            override fun onFinish() {
-                showProgressDialog1()
-                moveToNextActivityWithDelay()
-            }
-        }
-        (timeLeft as CountDownTimer).start()
-    }
-
-    private fun moveToNextActivityWithDelay() {
-        val delayMillis = 5000L
-        val handler = Handler()
-
-        handler.postDelayed({
-            val intent = Intent(this@Asocijacije, Skocko::class.java)
-            startActivity(intent)
-
-            finish()
-        }, delayMillis)
     }
 
     private fun showValues(vararg values: String?) {
@@ -347,49 +252,170 @@ class Asocijacije : AppCompatActivity() {
 
     }
 
+    private fun initTimer() {
+        val timerText = binding.textViewTimeLeft
+        timeLeft = object : CountDownTimer(120000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                timerText.text = (millisUntilFinished / 1000).toString()
+            }
+
+            override fun onFinish() {
+                showProgressDialogOnTimeout()
+                moveToNextActivityWithDelay()
+                displayValuesOnTimeout()
+            }
+        }
+        (timeLeft as CountDownTimer).start()
+    }
+
+    private fun startTimerProgressDialog() {
+        countDownTimer = object : CountDownTimer(totalTime, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
+
+                val secondsRemaining = millisUntilFinished / 1000
+                progressDialog?.setMessage("$secondsRemaining")
+
+            }
+
+            override fun onFinish() {
+                dismissProgressDialog()
+            }
+        }
+
+        (countDownTimer as CountDownTimer).start()
+    }
+
+    private fun stopTimer() {
+        timeLeft?.cancel()
+    }
+
+    private fun onCreateProgressDialog() {
+        progressDialog = ProgressDialog.show(this, "Please wait", "Loading game..", true, false)
+
+    }
+
+    private fun dismissProgressDialog() {
+        progressDialog?.dismiss()
+    }
+
+    private fun showProgressDialogOnTimeout() {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setTitle("Time is up!")
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.show()
+
+        startTimerProgressDialog()
+    }
+
+
+    private fun showProgressDialogOnGameFinish() {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setTitle("Game is finished. Please wait..")
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.show()
+
+        startTimerProgressDialog()
+    }
+
+    private fun moveToNextActivityWithDelay() {
+        val delayMillis = 5000L
+        val handler = Handler()
+
+        handler.postDelayed({
+            val intent = Intent(this@Asocijacije, Skocko::class.java)
+            startActivity(intent)
+
+            finish()
+        }, delayMillis)
+    }
+
+    private fun displayValuesOnTimeout() {
+        if (asocijacijeResponse != null) {
+            showValues(
+                asocijacijeResponse?.a1,
+                asocijacijeResponse?.a2,
+                asocijacijeResponse?.a3,
+                asocijacijeResponse?.a4,
+                asocijacijeResponse?.b1,
+                asocijacijeResponse?.b2,
+                asocijacijeResponse?.b3,
+                asocijacijeResponse?.b4,
+                asocijacijeResponse?.c1,
+                asocijacijeResponse?.c2,
+                asocijacijeResponse?.c3,
+                asocijacijeResponse?.c4,
+                asocijacijeResponse?.d1,
+                asocijacijeResponse?.d2,
+                asocijacijeResponse?.d3,
+                asocijacijeResponse?.d4,
+                asocijacijeResponse?.konacnoA,
+                asocijacijeResponse?.konacnoB,
+                asocijacijeResponse?.konacnoC,
+                asocijacijeResponse?.konacnoD
+            )
+        } else {
+            Log.e("displayValuesOnTimeout", "asocijacijeResponse is null")
+        }
+    }
+
     private fun getRoundData() {
 
-            val trustAllCerts = arrayOf<TrustManager>(
-                object : X509TrustManager {
-                    override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
-
-                    override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
-
-                    override fun getAcceptedIssuers(): Array<X509Certificate> {
-                        return arrayOf()
-                    }
+        val trustAllCerts = arrayOf<TrustManager>(
+            object : X509TrustManager {
+                override fun checkClientTrusted(
+                    chain: Array<out X509Certificate>?,
+                    authType: String?
+                ) {
                 }
+
+                override fun checkServerTrusted(
+                    chain: Array<out X509Certificate>?,
+                    authType: String?
+                ) {
+                }
+
+                override fun getAcceptedIssuers(): Array<X509Certificate> {
+                    return arrayOf()
+                }
+            }
+        )
+
+        val sslContext = SSLContext.getInstance("SSL")
+        sslContext.init(null, trustAllCerts, SecureRandom())
+
+        val sslSocketFactory = sslContext.socketFactory
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://192.168.1.9:8080/api/slagalica/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(
+                OkHttpClient.Builder()
+                    .sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
+                    .hostnameVerifier { _, _ -> true }
+                    .build()
             )
-
-            val sslContext = SSLContext.getInstance("SSL")
-            sslContext.init(null, trustAllCerts, SecureRandom())
-
-            val sslSocketFactory = sslContext.socketFactory
-
-            val retrofit = Retrofit.Builder()
-                .baseUrl("https://192.168.1.9:8080/api/slagalica/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(
-                    OkHttpClient.Builder()
-                        .sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
-                        .hostnameVerifier { _, _ -> true }
-                        .build()
-                )
-                .build()
+            .build()
 
         val asosijacijeService = retrofit.create(AsocijacijeApiService::class.java)
 
         val call = asosijacijeService.getRandomRound()
 
-        call.enqueue(object: Callback<AsocijacijeModel> {
-            override fun onResponse(call: Call<AsocijacijeModel>, response: Response<AsocijacijeModel>) {
-                if(response.isSuccessful){
+        call.enqueue(object : Callback<AsocijacijeModel> {
+            override fun onResponse(
+                call: Call<AsocijacijeModel>,
+                response: Response<AsocijacijeModel>
+            ) {
+                if (response.isSuccessful) {
                     asocijacijeResponse = response.body()
                     dismissProgressDialog()
+                    initTimer()
 
-                }
-                else {
-                    Toast.makeText(applicationContext, "Error fetching data", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(applicationContext, "Error fetching data", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
 
@@ -399,6 +425,24 @@ class Asocijacije : AppCompatActivity() {
 
         })
 
+    }
+
+    private fun setUpActionBar() {
+        val actionBar = supportActionBar
+
+        actionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        actionBar?.setCustomView(R.layout.action_bar_custom_title)
+
+        val titleTextView =
+            actionBar?.customView?.findViewById<TextView>(R.id.text_view_custom_title)
+
+        titleTextView?.text = "Asocijacije"
+        titleTextView?.gravity = Gravity.CENTER
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        timeLeft?.cancel()
     }
 
 }

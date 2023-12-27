@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
@@ -13,6 +14,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.deksi.graduationquiz.R
@@ -23,6 +25,14 @@ class Skocko : AppCompatActivity() {
 
     private lateinit var binding: ActivitySkockoBinding
     private var results = arrayOfNulls<TextView>(6)
+    private var row = 0
+    private var column = 0
+    private var timeLeft: CountDownTimer? = null
+    private var solution: IntArray = intArrayOf()
+    private var progressDialog: ProgressDialog? = null
+    private var countDownTimer: CountDownTimer? = null
+    private val totalTime: Long = 5000
+
     private var slots = Array(6) {
         arrayOfNulls<ImageView>(
             4
@@ -33,15 +43,6 @@ class Skocko : AppCompatActivity() {
             4
         )
     }
-    private var row = 0
-    private var column = 0
-    private var timeLeft: CountDownTimer? = null
-    private var solution: IntArray = intArrayOf()
-    private var progressDialog: ProgressDialog? = null
-    private var countDownTimer: CountDownTimer? = null
-    private val totalTime: Long = 5000
-//    private lateinit var resultTextArray: Array<TextView?>
-//    private lateinit var resultLayoutArray: Array<LinearLayout?>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,120 +54,7 @@ class Skocko : AppCompatActivity() {
         initTimer()
         initButtons()
         generateSolution()
-//        initArrays()
-    }
-    private fun dismissProgressDialog() {
-        progressDialog?.dismiss()
-    }
-
-    private fun showProgressDialog1() {
-        progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle("Time is up!")
-        progressDialog!!.setCancelable(false)
-        progressDialog!!.max = totalTime.toInt()
-        progressDialog!!.show()
-
-        startTimerProgressDialog()
-    }
-
-
-    private fun showProgressDialog2() {
-        progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle("Game is finished. Please wait..")
-        progressDialog!!.setCancelable(false)
-        progressDialog!!.max = totalTime.toInt()
-        progressDialog!!.show()
-
-        startTimerProgressDialog()
-    }
-
-    private fun stopTimer() {
-        timeLeft?.cancel()
-    }
-
-    private fun startTimerProgressDialog() {
-        countDownTimer = object : CountDownTimer(totalTime, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
-
-                val secondsRemaining = millisUntilFinished / 1000
-                progressDialog?.setMessage("$secondsRemaining")
-
-            }
-
-            override fun onFinish() {
-                dismissProgressDialog()
-            }
-        }
-
-        (countDownTimer as CountDownTimer).start()
-    }
-
-//    private fun initArrays() {
-//        resultTextArray = arrayOf(
-//            findViewById(R.id.result0),
-//            findViewById(R.id.result1),
-//            findViewById(R.id.result2),
-//            findViewById(R.id.result3),
-//            findViewById(R.id.result4),
-//            findViewById(R.id.result5),
-//            findViewById(R.id.result6),
-//            findViewById(R.id.result7)
-//        )
-//
-//        resultLayoutArray = arrayOf(
-//            findViewById(R.id.linear_layout_fields_0),
-//            findViewById(R.id.linear_layout_fields_1),
-//            findViewById(R.id.linear_layout_fields_2),
-//            findViewById(R.id.linear_layout_fields_3),
-//            findViewById(R.id.linear_layout_fields_4),
-//            findViewById(R.id.linear_layout_fields_5),
-//            findViewById(R.id.linear_layout_fields_6),
-//            findViewById(R.id.linear_layout_fields_7)
-//        )
-//    }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-        timeLeft?.cancel()
-    }
-
-    private fun initTimer() {
-        val timerText = binding.textViewTimeLeft
-        timeLeft = object : CountDownTimer(30000, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                timerText.text = (millisUntilFinished / 1000).toString()
-            }
-
-            override fun onFinish() {
-                showResult()
-                showProgressDialog1()
-                moveToTheNextActivityWithDelay()
-            }
-        }
-        (timeLeft as CountDownTimer).start()
-    }
-
-    private fun moveToTheNextActivityWithDelay() {
-        val delayMilis = 5000L
-        val handler = Handler()
-
-        handler.postDelayed({
-            val intent = Intent(this@Skocko, KorakPoKorak::class.java)
-            startActivity(intent)
-
-            finish()
-        }, delayMilis)
-    }
-
-    private fun initResult() {
-        results[0] = binding.result0
-        results[1] = binding.result1
-        results[2] = binding.result2
-        results[3] = binding.result3
-        results[4] = binding.result4
-        results[5] = binding.result5
+        setUpActionBar()
     }
 
     private fun initSlots() {
@@ -201,126 +89,14 @@ class Skocko : AppCompatActivity() {
         }
     }
 
-    private fun handleButtonClick(d: Drawable?, id: Int) {
-        if (row >= slots.size) {
-            return
-        }
-        slots[row][column]?.setImageDrawable(d)
-        guesses[row][column] = id
-        column++
-        if (column >= 4) {
-            column = 0
-            checkMatch()
-            row++
-        }
-        if (row == slots.size) {
-            showResult()
-            stopTimer()
-            showProgressDialog2()
-            moveToNextActivityWithDelay()
-        }
+    private fun initResult() {
+        results[0] = binding.result0
+        results[1] = binding.result1
+        results[2] = binding.result2
+        results[3] = binding.result3
+        results[4] = binding.result4
+        results[5] = binding.result5
     }
-
-    private fun moveToNextActivityWithDelay() {
-
-        val delayMilis = 5000L
-        val handler = Handler()
-
-        handler.postDelayed({
-            val intent = Intent(this@Skocko, KorakPoKorak::class.java)
-            startActivity(intent)
-
-            finish()
-        }, delayMilis)
-
-    }
-
-    private fun handleDelete() {
-        if (column == 0) {
-            return
-        }
-        slots[row][column - 1]!!.setImageDrawable(getDrawable(R.drawable.frame))
-        guesses[row][column - 1] = -1
-        if (column > 0) {
-            column--
-        }
-    }
-
-    // needs fixing
-
-    private fun checkMatch() {
-        var correct = 0
-        var misplaced = 0
-        val confirmed = booleanArrayOf(false, false, false, false)
-        for (i in 0..3) {
-            if (guesses[row][i] == solution[i]) {
-                correct++
-                confirmed[i] = true
-            }
-        }
-        for (i in 0..3) {
-            if (confirmed[i]) {
-                continue
-            }
-            for (j in 0..3) {
-                if (confirmed[j]) {
-                    continue
-                }
-                if (guesses[row][i] == solution[j]) {
-                    misplaced++
-                    confirmed[j] = true
-                    break
-                }
-            }
-        }
-        "correct:$correct\nmisplaced:$misplaced".also { results[row]!!.text = it }
-        if (correct == 4) {
-            showResult()
-            showScore()
-            stopTimer()
-            showProgressDialog2()
-            moveToNextActivityWithDelay()
-
-        }
-    }
-
-
-//    private fun checkMatch() {
-//        val correctColor = ContextCompat.getColor(this, R.color.correctColor)
-//        val misplacedColor = ContextCompat.getColor(this, R.color.misplacedColor)
-//
-//        val indicatorSize = resources.getDimensionPixelSize(R.dimen.indicator_size)
-//
-//        for (i in 0 until 4) {
-//            // Check correct guesses and set the indicator color
-//            if (guesses[row][i] == solution[i]) {
-//                "correct:${results[row]?.text?.toString()?.toInt()?.plus(1)}\nmisplaced:${results[row]?.text?.toString()?.substringAfter(":")}".also { results[row]?.text = it }
-//                setIndicatorColor(resultLayoutArray[row]!!, i, correctColor, indicatorSize)
-//            }
-//        }
-//
-//        for (i in 0 until 4) {
-//            if (guesses[row][i] != solution[i]) {
-//                for (j in 0 until 4) {
-//                    if (guesses[row][i] == solution[j]) {
-//                        setIndicatorColor(resultLayoutArray[row]!!, i, misplacedColor, indicatorSize)
-//                    }
-//                }
-//            }
-//        }
-//
-//        if (results[row]?.text?.toString()?.startsWith("correct:4") == true) {
-//            showResult()
-//            showScore()
-//        }
-//    }
-//
-//    private fun setIndicatorColor(resultLayout: LinearLayout, position: Int, color: Int, size: Int) {
-//        val indicator = View(this)
-//        indicator.layoutParams = LinearLayout.LayoutParams(size, size)
-//        indicator.setBackgroundColor(color)
-//        resultLayout.addView(indicator, position)
-//    }
 
     private fun initButtons() {
         val tref = binding.imageViewTref
@@ -369,6 +145,25 @@ class Skocko : AppCompatActivity() {
         delete.setOnClickListener { handleDelete() }
     }
 
+    private fun handleButtonClick(d: Drawable?, id: Int) {
+        if (row >= slots.size) {
+            return
+        }
+        slots[row][column]?.setImageDrawable(d)
+        guesses[row][column] = id
+        column++
+        if (column >= 4) {
+            column = 0
+            checkMatch()
+            row++
+        }
+        if (row == slots.size) {
+            showResult()
+            stopTimer()
+            showProgressDialogOnGameFinish()
+            moveToTheNextActivityWithDelay()
+        }
+    }
 
     private fun generateSolution() {
         solution = IntArray(4)
@@ -376,6 +171,42 @@ class Skocko : AppCompatActivity() {
         for (i in 0..3) {
             val number = generator.nextInt(6)
             solution[i] = number
+        }
+    }
+
+    private fun checkMatch() {
+        var correct = 0
+        var misplaced = 0
+        val confirmed = booleanArrayOf(false, false, false, false)
+        for (i in 0..3) {
+            if (guesses[row][i] == solution[i]) {
+                correct++
+                confirmed[i] = true
+            }
+        }
+        for (i in 0..3) {
+            if (confirmed[i]) {
+                continue
+            }
+            for (j in 0..3) {
+                if (confirmed[j]) {
+                    continue
+                }
+                if (guesses[row][i] == solution[j]) {
+                    misplaced++
+                    confirmed[j] = true
+                    break
+                }
+            }
+        }
+        "correct:$correct\nmisplaced:$misplaced".also { results[row]!!.text = it }
+        if (correct == 4) {
+            showResult()
+            showScore()
+            stopTimer()
+            showProgressDialogOnGameFinish()
+            moveToTheNextActivityWithDelay()
+
         }
     }
 
@@ -408,9 +239,110 @@ class Skocko : AppCompatActivity() {
             }
         }
 
-        // i need to add buttons for next game
-//        val nextGame = findViewById<Button>(R.id.nextGame)
-//        nextGame.visibility = View.VISIBLE
+    }
+
+    private fun handleDelete() {
+        if (column == 0) {
+            return
+        }
+        slots[row][column - 1]!!.setImageDrawable(getDrawable(R.drawable.frame))
+        guesses[row][column - 1] = -1
+        if (column > 0) {
+            column--
+        }
+    }
+
+    private fun initTimer() {
+        val timerText = binding.textViewTimeLeft
+        timeLeft = object : CountDownTimer(30000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                timerText.text = (millisUntilFinished / 1000).toString()
+            }
+
+            override fun onFinish() {
+                showResult()
+                showProgressDialogOnTimeout()
+                moveToTheNextActivityWithDelay()
+            }
+        }
+        (timeLeft as CountDownTimer).start()
+    }
+
+    private fun startTimerProgressDialog() {
+        countDownTimer = object : CountDownTimer(totalTime, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
+
+                val secondsRemaining = millisUntilFinished / 1000
+                progressDialog?.setMessage("$secondsRemaining")
+
+            }
+
+            override fun onFinish() {
+                dismissProgressDialog()
+            }
+        }
+
+        (countDownTimer as CountDownTimer).start()
+    }
+
+    private fun stopTimer() {
+        timeLeft?.cancel()
+    }
+
+    private fun showProgressDialogOnTimeout() {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setTitle("Time is up!")
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.show()
+
+        startTimerProgressDialog()
+    }
+
+
+    private fun showProgressDialogOnGameFinish() {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setTitle("Game is finished. Please wait..")
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.show()
+
+        startTimerProgressDialog()
+    }
+
+    private fun dismissProgressDialog() {
+        progressDialog?.dismiss()
+    }
+
+    private fun moveToTheNextActivityWithDelay() {
+        val delayMilis = 5000L
+        val handler = Handler()
+
+        handler.postDelayed({
+            val intent = Intent(this@Skocko, KorakPoKorak::class.java)
+            startActivity(intent)
+
+            finish()
+        }, delayMilis)
+    }
+
+    private fun setUpActionBar() {
+        val actionBar = supportActionBar
+
+        actionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        actionBar?.setCustomView(R.layout.action_bar_custom_title)
+
+        val titleTextView =
+            actionBar?.customView?.findViewById<TextView>(R.id.text_view_custom_title)
+
+        titleTextView?.text = "Skocko"
+        titleTextView?.gravity = Gravity.CENTER
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        timeLeft?.cancel()
     }
 
 }
