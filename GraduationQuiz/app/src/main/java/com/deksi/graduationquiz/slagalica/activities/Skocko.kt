@@ -32,6 +32,7 @@ class Skocko : AppCompatActivity() {
     private var progressDialog: ProgressDialog? = null
     private var countDownTimer: CountDownTimer? = null
     private val totalTime: Long = 5000
+    private var totalScore = 0
 
     private var slots = Array(6) {
         arrayOfNulls<ImageView>(
@@ -202,8 +203,8 @@ class Skocko : AppCompatActivity() {
         "correct:$correct\nmisplaced:$misplaced".also { results[row]!!.text = it }
         if (correct == 4) {
             showResult()
-            showScore()
             stopTimer()
+            showScore()
             showProgressDialogOnGameFinish()
             moveToTheNextActivityWithDelay()
 
@@ -211,15 +212,13 @@ class Skocko : AppCompatActivity() {
     }
 
     private fun showScore() {
-        var score = 0
         if (row / 2 == 0) {
-            score = 20
+            totalScore = 20
         } else if (row / 2 == 1) {
-            score = 15
+            totalScore = 15
         } else if (row / 2 == 2) {
-            score = 10
+            totalScore = 10
         }
-        Toast.makeText(applicationContext, " $score points!", Toast.LENGTH_LONG).show()
     }
 
     private fun showResult() {
@@ -274,7 +273,8 @@ class Skocko : AppCompatActivity() {
                 progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
 
                 val secondsRemaining = millisUntilFinished / 1000
-                progressDialog?.setMessage("$secondsRemaining")
+                val message = "$secondsRemaining     Score: $totalScore"
+                progressDialog?.setMessage(message)
 
             }
 

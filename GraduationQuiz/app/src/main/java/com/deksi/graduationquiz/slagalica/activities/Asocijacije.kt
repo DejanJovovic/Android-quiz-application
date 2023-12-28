@@ -43,6 +43,7 @@ class Asocijacije : AppCompatActivity() {
     private var progressDialog: ProgressDialog? = null
     private var countDownTimer: CountDownTimer? = null
     private val totalTime: Long = 5000
+    private var totalScore = 0  // treba dodati poene
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,8 +120,8 @@ class Asocijacije : AppCompatActivity() {
         if (editText?.text.toString() == expectedValue) {
             editText?.setBackgroundResource(R.drawable.round_green_reveal)
             // treba menjati
-            Toast.makeText(applicationContext, "Osvojili ste $points poena", Toast.LENGTH_LONG)
-                .show()
+//            Toast.makeText(applicationContext, "Osvojili ste $points poena", Toast.LENGTH_LONG)
+//                .show()
 
             // Automatically show corresponding values when the user enters the right value
             when (editText) {
@@ -389,7 +390,7 @@ class Asocijacije : AppCompatActivity() {
         val sslSocketFactory = sslContext.socketFactory
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.1.9:8080/api/slagalica/")
+            .baseUrl("https://192.168.197.66:8080/api/slagalica/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()

@@ -38,6 +38,8 @@ class KoZnaZna : AppCompatActivity() {
     private var countDownTimer: CountDownTimer? = null
     private val totalTime: Long = 5000
     private var userAnswered: Boolean = false
+    private var currentQuestionNumber = 1
+    private var totalScore = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityKoZnaZnaBinding.inflate(layoutInflater)
@@ -56,6 +58,8 @@ class KoZnaZna : AppCompatActivity() {
         val option4 = binding.buttonOption4
 
         val currentQuestion = questions[currentQuestionIndex]
+        "$currentQuestionNumber/5".also { binding.textViewNumberOfQuestions.text = it }
+
 
         question.text = currentQuestion.question
         option1.text = currentQuestion.option1
@@ -89,6 +93,7 @@ class KoZnaZna : AppCompatActivity() {
 
             // Reset the background of all buttons to their default state
             resetButtonBackgrounds()
+            currentQuestionNumber++
 
             // Increment the index to move to the next question
             currentQuestionIndex++
@@ -101,15 +106,15 @@ class KoZnaZna : AppCompatActivity() {
                 // Display the next question
                 displayData()
             } else {
+                userAnswered = true
                 stopTimer()
                 val buttonNext = binding.buttonNextQuestion
                 buttonNext.text = "Submit"
 
                 buttonNext.setOnClickListener {
-                    val intent = Intent(this@KoZnaZna, Spojnice::class.java)
-                    startActivity(intent)
+                    showProgressDialogOnGameEnd()
+                    moveToTheNextActivityWithDelay()
 
-                    finish()
                 }
             }
         }
@@ -128,6 +133,7 @@ class KoZnaZna : AppCompatActivity() {
         if (selectedOption == question.answer) {
             // Correct answer, update UI (change color to green)
             clickedButton.setBackgroundResource(R.drawable.round_green_reveal)
+            totalScore += 10
         } else {
             // Incorrect answer, update UI (change color to red)
             clickedButton.setBackgroundResource(R.drawable.round_red)
@@ -138,7 +144,10 @@ class KoZnaZna : AppCompatActivity() {
                 question.option2 -> binding.buttonOption2.setBackgroundResource(R.drawable.round_green_reveal)
                 question.option3 -> binding.buttonOption3.setBackgroundResource(R.drawable.round_green_reveal)
                 question.option4 -> binding.buttonOption4.setBackgroundResource(R.drawable.round_green_reveal)
+
+
             }
+            totalScore -= 5
         }
         userAnswered = true
     }
@@ -151,6 +160,7 @@ class KoZnaZna : AppCompatActivity() {
 
         userAnswered = false
     }
+
 
     private fun initTimer() {
         val timerText = binding.textViewTimeLeft
@@ -174,7 +184,8 @@ class KoZnaZna : AppCompatActivity() {
                 progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
 
                 val secondsRemaining = millisUntilFinished / 1000
-                progressDialog?.setMessage("$secondsRemaining")
+                val message = "$secondsRemaining     Score: $totalScore"
+                progressDialog?.setMessage(message)
             }
 
             override fun onFinish() {
@@ -221,6 +232,16 @@ class KoZnaZna : AppCompatActivity() {
         startTimerForProgressDialog()
     }
 
+    private fun showProgressDialogOnGameEnd() {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setTitle("Congrats!")
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.show()
+
+        startTimerForProgressDialog()
+    }
+
     private fun getRoundData() {
         val trustAllCerts = arrayOf<TrustManager>(
             object : X509TrustManager {
@@ -248,7 +269,7 @@ class KoZnaZna : AppCompatActivity() {
         val sslSocketFactory = sslContext.socketFactory
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.1.9:8080/api/koznazna/")
+            .baseUrl("https://192.168.197.66:8080/api/koznazna/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()

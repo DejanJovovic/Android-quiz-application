@@ -38,6 +38,8 @@ class KorakPoKorak : AppCompatActivity() {
     private var progressDialog: ProgressDialog? = null
     private var countDownTimer: CountDownTimer? = null
     private val totalTime: Long = 5000
+    private var totalScore: Int = 0
+    private var currentHintIndex: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,39 +58,60 @@ class KorakPoKorak : AppCompatActivity() {
     }
 
     private fun onClickListeners() {
-        binding.buttonHint1.setOnClickListener { onButtonClick(binding.buttonHint1, "hint1") }
-        binding.buttonHint2.setOnClickListener { onButtonClick(binding.buttonHint2, "hint2") }
-        binding.buttonHint3.setOnClickListener { onButtonClick(binding.buttonHint3, "hint3") }
-        binding.buttonHint4.setOnClickListener { onButtonClick(binding.buttonHint4, "hint4") }
-        binding.buttonHint5.setOnClickListener { onButtonClick(binding.buttonHint5, "hint5") }
-        binding.buttonHint6.setOnClickListener { onButtonClick(binding.buttonHint6, "hint6") }
-        binding.buttonHint7.setOnClickListener { onButtonClick(binding.buttonHint7, "hint7") }
+        binding.buttonHint1.setOnClickListener { onButtonClick(binding.buttonHint1, 1) }
+        binding.buttonHint2.setOnClickListener { onButtonClick(binding.buttonHint2, 2) }
+        binding.buttonHint3.setOnClickListener { onButtonClick(binding.buttonHint3, 3) }
+        binding.buttonHint4.setOnClickListener { onButtonClick(binding.buttonHint4, 4) }
+        binding.buttonHint5.setOnClickListener { onButtonClick(binding.buttonHint5, 5) }
+        binding.buttonHint6.setOnClickListener { onButtonClick(binding.buttonHint6, 6) }
+        binding.buttonHint7.setOnClickListener { onButtonClick(binding.buttonHint7, 7) }
         binding.buttonSubmitKorakpokorak.setOnClickListener { updateKorakPoKorak() }
     }
 
-    private fun onButtonClick(button: Button, buttonId: String) {
-        if (korakPoKorakResponse != null) {
-            // Get the corresponding value based on the buttonId
-            val buttonText = when (buttonId) {
-                "hint1" -> korakPoKorakResponse?.hint1
-                "hint2" -> korakPoKorakResponse?.hint2
-                "hint3" -> korakPoKorakResponse?.hint3
-                "hint4" -> korakPoKorakResponse?.hint4
-                "hint5" -> korakPoKorakResponse?.hint5
-                "hint6" -> korakPoKorakResponse?.hint6
-                "hint7" -> korakPoKorakResponse?.hint7
+    private fun onButtonClick(button: Button, hintIndex: Int) {
+        if (currentHintIndex + 1 == hintIndex && korakPoKorakResponse != null) {
+
+            val buttonText = when (hintIndex) {
+                1 -> korakPoKorakResponse?.hint1
+                2 -> korakPoKorakResponse?.hint2
+                3 -> korakPoKorakResponse?.hint3
+                4 -> korakPoKorakResponse?.hint4
+                5 -> korakPoKorakResponse?.hint5
+                6 -> korakPoKorakResponse?.hint6
+                7 -> korakPoKorakResponse?.hint7
                 else -> null
             }
-            buttonText?.let { button.text = it }
+
+
+
+            buttonText?.let {
+                button.text = it
+                currentHintIndex++
+            }
         }
     }
 
 
-    private fun checkAndUpdateField(editText: EditText?, expectedValue: String, points: Int) {
+    private fun checkAndUpdateField(editText: EditText?, expectedValue: String) {
         if (editText?.text.toString() == expectedValue) {
             editText?.setBackgroundResource(R.drawable.round_green_reveal)
-            Toast.makeText(applicationContext, "Osvojili ste $points poena", Toast.LENGTH_LONG)
-                .show()
+
+            // Increment currentHintIndex before calculating totalScore
+
+
+            // Calculate the score based on the hints revealed
+            totalScore = when (currentHintIndex) {
+                1 -> 20
+                2 -> 18
+                3 -> 16
+                4 -> 14
+                5 -> 12
+                6 -> 10
+                7 -> 8
+                else -> 0
+            }
+
+
 
             // Automatically show corresponding values when the user enters the right value
             when (editText) {
@@ -103,18 +126,14 @@ class KorakPoKorak : AppCompatActivity() {
                         korakPoKorakResponse?.hint7,
                     )
                 }
-
             }
             stopTimer()
             showProgressDialogOnGameFinish()
             moveToNextActivityWithDelay()
-
-
         } else {
             Toast.makeText(applicationContext, "Wrong!", Toast.LENGTH_LONG).show()
         }
     }
-
 
     private fun showValues(vararg values: String?) {
         if (values.size >= 7) {
@@ -137,7 +156,7 @@ class KorakPoKorak : AppCompatActivity() {
         val getKonacno: String? = korakPoKorakResponse?.konacno
 
         if (!konacno?.text.isNullOrEmpty()) {
-            checkAndUpdateField(konacno, getKonacno ?: "", 20)
+            checkAndUpdateField(konacno, getKonacno ?: "")
         }
     }
 
@@ -163,7 +182,8 @@ class KorakPoKorak : AppCompatActivity() {
                 progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
 
                 val secondsRemaining = millisUntilFinished / 1000
-                progressDialog?.setMessage("$secondsRemaining")
+                val message = "$secondsRemaining     Score: $totalScore"
+                progressDialog?.setMessage(message)
 
             }
 
@@ -267,7 +287,7 @@ class KorakPoKorak : AppCompatActivity() {
         val sslSocketFactory = sslContext.socketFactory
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.1.9:8080/api/korakPoKorak/")
+            .baseUrl("https://192.168.197.66:8080/api/korakPoKorak/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()

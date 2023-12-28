@@ -31,6 +31,7 @@ class MojBroj : AppCompatActivity() {
     private var progressDialog: ProgressDialog? = null
     private var countDownTimer: CountDownTimer? = null
     private val totalTime: Long = 5000
+    private var totalScore: Int = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -252,12 +253,11 @@ class MojBroj : AppCompatActivity() {
             val actual = result.text.toString().toDouble()
 
             if (actual == guess) {
-                Toast.makeText(applicationContext, "Osvojili ste 20 poena", Toast.LENGTH_LONG)
-                    .show()
+                totalScore = 20
                 showProgressDialogOnGameFinish()
                 goBackToTheHomeActivityWithDelay()
             } else {
-                Toast.makeText(applicationContext, "Osvojili ste 5 poena", Toast.LENGTH_LONG).show()
+                totalScore = 5
                 showProgressDialogOnGameFinish()
                 goBackToTheHomeActivityWithDelay()
 
@@ -289,6 +289,7 @@ class MojBroj : AppCompatActivity() {
             }
 
             override fun onFinish() {
+                totalScore = 0
                 // treba dodati da kad istekne vreme da prikaze zavrsnu kombinaciju
                 showProgressDialogOnTimeout()
                 goBackToTheHomeActivityWithDelay()
@@ -303,7 +304,8 @@ class MojBroj : AppCompatActivity() {
                 progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
 
                 val secondsRemaining = millisUntilFinished / 1000
-                progressDialog?.setMessage("$secondsRemaining")
+                val message = "$secondsRemaining     Score: $totalScore"
+                progressDialog?.setMessage(message)
 
             }
 

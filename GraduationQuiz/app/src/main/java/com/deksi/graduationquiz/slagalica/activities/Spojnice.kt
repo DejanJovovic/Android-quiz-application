@@ -37,6 +37,7 @@ class Spojnice : AppCompatActivity() {
     private var progressDialog: ProgressDialog? = null
     private var countDownTimer: CountDownTimer? = null
     private val totalTime: Long = 5000
+    private var totalScore = 0
     private val connectedPairs: MutableSet<Pair<String, String>> = mutableSetOf()
     private val correctConnections: List<Pair<String, String>> = listOf(
         "button_left1" to "button_right5",
@@ -119,7 +120,7 @@ class Spojnice : AppCompatActivity() {
                 // Correct connection logic
                 changeButtonColorToGreen(selectedLeft)
                 changeButtonColorToGreen(selectedRight)
-
+                totalScore += 2
 
             } else {
                 // Incorrect connection logic
@@ -198,7 +199,8 @@ class Spojnice : AppCompatActivity() {
                 progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
 
                 val secondsRemaining = millisUntilFinished / 1000
-                progressDialog?.setMessage("$secondsRemaining")
+                val message = "$secondsRemaining     Score: $totalScore"
+                progressDialog?.setMessage(message)
 
             }
 
@@ -311,7 +313,7 @@ class Spojnice : AppCompatActivity() {
 
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.1.9:8080/api/spojnice/")
+            .baseUrl("https://192.168.197.66:8080/api/spojnice/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
