@@ -226,7 +226,7 @@ class Asocijacije : AppCompatActivity() {
                         konacnoCGuessed = true
                         konacnoDGuessed = true
                         calculatingPointsWhenKonacnoIsGuessed()
-                        userPoints += 6  // trebalo je 7 poena po specifikaciji, ali ispadne 31 bod ukupno
+                        userPoints += 7
                         konacnoA?.setBackgroundResource(R.drawable.round_green_reveal)
                         konacnoB?.setBackgroundResource(R.drawable.round_green_reveal)
                         konacnoC?.setBackgroundResource(R.drawable.round_green_reveal)
