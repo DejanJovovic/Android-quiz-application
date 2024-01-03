@@ -29,6 +29,16 @@
             android:textColor="@color/white" />
 
 
+        <Button
+            android:id="@+id/button_go"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/edit_text_asosijacije"
+            android:text="Go"
+            android:textColor="@color/white" />
+
+
     </LinearLayout>
 
 

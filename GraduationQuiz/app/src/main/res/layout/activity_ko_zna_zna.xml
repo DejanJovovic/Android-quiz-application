@@ -28,7 +28,7 @@
             android:background="@drawable/round_white"
             android:elevation="1dp"
             android:gravity="center"
-            android:hint="@string/_1_10"
+            tools:text="@string/_1_10"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
             android:textColor="@color/question_text_color" />

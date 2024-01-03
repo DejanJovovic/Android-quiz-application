@@ -14,6 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.deksi.graduationquiz.R
 import com.deksi.graduationquiz.databinding.ActivityAsocijacijeBinding
 import com.deksi.graduationquiz.slagalica.api.AsocijacijeApiService
@@ -43,7 +44,21 @@ class Asocijacije : AppCompatActivity() {
     private var progressDialog: ProgressDialog? = null
     private var countDownTimer: CountDownTimer? = null
     private val totalTime: Long = 5000
-    private var totalScore = 0  // treba dodati poene
+    private var pointsA: Int = 0
+    private var pointsB: Int = 0
+    private var pointsC: Int = 0
+    private var pointsD: Int = 0
+    private var userPoints: Int = 0
+    private var konacnoAGuessed = false
+    private var konacnoBGuessed = false
+    private var konacnoCGuessed = false
+    private var konacnoDGuessed = false
+    private var konacnoGuessed = false
+    private var openedCluesA: Int = 4
+    private var openedCluesB: Int = 4
+    private var openedCluesC: Int = 4
+    private var openedCluesD: Int = 4
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,22 +82,54 @@ class Asocijacije : AppCompatActivity() {
     }
 
     private fun setOnClickButtonListeners() {
-        binding.buttonA1.setOnClickListener { onButtonClick(binding.buttonA1, "a1") }
-        binding.buttonA2.setOnClickListener { onButtonClick(binding.buttonA2, "a2") }
-        binding.buttonA3.setOnClickListener { onButtonClick(binding.buttonA3, "a3") }
-        binding.buttonA4.setOnClickListener { onButtonClick(binding.buttonA4, "a4") }
-        binding.buttonB1.setOnClickListener { onButtonClick(binding.buttonB1, "b1") }
-        binding.buttonB2.setOnClickListener { onButtonClick(binding.buttonB2, "b2") }
-        binding.buttonB3.setOnClickListener { onButtonClick(binding.buttonB3, "b3") }
-        binding.buttonB4.setOnClickListener { onButtonClick(binding.buttonB4, "b4") }
-        binding.buttonC1.setOnClickListener { onButtonClick(binding.buttonC1, "c1") }
-        binding.buttonC2.setOnClickListener { onButtonClick(binding.buttonC2, "c2") }
-        binding.buttonC3.setOnClickListener { onButtonClick(binding.buttonC3, "c3") }
-        binding.buttonC4.setOnClickListener { onButtonClick(binding.buttonC4, "c4") }
-        binding.buttonD1.setOnClickListener { onButtonClick(binding.buttonD1, "d1") }
-        binding.buttonD2.setOnClickListener { onButtonClick(binding.buttonD2, "d2") }
-        binding.buttonD3.setOnClickListener { onButtonClick(binding.buttonD3, "d3") }
-        binding.buttonD4.setOnClickListener { onButtonClick(binding.buttonD4, "d4") }
+        binding.buttonA1.setOnClickListener {
+            openedCluesA--
+            onButtonClick(binding.buttonA1, "a1") }
+        binding.buttonA2.setOnClickListener {
+            openedCluesA--
+            onButtonClick(binding.buttonA2, "a2") }
+        binding.buttonA3.setOnClickListener {
+            openedCluesA--
+            onButtonClick(binding.buttonA3, "a3") }
+        binding.buttonA4.setOnClickListener {
+            openedCluesA--
+            onButtonClick(binding.buttonA4, "a4") }
+        binding.buttonB1.setOnClickListener {
+            openedCluesB--
+            onButtonClick(binding.buttonB1, "b1") }
+        binding.buttonB2.setOnClickListener {
+            openedCluesB--
+            onButtonClick(binding.buttonB2, "b2") }
+        binding.buttonB3.setOnClickListener {
+            openedCluesB--
+            onButtonClick(binding.buttonB3, "b3") }
+        binding.buttonB4.setOnClickListener {
+            openedCluesB--
+            onButtonClick(binding.buttonB4, "b4") }
+        binding.buttonC1.setOnClickListener {
+            openedCluesC--
+            onButtonClick(binding.buttonC1, "c1") }
+        binding.buttonC2.setOnClickListener {
+            openedCluesC--
+            onButtonClick(binding.buttonC2, "c2") }
+        binding.buttonC3.setOnClickListener {
+            openedCluesC--
+            onButtonClick(binding.buttonC3, "c3") }
+        binding.buttonC4.setOnClickListener {
+            openedCluesC--
+            onButtonClick(binding.buttonC4, "c4") }
+        binding.buttonD1.setOnClickListener {
+            openedCluesD--
+            onButtonClick(binding.buttonD1, "d1") }
+        binding.buttonD2.setOnClickListener {
+            openedCluesD--
+            onButtonClick(binding.buttonD2, "d2") }
+        binding.buttonD3.setOnClickListener {
+            openedCluesD--
+            onButtonClick(binding.buttonD3, "d3") }
+        binding.buttonD4.setOnClickListener {
+            openedCluesD--
+            onButtonClick(binding.buttonD4, "d4") }
         val buttonSubmit = binding.buttonSubmit
         buttonSubmit.setOnClickListener {
             buttonSubmit.isEnabled = true
@@ -116,109 +163,105 @@ class Asocijacije : AppCompatActivity() {
         }
     }
 
-    private fun checkAndUpdateField(editText: EditText?, expectedValue: String, points: Int) {
-        if (editText?.text.toString() == expectedValue) {
-            editText?.setBackgroundResource(R.drawable.round_green_reveal)
-            // treba menjati
-//            Toast.makeText(applicationContext, "Osvojili ste $points poena", Toast.LENGTH_LONG)
-//                .show()
+    private fun checkAndUpdateField(editText: EditText?, expectedValue: String) {
+        if (editText?.text.toString().trim() == expectedValue.trim()) {
+            // Check if the editText is already revealed (has the green background)
+            if (editText == konacno && !konacnoGuessed ||
+                editText == konacnoA && !konacnoAGuessed ||
+                editText == konacnoB && !konacnoBGuessed ||
+                editText == konacnoC && !konacnoCGuessed ||
+                editText == konacnoD && !konacnoDGuessed
+            ) {
+                editText?.setBackgroundResource(R.drawable.round_green_reveal)
 
-            // Automatically show corresponding values when the user enters the right value
-            when (editText) {
-                konacnoA -> {
-                    showValues(
-                        asocijacijeResponse?.a1,
-                        asocijacijeResponse?.a2,
-                        asocijacijeResponse?.a3,
-                        asocijacijeResponse?.a4
-                    )
+
+                editText?.isEnabled = false
+
+                when (editText) {
+                    konacnoA -> {
+                        binding.buttonA1.text = asocijacijeResponse?.a1
+                        binding.buttonA2.text = asocijacijeResponse?.a2
+                        binding.buttonA3.text = asocijacijeResponse?.a3
+                        binding.buttonA4.text = asocijacijeResponse?.a4
+                        pointsA += 2
+                        konacnoAGuessed = true
+
+                    }
+
+                    konacnoB -> {
+                        binding.buttonB1.text = asocijacijeResponse?.b1
+                        binding.buttonB2.text = asocijacijeResponse?.b2
+                        binding.buttonB3.text = asocijacijeResponse?.b3
+                        binding.buttonB4.text = asocijacijeResponse?.b4
+                        pointsB += 2
+                        konacnoBGuessed = true
+
+
+                    }
+
+                    konacnoC -> {
+                        binding.buttonC1.text = asocijacijeResponse?.c1
+                        binding.buttonC2.text = asocijacijeResponse?.c2
+                        binding.buttonC3.text = asocijacijeResponse?.c3
+                        binding.buttonC4.text = asocijacijeResponse?.c4
+                        pointsC += 2
+                        konacnoCGuessed = true
+
+                    }
+
+                    konacnoD -> {
+                        binding.buttonD1.text = asocijacijeResponse?.d1
+                        binding.buttonD2.text = asocijacijeResponse?.d2
+                        binding.buttonD3.text = asocijacijeResponse?.d3
+                        binding.buttonD4.text = asocijacijeResponse?.d4
+                        pointsD += 2
+                        konacnoDGuessed = true
+
+                    }
+
+                    konacno -> {
+                        konacnoGuessed = true
+                        konacnoAGuessed = true
+                        konacnoBGuessed = true
+                        konacnoCGuessed = true
+                        konacnoDGuessed = true
+                        calculatingPointsWhenKonacnoIsGuessed()
+                        userPoints += 6  // trebalo je 7 poena po specifikaciji, ali ispadne 31 bod ukupno
+                        konacnoA?.setBackgroundResource(R.drawable.round_green_reveal)
+                        konacnoB?.setBackgroundResource(R.drawable.round_green_reveal)
+                        konacnoC?.setBackgroundResource(R.drawable.round_green_reveal)
+                        konacnoD?.setBackgroundResource(R.drawable.round_green_reveal)
+                        showValues(
+                            asocijacijeResponse?.a1,
+                            asocijacijeResponse?.a2,
+                            asocijacijeResponse?.a3,
+                            asocijacijeResponse?.a4,
+                            asocijacijeResponse?.b1,
+                            asocijacijeResponse?.b2,
+                            asocijacijeResponse?.b3,
+                            asocijacijeResponse?.b4,
+                            asocijacijeResponse?.c1,
+                            asocijacijeResponse?.c2,
+                            asocijacijeResponse?.c3,
+                            asocijacijeResponse?.c4,
+                            asocijacijeResponse?.d1,
+                            asocijacijeResponse?.d2,
+                            asocijacijeResponse?.d3,
+                            asocijacijeResponse?.d4,
+                            asocijacijeResponse?.konacnoA,
+                            asocijacijeResponse?.konacnoB,
+                            asocijacijeResponse?.konacnoC,
+                            asocijacijeResponse?.konacnoD
+                        )
+                    }
                 }
 
-                konacnoB -> {
-                    showValues(
-                        asocijacijeResponse?.b1,
-                        asocijacijeResponse?.b2,
-                        asocijacijeResponse?.b3,
-                        asocijacijeResponse?.b4
-                    )
-                }
-
-                konacnoC -> {
-                    showValues(
-                        asocijacijeResponse?.c1,
-                        asocijacijeResponse?.c2,
-                        asocijacijeResponse?.c3,
-                        asocijacijeResponse?.c4
-                    )
-                }
-
-                konacnoD -> {
-                    showValues(
-                        asocijacijeResponse?.d1,
-                        asocijacijeResponse?.d2,
-                        asocijacijeResponse?.d3,
-                        asocijacijeResponse?.d4
-                    )
-                }
-
-                konacno -> {
-                    showValues(
-                        asocijacijeResponse?.a1,
-                        asocijacijeResponse?.a2,
-                        asocijacijeResponse?.a3,
-                        asocijacijeResponse?.a4,
-                        asocijacijeResponse?.b1,
-                        asocijacijeResponse?.b2,
-                        asocijacijeResponse?.b3,
-                        asocijacijeResponse?.b4,
-                        asocijacijeResponse?.c1,
-                        asocijacijeResponse?.c2,
-                        asocijacijeResponse?.c3,
-                        asocijacijeResponse?.c4,
-                        asocijacijeResponse?.d1,
-                        asocijacijeResponse?.d2,
-                        asocijacijeResponse?.d3,
-                        asocijacijeResponse?.d4,
-                        asocijacijeResponse?.konacnoA,
-                        asocijacijeResponse?.konacnoB,
-                        asocijacijeResponse?.konacnoC,
-                        asocijacijeResponse?.konacnoD
-                    )
-                }
+            } else {
+                // The field was already revealed, no need to add points again
+//                Toast.makeText(applicationContext, "Already Guessed!", Toast.LENGTH_LONG).show()
             }
-
         } else {
             Toast.makeText(applicationContext, "Wrong!", Toast.LENGTH_LONG).show()
-        }
-    }
-
-    private fun updateAsosijacije() {
-        val getKonacnoA: String? = asocijacijeResponse?.konacnoA
-        val getKonacnoB: String? = asocijacijeResponse?.konacnoB
-        val getKonacnoC: String? = asocijacijeResponse?.konacnoC
-        val getKonacnoD: String? = asocijacijeResponse?.konacnoD
-        val getKonacno: String? = asocijacijeResponse?.konacno
-
-        if (!konacnoA?.text.isNullOrEmpty()) {
-            checkAndUpdateField(konacnoA, getKonacnoA ?: "", 5)
-        }
-        if (!konacnoB?.text.isNullOrEmpty()) {
-            checkAndUpdateField(konacnoB, getKonacnoB ?: "", 5)
-        }
-        if (!konacnoC?.text.isNullOrEmpty()) {
-            checkAndUpdateField(konacnoC, getKonacnoC ?: "", 5)
-        }
-        if (!konacnoD?.text.isNullOrEmpty()) {
-            checkAndUpdateField(konacnoD, getKonacnoD ?: "", 5)
-        }
-        if (!konacno?.text.isNullOrEmpty()) {
-            checkAndUpdateField(konacno, getKonacno ?: "", 20)
-            if (konacno?.text.toString() == getKonacno) {
-                stopTimer()
-                showProgressDialogOnGameFinish()
-                moveToNextActivityWithDelay()
-            }
-
         }
     }
 
@@ -247,11 +290,43 @@ class Asocijacije : AppCompatActivity() {
             binding.editTextKonacnoB.text = Editable.Factory.getInstance().newEditable(values[17])
             binding.editTextKonacnoC.text = Editable.Factory.getInstance().newEditable(values[18])
             binding.editTextKonacnoD.text = Editable.Factory.getInstance().newEditable(values[19])
+
+
         } else {
             Log.e("showValues", "Not enough non-null values provided")
         }
-
     }
+
+    private fun updateAsosijacije() {
+        val getKonacnoA: String? = asocijacijeResponse?.konacnoA
+        val getKonacnoB: String? = asocijacijeResponse?.konacnoB
+        val getKonacnoC: String? = asocijacijeResponse?.konacnoC
+        val getKonacnoD: String? = asocijacijeResponse?.konacnoD
+        val getKonacno: String? = asocijacijeResponse?.konacno
+
+        if (!konacnoA?.text.isNullOrEmpty()) {
+            checkAndUpdateField(konacnoA, getKonacnoA ?: "")
+        }
+        if (!konacnoB?.text.isNullOrEmpty()) {
+            checkAndUpdateField(konacnoB, getKonacnoB ?: "")
+        }
+        if (!konacnoC?.text.isNullOrEmpty()) {
+            checkAndUpdateField(konacnoC, getKonacnoC ?: "")
+        }
+        if (!konacnoD?.text.isNullOrEmpty()) {
+            checkAndUpdateField(konacnoD, getKonacnoD ?: "")
+        }
+        if (!konacno?.text.isNullOrEmpty()) {
+            checkAndUpdateField(konacno, getKonacno ?: "")
+            if (konacno?.text.toString() == getKonacno) {
+                stopTimer()
+                showProgressDialogOnGameFinish()
+                moveToNextActivityWithDelay()
+            }
+
+        }
+    }
+
 
     private fun initTimer() {
         val timerText = binding.textViewTimeLeft
@@ -261,6 +336,7 @@ class Asocijacije : AppCompatActivity() {
             }
 
             override fun onFinish() {
+                calculatingPointsOnTimeout()
                 showProgressDialogOnTimeout()
                 moveToNextActivityWithDelay()
                 displayValuesOnTimeout()
@@ -273,9 +349,20 @@ class Asocijacije : AppCompatActivity() {
         countDownTimer = object : CountDownTimer(totalTime, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
-
+                calculatingPointsOnTimeout()
                 val secondsRemaining = millisUntilFinished / 1000
-                progressDialog?.setMessage("$secondsRemaining")
+                val points = pointsA + openedCluesA + pointsB + openedCluesB + pointsC + openedCluesC + pointsD + openedCluesD + userPoints
+                Toast.makeText(applicationContext, "pA: $pointsA," +
+                        "cA: $openedCluesA," +
+                        "pB: $pointsB," +
+                        "cB: $openedCluesB," +
+                        "pC: $pointsC," +
+                        "CC: $openedCluesC, " +
+                        "pD: $pointsD," +
+                        "cD: $openedCluesD," +
+                        "uP: $userPoints",Toast.LENGTH_LONG).show()
+                val message = "$secondsRemaining     Score: $points"
+                progressDialog?.setMessage(message)
 
             }
 
@@ -285,6 +372,56 @@ class Asocijacije : AppCompatActivity() {
         }
 
         (countDownTimer as CountDownTimer).start()
+    }
+
+    private fun calculatingPointsWhenKonacnoIsGuessed() {
+        if(pointsA == 0) {
+            pointsA += 2
+        }
+        if(pointsB == 0) {
+            pointsB += 2
+        }
+        if(pointsC == 0) {
+            pointsC += 2
+        }
+        if(pointsD == 0) {
+            pointsD += 2
+        }
+    }
+
+    private fun calculatingPointsOnTimeout() {
+        if(openedCluesA == 4) {
+            if(pointsA == 0) {
+                if(userPoints == 0) {
+                    openedCluesA = 0
+                }
+            }
+
+        }
+        if(openedCluesB == 4) {
+            if(pointsB == 0) {
+                if(userPoints == 0) {
+                    openedCluesB = 0
+                }
+            }
+
+        }
+        if(openedCluesC == 4) {
+            if(pointsC == 0) {
+                if(userPoints == 0) {
+                    openedCluesC = 0
+                }
+            }
+
+        }
+        if(openedCluesD == 4) {
+            if(pointsD == 0) {
+                if(userPoints == 0) {
+                    openedCluesD = 0
+                }
+            }
+
+        }
     }
 
     private fun stopTimer() {
@@ -390,7 +527,7 @@ class Asocijacije : AppCompatActivity() {
         val sslSocketFactory = sslContext.socketFactory
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.197.66:8080/api/slagalica/")
+            .baseUrl("https://192.168.1.9:8080/api/slagalica/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()

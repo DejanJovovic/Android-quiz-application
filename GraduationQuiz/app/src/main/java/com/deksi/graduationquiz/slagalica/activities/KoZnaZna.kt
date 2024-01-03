@@ -269,7 +269,7 @@ class KoZnaZna : AppCompatActivity() {
         val sslSocketFactory = sslContext.socketFactory
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.197.66:8080/api/koznazna/")
+            .baseUrl("https://192.168.1.9:8080/api/koznazna/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()

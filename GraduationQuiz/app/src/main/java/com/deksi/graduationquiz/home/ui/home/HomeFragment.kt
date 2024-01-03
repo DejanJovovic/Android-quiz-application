@@ -45,5 +45,10 @@ class HomeFragment : Fragment() {
             startActivity(intent)
 
         }
+        binding.buttonGo.setOnClickListener {
+            val intent = Intent(context, Asocijacije::class.java)
+            startActivity(intent)
+
+        }
     }
 }
