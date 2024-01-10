@@ -92,4 +92,6 @@
     <string name="play">Play</string>
     <string name="next_game">Next game</string>
     <string name="finish">Finish</string>
+    <string name="sudoku">Sudoku</string>
+    <string name="slagalica">Slagalica</string>
 </resources>

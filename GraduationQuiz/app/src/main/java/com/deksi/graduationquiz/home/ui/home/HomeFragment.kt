@@ -15,6 +15,7 @@ import com.deksi.graduationquiz.slagalica.activities.KorakPoKorak
 import com.deksi.graduationquiz.slagalica.activities.MojBroj
 import com.deksi.graduationquiz.slagalica.activities.Skocko
 import com.deksi.graduationquiz.slagalica.activities.Spojnice
+import com.deksi.graduationquiz.sudoku.Sudoku
 
 class HomeFragment : Fragment() {
 
@@ -40,10 +41,14 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUpListeners() {
-        binding.buttonPlay.setOnClickListener {
+        binding.buttonSlagalica.setOnClickListener {
             val intent = Intent(context, KoZnaZna::class.java)
             startActivity(intent)
 
+        }
+        binding.buttonSudoku.setOnClickListener {
+            val intent = Intent(context, Sudoku::class.java)
+            startActivity(intent)
         }
     }
 }

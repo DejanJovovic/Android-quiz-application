@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".sudoku.Sudoku">
+
+    <com.deksi.graduationquiz.sudoku.SudokuBoardView
+        android:id="@+id/sudoku_board_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/buttonsLayout"
+        android:layout_marginBottom="56dp"/>
+
+    <GridLayout
+        android:id="@+id/buttonsLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:columnCount="3"
+        android:rowCount="3">
+
+        <Button
+            android:id="@+id/button_one"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/edit_text_asosijacije"
+            android:elevation="0dp"
+            android:text="1" />
+
+        <Button
+            android:id="@+id/button_two"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/edit_text_asosijacije"
+            android:elevation="0dp"
+            android:text="2" />
+
+        <Button
+            android:id="@+id/button_three"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/edit_text_asosijacije"
+            android:elevation="0dp"
+            android:layout_row="0"
+            android:layout_column="2"
+            android:text="3" />
+
+        <Button
+            android:id="@+id/button_four"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/edit_text_asosijacije"
+            android:elevation="0dp"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:text="4" />
+
+        <Button
+            android:id="@+id/button_five"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/edit_text_asosijacije"
+            android:elevation="0dp"
+            android:layout_row="1"
+            android:layout_column="1"
+            android:text="5" />
+
+        <Button
+            android:id="@+id/button_six"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/edit_text_asosijacije"
+            android:elevation="0dp"
+            android:layout_row="1"
+            android:layout_column="2"
+            android:text="6" />
+
+        <Button
+            android:id="@+id/button_seven"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="2"
+            android:layout_column="0"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/edit_text_asosijacije"
+            android:elevation="0dp"
+            android:text="7" />
+
+        <Button
+            android:id="@+id/button_eight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="2"
+            android:layout_column="1"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/edit_text_asosijacije"
+            android:elevation="0dp"
+            android:text="8" />
+
+        <Button
+            android:id="@+id/button_nine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="2"
+            android:layout_column="2"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/edit_text_asosijacije"
+            android:elevation="0dp"
+            android:text="9" />
+
+    </GridLayout>
+
+
+</RelativeLayout>
