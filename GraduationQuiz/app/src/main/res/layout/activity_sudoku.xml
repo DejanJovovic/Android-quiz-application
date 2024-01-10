@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".sudoku.Sudoku">
 
-    <com.deksi.graduationquiz.sudoku.SudokuBoardView
+    <com.deksi.graduationquiz.sudoku.view.SudokuBoardView
         android:id="@+id/sudoku_board_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

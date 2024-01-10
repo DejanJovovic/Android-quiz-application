@@ -5,16 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.deksi.graduationquiz.databinding.FragmentHomeBinding
-import com.deksi.graduationquiz.slagalica.activities.Asocijacije
 import com.deksi.graduationquiz.slagalica.activities.KoZnaZna
-import com.deksi.graduationquiz.slagalica.activities.KorakPoKorak
-import com.deksi.graduationquiz.slagalica.activities.MojBroj
-import com.deksi.graduationquiz.slagalica.activities.Skocko
-import com.deksi.graduationquiz.slagalica.activities.Spojnice
 import com.deksi.graduationquiz.sudoku.Sudoku
 
 class HomeFragment : Fragment() {
