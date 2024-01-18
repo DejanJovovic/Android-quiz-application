@@ -8,76 +8,119 @@ class SudokuGame {
 
     var selectedCellLiveData = MutableLiveData<Pair<Int, Int>>()
     var cellsLiveData = MutableLiveData<List<Cell>>()
-    val isTakingNotesLiveData = MutableLiveData<Boolean>()
-    val highlightedKeysLiveData = MutableLiveData<Set<Int>>()
+
 
     private var selectedRow = -1
     private var selectedCol = -1
-    private var isTakingNotes = false
 
     private val board: Board
 
     // called whenever the SudokuGame is created
     init {
-        val cells = List(9 * 9) { i ->
-            Cell(i / 9, i % 9, i % 9)
+        val solvedBoard = generateSolvedBoard()
+        val cells = solvedBoard.cells.map { Cell(it.row, it.col, it.value) }.toMutableList()
+
+        val blankCellCount = 30
+        val blankCellIndices = (0 until 9 * 9).shuffled().take(blankCellCount)
+
+        for (index in blankCellIndices) {
+            cells[index].value = 0
         }
-        cells[0].notes = mutableSetOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
+
         board = Board(9, cells)
 
         selectedCellLiveData.postValue(Pair(selectedRow, selectedCol))
         cellsLiveData.postValue(board.cells)
-        isTakingNotesLiveData.postValue(isTakingNotes)
     }
 
+
+    private fun generateSolvedBoard(): Board {
+        val numbers = (1..9).toList()
+        val board = Board(9, MutableList(9 * 9) { Cell(it / 9, it % 9, 0) })
+
+        for (row in 0 until 9) {
+            val rowNumbers = numbers.shuffled()
+            for (col in 0 until 9) {
+                val index = row * 9 + col
+                board.getCell(row, col).value = rowNumbers[col]
+            }
+        }
+
+        solve(board)
+
+        return board
+    }
+
+    private fun solve(board: Board): Boolean {
+        val emptyCell = findEmptyCell(board)
+        if (emptyCell == null) {
+            // If there are no empty cells, the board is solved
+            return true
+        }
+
+        val (row, col) = emptyCell
+        for (num in 1..9) {
+            if (isValidMove(board, row, col, num)) {
+                board.getCell(row, col).value = num
+
+                if (solve(board)) {
+                    return true
+                }
+
+                // If the current placement doesn't lead to a solution, backtrack
+                board.getCell(row, col).value = 0
+            }
+        }
+
+        // If no number works in this cell, backtrack
+        return false
+    }
+
+    private fun findEmptyCell(board: Board): Pair<Int, Int>? {
+        for (row in 0 until 9) {
+            for (col in 0 until 9) {
+                if (board.getCell(row, col).value == 0) {
+                    return Pair(row, col)
+                }
+            }
+        }
+        return null
+    }
+
+    private fun isValidMove(board: Board, row: Int, col: Int, num: Int): Boolean {
+        return !isInRow(board, row, num) && !isInCol(board, col, num) && !isInBox(board, row - row % 3, col - col % 3, num)
+    }
+
+    private fun isInRow(board: Board, row: Int, num: Int): Boolean {
+        return (0 until 9).any { board.getCell(row, it).value == num }
+    }
+
+    private fun isInCol(board: Board, col: Int, num: Int): Boolean {
+        return (0 until 9).any { board.getCell(it, col).value == num }
+    }
+
+    private fun isInBox(board: Board, startRow: Int, startCol: Int, num: Int): Boolean {
+        return (0 until 3).any { rowOffset ->
+            (0 until 3).any { colOffset ->
+                board.getCell(startRow + rowOffset, startCol + colOffset).value == num
+            }
+        }
+    }
     //it takes a number and decides what to do with it
     fun handleInput(number: Int) {
         if (selectedRow == -1 || selectedCol == -1) return
-        val cell = board.getCell(selectedRow, selectedCol)
+        val selectedCell = board.getCell(selectedRow, selectedCol)
 
-        // if selectedRow or selectedCol happen to be startingCell when the user clicks, dont let him input anything
-        if (cell.isStartingCell) return
-
-        if (isTakingNotes) {
-            if (cell.notes.contains(number)) {
-                cell.notes.remove(number)
-            } else {
-                cell.notes.add(number)
-            }
-            highlightedKeysLiveData.postValue(cell.notes)
-        } else {
-            //gets the corrected cell, updates it, and posts back
-            cell.value = number
+        if (selectedCell.value == 0) {
+            selectedCell.value = number
+            cellsLiveData.postValue(board.cells)
         }
-        cellsLiveData.postValue(board.cells)
     }
 
     fun updateSelectedCell(row: Int, col: Int) {
-        val cell = board.getCell(row, col)
-
-        // if selectedRow or selectedCol happen to be startingCell when the user clicks, dont let him input anything
-        if (!cell.isStartingCell) {
-            selectedRow = row
-            selectedCol = col
-            selectedCellLiveData.postValue(Pair(row, col))
-
-            if (isTakingNotes) {
-                highlightedKeysLiveData.postValue(cell.notes)
-            }
-        }
+        selectedRow = row
+        selectedCol = col
+        selectedCellLiveData.postValue(Pair(row, col))
     }
 
-    fun changeNoteTakingState() {
-        // if taking notes, grab the notes of the current cell, if not, just grab an empty cell of notes
-
-        isTakingNotes = !isTakingNotes
-        isTakingNotesLiveData.postValue(isTakingNotes)
-        val currentNotes =
-            if (isTakingNotes) {
-                board.getCell(selectedRow, selectedCol).notes
-            } else {
-                setOf<Int>()
-            }
-        highlightedKeysLiveData.postValue(currentNotes)
-    }
 }

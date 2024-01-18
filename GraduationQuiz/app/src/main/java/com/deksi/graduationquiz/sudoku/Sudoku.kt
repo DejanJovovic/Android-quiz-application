@@ -20,7 +20,6 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener {
 
     private lateinit var viewModel: SudokuViewModel
     private lateinit var binding: ActivitySudokuBinding
-    private lateinit var numberButtons: List<Button>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,43 +27,19 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener {
         setContentView(binding.root)
 
         binding.sudokuBoardView.registerListener(this)
+
         viewModel = ViewModelProvider(this)[SudokuViewModel::class.java]
         // observing what's happening to the selecetedCellData
         viewModel.sudokuGame.selectedCellLiveData.observe(this, Observer { updateSelectedCellUI(it) })
         viewModel.sudokuGame.cellsLiveData.observe(this, Observer { updateCells(it) })
-        viewModel.sudokuGame.isTakingNotesLiveData.observe(this, Observer { updateNoteTakingUI(it) })
-        viewModel.sudokuGame.highlightedKeysLiveData.observe(this, Observer { updateHighlightedKeys(it) })
 
-        numberButtons = listOf(binding.buttonOne, binding.buttonTwo, binding.buttonThree, binding.buttonFour,
-            binding.buttonFive, binding.buttonSix, binding.buttonSeven, binding.buttonEight, binding.buttonNine)
+        val buttons = listOf(binding.buttonOne, binding.buttonTwo, binding.buttonThree, binding.buttonFour, binding.buttonFive, binding.buttonSix,
+            binding.buttonSeven, binding.buttonEight, binding.buttonNine)
 
-        numberButtons.forEachIndexed { index, button ->
-            button.setOnClickListener {
-                viewModel.sudokuGame.handleInput(index + 1)
-            }
-        }
-
-        binding.notesButton.setOnClickListener {
-            viewModel.sudokuGame.changeNoteTakingState()
+        buttons.forEachIndexed { index, button ->
+            button.setOnClickListener { viewModel.sudokuGame.handleInput(index + 1) }
         }
     }
-
-    // only update if its not null
-    private fun updateNoteTakingUI(isNoteTaking: Boolean?) = isNoteTaking?.let {
-        if (it){
-            binding.notesButton.setBackgroundColor(ContextCompat.getColor(this, R.color.blue))
-        } else {
-            binding.notesButton.setBackgroundColor(Color.LTGRAY)
-        }
-    }
-    private fun updateHighlightedKeys(set: Set<Int>?) = set?.let {
-        numberButtons.forEachIndexed { index, button ->
-            val color = if(set.contains(index + 1)) ContextCompat.getColor(this, R.color.blue)
-            else Color.LTGRAY
-            button.setBackgroundColor(color)
-        }
-    }
-
 
 
     //runs only when the cells is not null
