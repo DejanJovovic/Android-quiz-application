@@ -1,10 +1,14 @@
 package com.deksi.graduationquiz.sudoku.game
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
+
 
 // keeps the connection here between view and viewModel#
 // stores the state of the board and the game
-class SudokuGame {
+class SudokuGame(
+    private val listener: SudokuGameListener
+) {
 
     var selectedCellLiveData = MutableLiveData<Pair<Int, Int>>()
     var cellsLiveData = MutableLiveData<List<Cell>>()
@@ -14,6 +18,13 @@ class SudokuGame {
     private var selectedCol = -1
 
     private val board: Board
+
+    private var remainingLives = 3
+        set(value) {
+            field = value
+            // Notify the listener when remaining lives change
+            listener.onRemainingLivesChanged(value)
+        }
 
     // called whenever the SudokuGame is created
     init {
@@ -80,7 +91,22 @@ class SudokuGame {
     }
 
     private fun isValidMove(board: Board, row: Int, col: Int, num: Int): Boolean {
-        return !isInRow(board, row, num) && !isInCol(board, col, num) && !isInBox(board, row - row % 3, col - col % 3, num)
+        return !isInRow(board, row, num) && !isInCol(board, col, num) && !isInBox(
+            board,
+            row - row % 3,
+            col - col % 3,
+            num
+        )
+    }
+
+
+    fun isNumberCorrect(board: Board, row: Int, col: Int, num: Int): Boolean {
+        return !isInRow(board, row, num) && !isInCol(board, col, num) && !isInBox(
+            board,
+            row - row % 3,
+            col - col % 3,
+            num
+        )
     }
 
     private fun isInRow(board: Board, row: Int, num: Int): Boolean {
@@ -98,16 +124,42 @@ class SudokuGame {
             }
         }
     }
+
+    fun decrementLives() {
+        remainingLives--
+    }
+
+
     //it takes a number and decides what to do with it
     fun handleInput(number: Int) {
         if (selectedRow == -1 || selectedCol == -1) return
         val selectedCell = board.getCell(selectedRow, selectedCol)
 
-        if (selectedCell.value == 0) {
+        if (selectedCell.value == 0 && isNumberCorrect(board, selectedRow, selectedCol, number)) {
             selectedCell.value = number
             cellsLiveData.postValue(board.cells)
+            Log.d("Correct number!", "Correct number")
+
+        } else {
+            Log.d("Wrong number!", "Wrong number")
+            decrementLives()
+            updateLivesUI(listener)
+
+            if (remainingLives == 0) {
+                // Game over, navigate to HomeActivity
+                listener.onRemainingLivesChanged(remainingLives)  // Notify listener about game over
+            }
         }
     }
+
+    private fun updateLivesUI(listener: SudokuGameListener) {
+        listener.onRemainingLivesChanged(remainingLives)
+    }
+
+    interface SudokuGameListener {
+        fun onRemainingLivesChanged(remainingLives: Int)
+    }
+
 
     fun updateSelectedCell(row: Int, col: Int) {
         selectedRow = row

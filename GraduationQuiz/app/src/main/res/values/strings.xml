@@ -94,4 +94,5 @@
     <string name="finish">Finish</string>
     <string name="sudoku">Sudoku</string>
     <string name="slagalica">Slagalica</string>
+    <string name="remaining_lives_left_3">Remaining lives left: 3</string>
 </resources>
