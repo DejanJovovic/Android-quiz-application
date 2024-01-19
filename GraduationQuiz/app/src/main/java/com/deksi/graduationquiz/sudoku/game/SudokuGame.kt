@@ -35,17 +35,7 @@ class SudokuGame {
 
 
     private fun generateSolvedBoard(): Board {
-        val numbers = (1..9).toList()
         val board = Board(9, MutableList(9 * 9) { Cell(it / 9, it % 9, 0) })
-
-        for (row in 0 until 9) {
-            val rowNumbers = numbers.shuffled()
-            for (col in 0 until 9) {
-                val index = row * 9 + col
-                board.getCell(row, col).value = rowNumbers[col]
-            }
-        }
-
         solve(board)
 
         return board
@@ -59,7 +49,9 @@ class SudokuGame {
         }
 
         val (row, col) = emptyCell
-        for (num in 1..9) {
+        val numbers = (1..9).shuffled()
+
+        for (num in numbers) {
             if (isValidMove(board, row, col, num)) {
                 board.getCell(row, col).value = num
 
