@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.view.Gravity
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -44,6 +45,7 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
         setUpActionBar()
 
         binding.sudokuBoardView.registerListener(this)
+
 
         viewModel = ViewModelProvider(this)[SudokuViewModel::class.java]
         viewModel.sudokuGame = SudokuGame(listener = this)
@@ -82,6 +84,13 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
             showProgressDialogOnGameFinish()
             moveToNextActivityWithDelay()
         }
+    }
+
+    override fun onGameFinished() {
+        stopTimer()
+        showProgressDialogOnGameFinished()
+        moveToNextActivityWithDelay()
+
     }
 
 
@@ -152,6 +161,16 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
     private fun showProgressDialogOnGameFinish() {
         progressDialog = ProgressDialog(this)
         progressDialog!!.setTitle("You are out of lives!")
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.show()
+
+        startTimerProgressDialog()
+    }
+
+    private fun showProgressDialogOnGameFinished() {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setTitle("Congrats on beating the game!")
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()

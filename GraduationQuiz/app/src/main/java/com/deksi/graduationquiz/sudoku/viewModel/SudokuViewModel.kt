@@ -11,4 +11,8 @@ class SudokuViewModel: ViewModel(), SudokuGame.SudokuGameListener {
     override fun onRemainingLivesChanged(remainingLives: Int) {
 
     }
+
+    override fun onGameFinished() {
+
+    }
 }

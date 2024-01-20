@@ -140,6 +140,11 @@ class SudokuGame(
             cellsLiveData.postValue(board.cells)
             Log.d("Correct number!", "Correct number")
 
+            if (isGameFinished()) {
+                //Game finished and notify the listener
+                listener.onGameFinished()
+            }
+
         } else {
             Log.d("Wrong number!", "Wrong number")
             decrementLives()
@@ -152,12 +157,18 @@ class SudokuGame(
         }
     }
 
+    private fun isGameFinished(): Boolean {
+        // Check if all cells are filled
+        return board.cells.all { it.value != 0 }
+    }
+
     private fun updateLivesUI(listener: SudokuGameListener) {
         listener.onRemainingLivesChanged(remainingLives)
     }
 
     interface SudokuGameListener {
         fun onRemainingLivesChanged(remainingLives: Int)
+        fun onGameFinished()
     }
 
 
@@ -166,5 +177,17 @@ class SudokuGame(
         selectedCol = col
         selectedCellLiveData.postValue(Pair(row, col))
     }
+
+//    fun handleDelete() {
+//        if (selectedRow != -1 && selectedCol != -1) {
+//            val selectedCell = board.getCell(selectedRow, selectedCol)
+//
+//            if (selectedCell.value != 0) {
+//                // Only delete if the cell is not empty
+//                selectedCell.value = 0
+//                cellsLiveData.postValue(board.cells)
+//            }
+//        }
+//    }
 
 }
