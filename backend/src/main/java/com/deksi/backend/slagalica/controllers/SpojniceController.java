@@ -1,6 +1,5 @@
 package com.deksi.backend.slagalica.controllers;
 
-import com.deksi.backend.slagalica.model.AsocijacijeEntity;
 import com.deksi.backend.slagalica.model.SpojniceEntity;
 import com.deksi.backend.slagalica.repository.SpojniceRepository;
 import com.deksi.backend.slagalica.service.SpojniceService;
@@ -24,14 +23,18 @@ public class SpojniceController {
     @Autowired
     private SpojniceService spojniceService;
 
+    private Long previousRoundId;
+
 
 
     @GetMapping("/random-round")
     public ResponseEntity<SpojniceEntity> getRandomRound() {
-        Long randomRoundId = spojniceService.getRandomSpojniceRound();
+        Long randomRoundId = spojniceService.getRandomSpojniceRound(previousRoundId);
 
         if (randomRoundId != null) {
             Optional<SpojniceEntity> round = spojniceService.findOneById(randomRoundId);
+
+            previousRoundId = randomRoundId;
 
             return round.map(spojniceEntity
                     -> new ResponseEntity<>(spojniceEntity, HttpStatus.OK)).orElseGet(()

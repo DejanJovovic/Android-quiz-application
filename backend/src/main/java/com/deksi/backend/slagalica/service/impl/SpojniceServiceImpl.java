@@ -23,9 +23,15 @@ public class SpojniceServiceImpl implements SpojniceService {
 
 
     @Override
-    public Long getRandomSpojniceRound() {
-        Optional<SpojniceEntity> randomEntity = spojniceRepository.getRandomEntity();
-        return randomEntity.map(SpojniceEntity::getId).orElse(null);
+    public Long getRandomSpojniceRound(Long previousRoundId) {
+        Long randomRoundId;
 
+        do {
+            Optional<SpojniceEntity> randomEntity = spojniceRepository.getRandomEntity();
+            randomRoundId = randomEntity.map(SpojniceEntity::getId).orElse(null);
+
+        } while (randomRoundId != null && randomRoundId.equals(previousRoundId));
+
+        return randomRoundId;
     }
 }

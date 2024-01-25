@@ -8,5 +8,5 @@ public interface KorakPoKorakService {
 
     Optional<KorakPoKorakEntity> findOneById(Long id);
 
-    Long getRandomKorakPoKorakRound();
+    Long getRandomKorakPoKorakRound(Long previousRoundId);
 }

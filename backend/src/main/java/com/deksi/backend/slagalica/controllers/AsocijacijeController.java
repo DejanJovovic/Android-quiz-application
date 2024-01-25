@@ -24,15 +24,17 @@ public class AsocijacijeController {
     @Autowired
     private AsocijacijeService asocijacijeService;
 
+    private Long previousRoundId;
 
-    // needs fixing
 
     @GetMapping("/random-round")
     public ResponseEntity<AsocijacijeEntity> getRandomRound() {
-        Long randomRoundId = asocijacijeService.getRandomAsosijacijeRound();
+        Long randomRoundId = asocijacijeService.getRandomAsocijacijeRound(previousRoundId);
 
         if (randomRoundId != null) {
             Optional<AsocijacijeEntity> round = asocijacijeService.findOneById(randomRoundId);
+
+            previousRoundId = randomRoundId;
 
             return round.map(asocijacijeEntity
                     -> new ResponseEntity<>(asocijacijeEntity, HttpStatus.OK)).orElseGet(()

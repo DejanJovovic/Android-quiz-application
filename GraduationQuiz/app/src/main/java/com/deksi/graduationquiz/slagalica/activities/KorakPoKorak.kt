@@ -38,6 +38,7 @@ class KorakPoKorak : AppCompatActivity() {
     private var progressDialog: ProgressDialog? = null
     private var countDownTimer: CountDownTimer? = null
     private val totalTime: Long = 5000
+    private var currentRound = 2
     private var totalScore: Int = 0
     private var currentHintIndex: Int = 0
 
@@ -45,6 +46,10 @@ class KorakPoKorak : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityKorakPoKorakBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        savedInstanceState?.let {
+            currentRound++
+        }
 
         getRoundData()
         findViewsById()
@@ -96,8 +101,6 @@ class KorakPoKorak : AppCompatActivity() {
         if (editText?.text.toString() == expectedValue) {
             editText?.setBackgroundResource(R.drawable.round_green_reveal)
 
-            // Increment currentHintIndex before calculating totalScore
-
 
             // Calculate the score based on the hints revealed
             totalScore = when (currentHintIndex) {
@@ -127,9 +130,16 @@ class KorakPoKorak : AppCompatActivity() {
                     )
                 }
             }
-            stopTimer()
-            showProgressDialogOnGameFinish()
-            moveToNextActivityWithDelay()
+            if(currentRound < 3){
+                stopTimer()
+                showProgressDialogOnNextRound()
+                moveToNextActivityWithDelay()
+            }
+            else {
+                stopTimer()
+                showProgressDialogOnGameFinish()
+                moveToNextActivityWithDelay()
+            }
         } else {
             Toast.makeText(applicationContext, "Wrong!", Toast.LENGTH_LONG).show()
         }
@@ -230,16 +240,38 @@ class KorakPoKorak : AppCompatActivity() {
         startTimerProgressDialog()
     }
 
+    private fun showProgressDialogOnNextRound() {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setTitle("Round $currentRound is starting...")
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.show()
+
+        startTimerProgressDialog()
+    }
+
     private fun moveToNextActivityWithDelay() {
         val delayMilis = 5000L
         val handler = Handler()
 
         handler.postDelayed({
-            val intent = Intent(this@KorakPoKorak, MojBroj::class.java)
-            startActivity(intent)
+            if(currentRound < 3) {
+                onSaveInstanceState(Bundle())
+                recreate()
+                clearKonacnoField()
+            }
 
-            finish()
+            else {
+                val intent = Intent(this@KorakPoKorak, MojBroj::class.java)
+                startActivity(intent)
+                finish()
+            }
+
         }, delayMilis)
+    }
+
+    private fun clearKonacnoField() {
+        konacno?.text?.clear()
     }
 
     private fun displayValuesOnTimeout() {
@@ -341,5 +373,11 @@ class KorakPoKorak : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         timeLeft?.cancel()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // Save the state
+        outState.putInt("currentRound", currentRound)
     }
 }

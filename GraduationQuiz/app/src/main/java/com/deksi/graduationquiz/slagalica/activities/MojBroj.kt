@@ -32,12 +32,17 @@ class MojBroj : AppCompatActivity() {
     private var countDownTimer: CountDownTimer? = null
     private val totalTime: Long = 5000
     private var totalScore: Int = 0
+    private var currentRound = 2
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMojBrojBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        savedInstanceState?.let {
+            currentRound++
+        }
 
         init()
         initTimer()
@@ -252,14 +257,27 @@ class MojBroj : AppCompatActivity() {
             val guess = evalSolution(solution.text.toString())
             val actual = result.text.toString().toDouble()
 
-            if (actual == guess) {
-                totalScore = 20
-                showProgressDialogOnGameFinish()
-                goBackToTheHomeActivityWithDelay()
-            } else {
-                totalScore = 5
-                showProgressDialogOnGameFinish()
-                goBackToTheHomeActivityWithDelay()
+            if (currentRound < 3) {
+                if (actual == guess) {
+                    totalScore = 20
+                    showProgressDialogOnNextRound()
+                    moveToResultsActivityWithDelay()
+                } else {
+                    totalScore = 5
+                    showProgressDialogOnNextRound()
+                    moveToResultsActivityWithDelay()
+                }
+
+            } else if (currentRound == 3) {
+                if (actual == guess) {
+                    totalScore = 20
+                    showProgressDialogOnGameFinish()
+                    moveToResultsActivityWithDelay()
+                } else {
+                    totalScore = 5
+                    showProgressDialogOnGameFinish()
+                    moveToResultsActivityWithDelay()
+                }
 
             }
 
@@ -292,7 +310,7 @@ class MojBroj : AppCompatActivity() {
                 totalScore = 0
                 // treba dodati da kad istekne vreme da prikaze zavrsnu kombinaciju
                 showProgressDialogOnTimeout()
-                goBackToTheHomeActivityWithDelay()
+                moveToResultsActivityWithDelay()
             }
         }
         (timeLeft as CountDownTimer).start()
@@ -342,19 +360,35 @@ class MojBroj : AppCompatActivity() {
         startTimerProgressDialog()
     }
 
+    private fun showProgressDialogOnNextRound() {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setTitle("Round $currentRound is starting...")
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.show()
+
+        startTimerProgressDialog()
+    }
+
+
     private fun dismissProgressDialog() {
         progressDialog?.dismiss()
     }
 
-    private fun goBackToTheHomeActivityWithDelay() {
+    private fun moveToResultsActivityWithDelay() {
         val delayMilis = 5000L
         val handler = Handler()
 
         handler.postDelayed({
-            val intent = Intent(this@MojBroj, HomeActivity::class.java)
-            startActivity(intent)
+            if (currentRound < 3) {
+                onSaveInstanceState(Bundle())
+                recreate()
+            } else {
+                val intent = Intent(this@MojBroj, Results::class.java)
+                startActivity(intent)
+                finish()
+            }
 
-            finish()
         }, delayMilis)
     }
 
@@ -374,6 +408,12 @@ class MojBroj : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         timeLeft?.cancel()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // Save the state
+        outState.putInt("currentRound", currentRound)
     }
 
 }

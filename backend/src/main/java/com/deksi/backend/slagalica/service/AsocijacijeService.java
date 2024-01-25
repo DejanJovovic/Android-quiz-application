@@ -8,6 +8,6 @@ public interface AsocijacijeService {
 
     Optional<AsocijacijeEntity> findOneById(Long id);
 
-    Long getRandomAsosijacijeRound();
+    Long getRandomAsocijacijeRound(Long previousRoundId);
 
 }

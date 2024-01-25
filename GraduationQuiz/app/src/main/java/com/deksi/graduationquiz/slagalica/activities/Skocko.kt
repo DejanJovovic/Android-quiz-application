@@ -33,6 +33,7 @@ class Skocko : AppCompatActivity() {
     private var countDownTimer: CountDownTimer? = null
     private val totalTime: Long = 5000
     private var totalScore = 0
+    private var currentRound = 2
 
     private var slots = Array(6) {
         arrayOfNulls<ImageView>(
@@ -49,6 +50,10 @@ class Skocko : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySkockoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        savedInstanceState?.let {
+            currentRound++
+        }
 
         initResult()
         initSlots()
@@ -159,10 +164,18 @@ class Skocko : AppCompatActivity() {
             row++
         }
         if (row == slots.size) {
-            showResult()
-            stopTimer()
-            showProgressDialogOnGameFinish()
-            moveToTheNextActivityWithDelay()
+            if(currentRound < 3){
+                showResult()
+                stopTimer()
+                showProgressDialogOnNextRound()
+                moveToTheNextActivityWithDelay()
+            }
+            else {
+                showResult()
+                stopTimer()
+                showProgressDialogOnGameFinish()
+                moveToTheNextActivityWithDelay()
+            }
         }
     }
 
@@ -202,11 +215,24 @@ class Skocko : AppCompatActivity() {
         }
         "correct:$correct\nmisplaced:$misplaced".also { results[row]!!.text = it }
         if (correct == 4) {
-            showResult()
-            stopTimer()
-            showScore()
+
             showProgressDialogOnGameFinish()
-            moveToTheNextActivityWithDelay()
+
+
+            if(currentRound < 3){
+                showResult()
+                showScore()
+                stopTimer()
+                showProgressDialogOnNextRound()
+                moveToTheNextActivityWithDelay()
+            }
+            else {
+                showResult()
+                showScore()
+                stopTimer()
+                showProgressDialogOnGameFinish()
+                moveToTheNextActivityWithDelay()
+            }
 
         }
     }
@@ -311,6 +337,16 @@ class Skocko : AppCompatActivity() {
         startTimerProgressDialog()
     }
 
+    private fun showProgressDialogOnNextRound() {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setTitle("Round $currentRound is starting...")
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.show()
+
+        startTimerProgressDialog()
+    }
+
     private fun dismissProgressDialog() {
         progressDialog?.dismiss()
     }
@@ -320,10 +356,17 @@ class Skocko : AppCompatActivity() {
         val handler = Handler()
 
         handler.postDelayed({
-            val intent = Intent(this@Skocko, KorakPoKorak::class.java)
-            startActivity(intent)
+            if(currentRound < 3) {
+                onSaveInstanceState(Bundle())
+                recreate()
+            }
 
-            finish()
+            else {
+                val intent = Intent(this@Skocko, KorakPoKorak::class.java)
+                startActivity(intent)
+                finish()
+            }
+
         }, delayMilis)
     }
 
@@ -343,6 +386,12 @@ class Skocko : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         timeLeft?.cancel()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // Save the state
+        outState.putInt("currentRound", currentRound)
     }
 
 }

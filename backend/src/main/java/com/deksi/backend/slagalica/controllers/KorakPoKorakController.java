@@ -1,6 +1,5 @@
 package com.deksi.backend.slagalica.controllers;
 
-import com.deksi.backend.slagalica.model.AsocijacijeEntity;
 import com.deksi.backend.slagalica.model.KorakPoKorakEntity;
 import com.deksi.backend.slagalica.repository.KorakPoKorakRepository;
 import com.deksi.backend.slagalica.service.KorakPoKorakService;
@@ -25,13 +24,17 @@ public class KorakPoKorakController {
     @Autowired
     private KorakPoKorakService korakPoKorakService;
 
+    private Long previousRoundId;
+
 
     @GetMapping("/random-round")
     public ResponseEntity<KorakPoKorakEntity> getRandomRound() {
-        Long randomRoundId = korakPoKorakService.getRandomKorakPoKorakRound();
+        Long randomRoundId = korakPoKorakService.getRandomKorakPoKorakRound(previousRoundId);
 
         if (randomRoundId != null) {
             Optional<KorakPoKorakEntity> round = korakPoKorakService.findOneById(randomRoundId);
+
+            previousRoundId = randomRoundId;
 
             return round.map(korakPoKorakEntity
                     -> new ResponseEntity<>(korakPoKorakEntity, HttpStatus.OK)).orElseGet(()

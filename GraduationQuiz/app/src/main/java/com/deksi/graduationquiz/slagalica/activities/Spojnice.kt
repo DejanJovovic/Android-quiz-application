@@ -38,6 +38,7 @@ class Spojnice : AppCompatActivity() {
     private var countDownTimer: CountDownTimer? = null
     private val totalTime: Long = 5000
     private var totalScore = 0
+    private var currentRound = 2
     private val connectedPairs: MutableSet<Pair<String, String>> = mutableSetOf()
     private val correctConnections: List<Pair<String, String>> = listOf(
         "button_left1" to "button_right5",
@@ -51,6 +52,10 @@ class Spojnice : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySpojniceBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        savedInstanceState?.let {
+            currentRound++
+        }
 
         getRoundData()
         onClickListeners()
@@ -139,9 +144,18 @@ class Spojnice : AppCompatActivity() {
         }
 
         if (connectedPairs.size == correctConnections.size) {
-            stopTimer()
-            showProgressDialogOnGameFinish()
-            moveToNextActivityWithDelay()
+
+            if(currentRound < 3){
+                stopTimer()
+                showProgressDialogOnNextRound()
+                moveToNextActivityWithDelay()
+            }
+            else {
+                stopTimer()
+                showProgressDialogOnGameFinish()
+                moveToNextActivityWithDelay()
+            }
+
         }
     }
 
@@ -188,6 +202,7 @@ class Spojnice : AppCompatActivity() {
             override fun onFinish() {
                 showProgressDialogOnTimeout()
                 moveToNextActivityWithDelay()
+
             }
         }
         (timeLeft as CountDownTimer).start()
@@ -246,15 +261,33 @@ class Spojnice : AppCompatActivity() {
         startTimerProgressDialog()
     }
 
+    private fun showProgressDialogOnNextRound() {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setTitle("Round $currentRound is starting...")
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.show()
+
+        startTimerProgressDialog()
+    }
+
     private fun moveToNextActivityWithDelay() {
         val delayMilis = 5000L
         val handler = Handler()
 
         handler.postDelayed({
-            val intent = Intent(this@Spojnice, Asocijacije::class.java)
-            startActivity(intent)
+            if(currentRound < 3) {
+                onSaveInstanceState(Bundle())
+                recreate()
+                connectedPairs.clear()
+            }
 
-            finish()
+            else {
+                val intent = Intent(this@Spojnice, Asocijacije::class.java)
+                startActivity(intent)
+                finish()
+            }
+
         }, delayMilis)
     }
 
@@ -365,5 +398,11 @@ class Spojnice : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         timeLeft?.cancel()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // Save the state
+        outState.putInt("currentRound", currentRound)
     }
 }

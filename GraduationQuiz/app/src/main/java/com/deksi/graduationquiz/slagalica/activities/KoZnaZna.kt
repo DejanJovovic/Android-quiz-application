@@ -234,7 +234,7 @@ class KoZnaZna : AppCompatActivity() {
 
     private fun showProgressDialogOnGameEnd() {
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle("Congrats!")
+        progressDialog!!.setTitle("Game is finished. Please wait..")
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()

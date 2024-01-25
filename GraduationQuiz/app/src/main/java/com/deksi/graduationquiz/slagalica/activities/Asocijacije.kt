@@ -44,6 +44,7 @@ class Asocijacije : AppCompatActivity() {
     private var progressDialog: ProgressDialog? = null
     private var countDownTimer: CountDownTimer? = null
     private val totalTime: Long = 5000
+    private var currentRound = 2
     private var pointsA: Int = 0
     private var pointsB: Int = 0
     private var pointsC: Int = 0
@@ -60,10 +61,15 @@ class Asocijacije : AppCompatActivity() {
     private var openedCluesD: Int = 4
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAsocijacijeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        savedInstanceState?.let {
+            currentRound++
+        }
 
         getRoundData()
         setOnClickButtonListeners()
@@ -319,9 +325,16 @@ class Asocijacije : AppCompatActivity() {
         if (!konacno?.text.isNullOrEmpty()) {
             checkAndUpdateField(konacno, getKonacno ?: "")
             if (konacno?.text.toString() == getKonacno) {
-                stopTimer()
-                showProgressDialogOnGameFinish()
-                moveToNextActivityWithDelay()
+                if(currentRound < 3){
+                    stopTimer()
+                    showProgressDialogOnNextRound()
+                    moveToNextActivityWithDelay()
+                }
+                else {
+                    stopTimer()
+                    showProgressDialogOnGameFinish()
+                    moveToNextActivityWithDelay()
+                }
             }
 
         }
@@ -352,15 +365,15 @@ class Asocijacije : AppCompatActivity() {
                 calculatingPointsOnTimeout()
                 val secondsRemaining = millisUntilFinished / 1000
                 val points = pointsA + openedCluesA + pointsB + openedCluesB + pointsC + openedCluesC + pointsD + openedCluesD + userPoints
-                Toast.makeText(applicationContext, "pA: $pointsA," +
-                        "cA: $openedCluesA," +
-                        "pB: $pointsB," +
-                        "cB: $openedCluesB," +
-                        "pC: $pointsC," +
-                        "CC: $openedCluesC, " +
-                        "pD: $pointsD," +
-                        "cD: $openedCluesD," +
-                        "uP: $userPoints",Toast.LENGTH_LONG).show()
+//                Toast.makeText(applicationContext, "pA: $pointsA," +
+//                        "cA: $openedCluesA," +
+//                        "pB: $pointsB," +
+//                        "cB: $openedCluesB," +
+//                        "pC: $pointsC," +
+//                        "CC: $openedCluesC, " +
+//                        "pD: $pointsD," +
+//                        "cD: $openedCluesD," +
+//                        "uP: $userPoints",Toast.LENGTH_LONG).show()
                 val message = "$secondsRemaining     Score: $points"
                 progressDialog?.setMessage(message)
 
@@ -458,16 +471,48 @@ class Asocijacije : AppCompatActivity() {
         startTimerProgressDialog()
     }
 
+    private fun showProgressDialogOnNextRound() {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setTitle("Round $currentRound is starting...")
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.show()
+
+        startTimerProgressDialog()
+    }
+
     private fun moveToNextActivityWithDelay() {
-        val delayMillis = 5000L
+        val delayMilis = 5000L
         val handler = Handler()
 
         handler.postDelayed({
-            val intent = Intent(this@Asocijacije, Skocko::class.java)
-            startActivity(intent)
+            if(currentRound < 3) {
+                onSaveInstanceState(Bundle())
+                recreate()
+                clearKonacnoFields()
+            }
 
-            finish()
-        }, delayMillis)
+            else {
+                val intent = Intent(this@Asocijacije, Skocko::class.java)
+                startActivity(intent)
+                finish()
+            }
+
+        }, delayMilis)
+    }
+
+    private fun clearKonacnoFields() {
+        konacnoA?.text?.clear()
+        konacnoB?.text?.clear()
+        konacnoC?.text?.clear()
+        konacnoD?.text?.clear()
+        konacno?.text?.clear()
+
+        konacnoAGuessed = false
+        konacnoBGuessed = false
+        konacnoCGuessed = false
+        konacnoDGuessed = false
+        konacnoGuessed = false
     }
 
     private fun displayValuesOnTimeout() {
@@ -581,6 +626,12 @@ class Asocijacije : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         timeLeft?.cancel()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // Save the state
+        outState.putInt("currentRound", currentRound)
     }
 
 }

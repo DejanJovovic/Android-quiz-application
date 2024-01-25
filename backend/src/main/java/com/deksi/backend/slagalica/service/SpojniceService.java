@@ -8,5 +8,5 @@ public interface SpojniceService {
 
     Optional<SpojniceEntity> findOneById(Long id);
 
-    Long getRandomSpojniceRound();
+    Long getRandomSpojniceRound(Long previousRoundId);
 }
