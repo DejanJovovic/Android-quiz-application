@@ -1,6 +1,7 @@
 package com.deksi.graduationquiz.slagalica.activities
 
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -50,6 +51,7 @@ class Asocijacije : AppCompatActivity() {
     private var pointsC: Int = 0
     private var pointsD: Int = 0
     private var userPoints: Int = 0
+    private var totalScore: Int = 0
     private var konacnoAGuessed = false
     private var konacnoBGuessed = false
     private var konacnoCGuessed = false
@@ -67,6 +69,7 @@ class Asocijacije : AppCompatActivity() {
         binding = ActivityAsocijacijeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        totalScore = savedInstanceState?.getInt("totalScore") ?: 0
         savedInstanceState?.let {
             currentRound++
         }
@@ -364,7 +367,7 @@ class Asocijacije : AppCompatActivity() {
                 progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
                 calculatingPointsOnTimeout()
                 val secondsRemaining = millisUntilFinished / 1000
-                val points = pointsA + openedCluesA + pointsB + openedCluesB + pointsC + openedCluesC + pointsD + openedCluesD + userPoints
+                totalScore = pointsA + openedCluesA + pointsB + openedCluesB + pointsC + openedCluesC + pointsD + openedCluesD + userPoints
 //                Toast.makeText(applicationContext, "pA: $pointsA," +
 //                        "cA: $openedCluesA," +
 //                        "pB: $pointsB," +
@@ -374,7 +377,7 @@ class Asocijacije : AppCompatActivity() {
 //                        "pD: $pointsD," +
 //                        "cD: $openedCluesD," +
 //                        "uP: $userPoints",Toast.LENGTH_LONG).show()
-                val message = "$secondsRemaining     Score: $points"
+                val message = "$secondsRemaining     Score: $totalScore"
                 progressDialog?.setMessage(message)
 
             }
@@ -487,12 +490,14 @@ class Asocijacije : AppCompatActivity() {
 
         handler.postDelayed({
             if(currentRound < 3) {
+                saveTotalScoreToLocalPreferences()
                 onSaveInstanceState(Bundle())
                 recreate()
                 clearKonacnoFields()
             }
 
             else {
+                saveTotalScoreToLocalPreferences()
                 val intent = Intent(this@Asocijacije, Skocko::class.java)
                 startActivity(intent)
                 finish()
@@ -500,6 +505,31 @@ class Asocijacije : AppCompatActivity() {
 
         }, delayMilis)
     }
+
+    private fun saveTotalScoreToLocalPreferences() {
+        val sharedPreferences = getSharedPreferences("GameScores", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        // Retrieve the existing total score
+        val currentTotalScore = sharedPreferences.getInt("totalScore", 0)
+
+        // Add the local total score to the overall total score
+        val newTotalScore = currentTotalScore + totalScore
+
+        // Save the updated total score
+        editor.putInt("totalScore", newTotalScore)
+        editor.apply()
+    }
+
+    private fun clearTotalScoreFromPreferences() {
+        val sharedPreferences = getSharedPreferences("GameScores", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        // Remove the totalScore key from SharedPreferences
+        editor.remove("totalScore")
+        editor.apply()
+    }
+
 
     private fun clearKonacnoFields() {
         konacnoA?.text?.clear()
@@ -572,7 +602,7 @@ class Asocijacije : AppCompatActivity() {
         val sslSocketFactory = sslContext.socketFactory
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.1.9:8080/api/slagalica/")
+            .baseUrl("https://192.168.178.66:8080/api/slagalica/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -628,10 +658,16 @@ class Asocijacije : AppCompatActivity() {
         timeLeft?.cancel()
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        clearTotalScoreFromPreferences()
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         // Save the state
         outState.putInt("currentRound", currentRound)
+        outState.putInt("totalScore", totalScore)
     }
 
 }

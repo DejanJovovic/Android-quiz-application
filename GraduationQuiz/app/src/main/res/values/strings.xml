@@ -95,4 +95,7 @@
     <string name="sudoku">Sudoku</string>
     <string name="slagalica">Slagalica</string>
     <string name="remaining_lives_left_3">Remaining lives left: 3</string>
+    <string name="your_total_score_is">Your total score is:</string>
+    <string name="you_have_successfully_completed_the_quiz">You have successfully completed the quiz!</string>
+    <string name="back_to_home">Back to home</string>
 </resources>

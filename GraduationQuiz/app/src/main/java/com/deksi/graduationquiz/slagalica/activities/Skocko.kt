@@ -1,6 +1,7 @@
 package com.deksi.graduationquiz.slagalica.activities
 
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -51,6 +52,7 @@ class Skocko : AppCompatActivity() {
         binding = ActivitySkockoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        totalScore = savedInstanceState?.getInt("totalScore") ?: 0
         savedInstanceState?.let {
             currentRound++
         }
@@ -357,17 +359,43 @@ class Skocko : AppCompatActivity() {
 
         handler.postDelayed({
             if(currentRound < 3) {
+                saveTotalScoreToLocalPreferences()
                 onSaveInstanceState(Bundle())
                 recreate()
             }
 
             else {
+                saveTotalScoreToLocalPreferences()
                 val intent = Intent(this@Skocko, KorakPoKorak::class.java)
                 startActivity(intent)
                 finish()
             }
 
         }, delayMilis)
+    }
+
+    private fun saveTotalScoreToLocalPreferences() {
+        val sharedPreferences = getSharedPreferences("GameScores", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        // Retrieve the existing total score
+        val currentTotalScore = sharedPreferences.getInt("totalScore", 0)
+
+        // Add the local total score to the overall total score
+        val newTotalScore = currentTotalScore + totalScore
+
+        // Save the updated total score
+        editor.putInt("totalScore", newTotalScore)
+        editor.apply()
+    }
+
+    private fun clearTotalScoreFromPreferences() {
+        val sharedPreferences = getSharedPreferences("GameScores", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        // Remove the totalScore key from SharedPreferences
+        editor.remove("totalScore")
+        editor.apply()
     }
 
     private fun setUpActionBar() {
@@ -388,10 +416,16 @@ class Skocko : AppCompatActivity() {
         timeLeft?.cancel()
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        clearTotalScoreFromPreferences()
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         // Save the state
         outState.putInt("currentRound", currentRound)
+        outState.putInt("totalScore", totalScore)
     }
 
 }

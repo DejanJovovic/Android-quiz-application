@@ -40,6 +40,7 @@ class MojBroj : AppCompatActivity() {
         binding = ActivityMojBrojBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        totalScore = savedInstanceState?.getInt("totalScore") ?: 0
         savedInstanceState?.let {
             currentRound++
         }
@@ -248,10 +249,9 @@ class MojBroj : AppCompatActivity() {
 
     private fun setUpFinalResultButtons() {
         val result = binding.buttonFinalResult
-        val finish = binding.buttonDone
         val stopBtn = binding.buttonStopDigits
 
-        finish.setOnClickListener {
+        binding.buttonDone.setOnClickListener {
             stopTimer()
             val solution = binding.textViewUserInput
             val guess = evalSolution(solution.text.toString())
@@ -291,6 +291,7 @@ class MojBroj : AppCompatActivity() {
     }
 
     private fun displayInput() {
+        binding.buttonDone.isEnabled = true
         val buffer = StringBuffer()
         for (value in input) {
             buffer.append(value?.text.toString())
@@ -381,15 +382,41 @@ class MojBroj : AppCompatActivity() {
 
         handler.postDelayed({
             if (currentRound < 3) {
+                saveTotalScoreToLocalPreferences()
                 onSaveInstanceState(Bundle())
                 recreate()
             } else {
+                saveTotalScoreToLocalPreferences()
                 val intent = Intent(this@MojBroj, Results::class.java)
                 startActivity(intent)
                 finish()
             }
 
         }, delayMilis)
+    }
+
+    private fun saveTotalScoreToLocalPreferences() {
+        val sharedPreferences = getSharedPreferences("GameScores", android.content.Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        // Retrieve the existing total score
+        val currentTotalScore = sharedPreferences.getInt("totalScore", 0)
+
+        // Add the local total score to the overall total score
+        val newTotalScore = currentTotalScore + totalScore
+
+        // Save the updated total score
+        editor.putInt("totalScore", newTotalScore)
+        editor.apply()
+    }
+
+    private fun clearTotalScoreFromPreferences() {
+        val sharedPreferences = getSharedPreferences("GameScores", android.content.Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        // Remove the totalScore key from SharedPreferences
+        editor.remove("totalScore")
+        editor.apply()
     }
 
     private fun setUpActionBar() {
@@ -410,10 +437,16 @@ class MojBroj : AppCompatActivity() {
         timeLeft?.cancel()
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        clearTotalScoreFromPreferences()
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         // Save the state
         outState.putInt("currentRound", currentRound)
+        outState.putInt("totalScore", totalScore)
     }
 
 }

@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.deksi.graduationquiz.databinding.FragmentHomeBinding
+import com.deksi.graduationquiz.slagalica.activities.Asocijacije
 import com.deksi.graduationquiz.slagalica.activities.KoZnaZna
+import com.deksi.graduationquiz.slagalica.activities.MojBroj
 import com.deksi.graduationquiz.sudoku.Sudoku
 
 class HomeFragment : Fragment() {

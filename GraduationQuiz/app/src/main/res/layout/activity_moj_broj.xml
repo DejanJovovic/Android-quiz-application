@@ -232,6 +232,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="84dp"
+            android:enabled="false"
             android:backgroundTint="@color/edit_text_asosijacije"
             android:text="@string/done"
             android:textColor="@color/white" />

@@ -1,6 +1,7 @@
 package com.deksi.graduationquiz.slagalica.activities
 
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -37,7 +38,8 @@ class Spojnice : AppCompatActivity() {
     private var progressDialog: ProgressDialog? = null
     private var countDownTimer: CountDownTimer? = null
     private val totalTime: Long = 5000
-    private var totalScore = 0
+    private var totalScore: Int = 0
+    private var roundScore: Int = 0
     private var currentRound = 2
     private val connectedPairs: MutableSet<Pair<String, String>> = mutableSetOf()
     private val correctConnections: List<Pair<String, String>> = listOf(
@@ -53,6 +55,7 @@ class Spojnice : AppCompatActivity() {
         binding = ActivitySpojniceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        totalScore = savedInstanceState?.getInt("totalScore") ?: 0
         savedInstanceState?.let {
             currentRound++
         }
@@ -125,7 +128,7 @@ class Spojnice : AppCompatActivity() {
                 // Correct connection logic
                 changeButtonColorToGreen(selectedLeft)
                 changeButtonColorToGreen(selectedRight)
-                totalScore += 2
+                roundScore += 2
 
             } else {
                 // Incorrect connection logic
@@ -214,7 +217,9 @@ class Spojnice : AppCompatActivity() {
                 progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
 
                 val secondsRemaining = millisUntilFinished / 1000
-                val message = "$secondsRemaining     Score: $totalScore"
+                // mozda treba izmeniti
+                val score = roundScore + totalScore
+                val message = "$secondsRemaining     Score: $score"
                 progressDialog?.setMessage(message)
 
             }
@@ -277,18 +282,44 @@ class Spojnice : AppCompatActivity() {
 
         handler.postDelayed({
             if(currentRound < 3) {
+                saveTotalScoreToLocalPreferences()
                 onSaveInstanceState(Bundle())
                 recreate()
                 connectedPairs.clear()
             }
 
             else {
+                saveTotalScoreToLocalPreferences()
                 val intent = Intent(this@Spojnice, Asocijacije::class.java)
                 startActivity(intent)
                 finish()
             }
 
         }, delayMilis)
+    }
+
+    private fun saveTotalScoreToLocalPreferences() {
+        val sharedPreferences = getSharedPreferences("GameScores", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        // Retrieve the existing total score
+        val currentTotalScore = sharedPreferences.getInt("totalScore", 0)
+
+        // Add the local total score to the overall total score
+        val newTotalScore = currentTotalScore + roundScore
+
+        // Save the updated total score
+        editor.putInt("totalScore", newTotalScore)
+        editor.apply()
+    }
+
+    private fun clearTotalScoreFromPreferences() {
+        val sharedPreferences = getSharedPreferences("GameScores", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        // Remove the totalScore key from SharedPreferences
+        editor.remove("totalScore")
+        editor.apply()
     }
 
     private fun setupData() {
@@ -346,7 +377,7 @@ class Spojnice : AppCompatActivity() {
 
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.1.9:8080/api/spojnice/")
+            .baseUrl("https://192.168.178.66:8080/api/spojnice/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -400,9 +431,15 @@ class Spojnice : AppCompatActivity() {
         timeLeft?.cancel()
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        clearTotalScoreFromPreferences()
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         // Save the state
         outState.putInt("currentRound", currentRound)
+        outState.putInt("totalScore", totalScore)
     }
 }

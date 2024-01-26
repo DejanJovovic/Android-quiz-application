@@ -2,6 +2,7 @@ package com.deksi.graduationquiz.slagalica.activities
 
 
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -205,6 +206,7 @@ class KoZnaZna : AppCompatActivity() {
         val handler = Handler()
 
         handler.postDelayed({
+            saveTotalScoreToLocalPreferences()
             val intent = Intent(this@KoZnaZna, Spojnice::class.java)
             startActivity(intent)
 
@@ -242,6 +244,31 @@ class KoZnaZna : AppCompatActivity() {
         startTimerForProgressDialog()
     }
 
+    private fun saveTotalScoreToLocalPreferences() {
+        val sharedPreferences = getSharedPreferences("GameScores", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        // Retrieve the existing total score
+        val currentTotalScore = sharedPreferences.getInt("totalScore", 0)
+
+        // Add the local total score to the overall total score
+        val newTotalScore = currentTotalScore + totalScore
+
+        // Save the updated total score
+        editor.putInt("totalScore", newTotalScore)
+        editor.apply()
+    }
+
+
+    private fun clearTotalScoreFromPreferences() {
+        val sharedPreferences = getSharedPreferences("GameScores", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        // Remove the totalScore key from SharedPreferences
+        editor.remove("totalScore")
+        editor.apply()
+    }
+
     private fun getRoundData() {
         val trustAllCerts = arrayOf<TrustManager>(
             object : X509TrustManager {
@@ -269,7 +296,7 @@ class KoZnaZna : AppCompatActivity() {
         val sslSocketFactory = sslContext.socketFactory
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.1.9:8080/api/koznazna/")
+            .baseUrl("https://192.168.178.66:8080/api/koznazna/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -323,5 +350,10 @@ class KoZnaZna : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         timeLeft?.cancel()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        clearTotalScoreFromPreferences()
     }
 }

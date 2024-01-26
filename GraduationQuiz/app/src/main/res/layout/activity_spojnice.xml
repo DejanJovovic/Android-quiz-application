@@ -25,7 +25,8 @@
             android:layout_height="100dp"
             android:layout_marginTop="50dp"
             android:backgroundTint="@color/edit_text_asosijacije"
-            android:text="@string/the_subject"
+            tools:text="@string/the_subject"
+            tools:textColor="@color/white"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="16sp" />
@@ -52,7 +53,7 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_white"
-                android:hint="@string/_1"
+                tools:text="@string/_1"
                 android:textColor="@color/edit_text_asosijacije"
                 android:textColorHint="@color/edit_text_asosijacije" />
 
@@ -63,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="52dp"
                 android:background="@drawable/round_white"
-                android:hint="@string/_5"
+                tools:text="@string/_5"
                 android:textColor="@color/edit_text_asosijacije"
                 android:textColorHint="@color/edit_text_asosijacije">
 
@@ -86,7 +87,7 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_white"
-                android:hint="@string/_2"
+                tools:text="@string/_2"
                 android:textColor="@color/edit_text_asosijacije"
                 android:textColorHint="@color/edit_text_asosijacije" />
 
@@ -97,7 +98,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="52dp"
                 android:background="@drawable/round_white"
-                android:hint="@string/_4"
+                tools:text="@string/_4"
                 android:textColor="@color/edit_text_asosijacije"
                 android:textColorHint="@color/edit_text_asosijacije" />
 
@@ -117,7 +118,7 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_white"
-                android:hint="@string/_3"
+                tools:text="@string/_3"
                 android:textColor="@color/edit_text_asosijacije"
                 android:textColorHint="@color/edit_text_asosijacije" />
 
@@ -128,7 +129,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="52dp"
                 android:background="@drawable/round_white"
-                android:text="@string/_3"
+                tools:text="@string/_3"
                 android:textColor="@color/edit_text_asosijacije"
                 android:textColorHint="@color/edit_text_asosijacije" />
 
@@ -149,7 +150,7 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_white"
-                android:hint="@string/_4"
+                tools:text="@string/_4"
                 android:textColor="@color/edit_text_asosijacije"
                 android:textColorHint="@color/edit_text_asosijacije" />
 
@@ -160,7 +161,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="52dp"
                 android:background="@drawable/round_white"
-                android:hint="@string/_2"
+                tools:text="@string/_2"
                 android:textColor="@color/edit_text_asosijacije"
                 android:textColorHint="@color/edit_text_asosijacije" />
 
@@ -181,7 +182,7 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_white"
-                android:hint="@string/_5"
+                tools:text="@string/_5"
                 android:textColor="@color/edit_text_asosijacije"
                 android:textColorHint="@color/edit_text_asosijacije" />
 
@@ -192,7 +193,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="52dp"
                 android:background="@drawable/round_white"
-                android:text="@string/_1"
+                tools:text="@string/_1"
                 android:textColor="@color/blue" />
 
         </LinearLayout>
