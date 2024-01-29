@@ -98,4 +98,6 @@
     <string name="your_total_score_is">Your total score is:</string>
     <string name="you_have_successfully_completed_the_quiz">You have successfully completed the quiz!</string>
     <string name="back_to_home">Back to home</string>
+    <string name="select_difficulty">Select Difficulty</string>
+    <string name="select">Select</string>
 </resources>

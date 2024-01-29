@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
@@ -44,11 +45,14 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
         initTimer()
         setUpActionBar()
 
+        val difficulty = intent.getStringExtra("difficulty") ?: "easy"
+
+
         binding.sudokuBoardView.registerListener(this)
 
 
         viewModel = ViewModelProvider(this)[SudokuViewModel::class.java]
-        viewModel.sudokuGame = SudokuGame(listener = this)
+        viewModel.sudokuGame = SudokuGame(listener = this, difficulty = difficulty)
         // observing what's happening to the selecetedCellData
         viewModel.sudokuGame.selectedCellLiveData.observe(this, Observer { updateSelectedCellUI(it) })
         viewModel.sudokuGame.cellsLiveData.observe(this, Observer { updateCells(it) })

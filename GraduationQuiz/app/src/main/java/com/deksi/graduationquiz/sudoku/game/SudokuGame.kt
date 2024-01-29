@@ -2,12 +2,14 @@ package com.deksi.graduationquiz.sudoku.game
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import java.util.Locale
 
 
 // keeps the connection here between view and viewModel#
 // stores the state of the board and the game
 class SudokuGame(
-    private val listener: SudokuGameListener
+    private val listener: SudokuGameListener,
+    private val difficulty: String
 ) {
 
     var selectedCellLiveData = MutableLiveData<Pair<Int, Int>>()
@@ -31,7 +33,7 @@ class SudokuGame(
         val solvedBoard = generateSolvedBoard()
         val cells = solvedBoard.cells.map { Cell(it.row, it.col, it.value) }.toMutableList()
 
-        val blankCellCount = 30
+        val blankCellCount = getBlankCellCount()
         val blankCellIndices = (0 until 9 * 9).shuffled().take(blankCellCount)
 
         for (index in blankCellIndices) {
@@ -42,6 +44,15 @@ class SudokuGame(
 
         selectedCellLiveData.postValue(Pair(selectedRow, selectedCol))
         cellsLiveData.postValue(board.cells)
+    }
+
+    private fun getBlankCellCount(): Int {
+        return when (difficulty.toLowerCase(Locale.getDefault())) {
+            "easy" -> 30
+            "medium" -> 40
+            "hard" -> 50
+            else -> 30 // Default to easy if the difficulty is not recognized
+        }
     }
 
 
