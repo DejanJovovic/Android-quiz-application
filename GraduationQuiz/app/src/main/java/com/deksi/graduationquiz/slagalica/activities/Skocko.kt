@@ -3,6 +3,7 @@ package com.deksi.graduationquiz.slagalica.activities
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -25,7 +26,6 @@ import java.util.Random
 class Skocko : AppCompatActivity() {
 
     private lateinit var binding: ActivitySkockoBinding
-    private var results = arrayOfNulls<TextView>(6)
     private var row = 0
     private var column = 0
     private var timeLeft: CountDownTimer? = null
@@ -46,6 +46,9 @@ class Skocko : AppCompatActivity() {
             4
         )
     }
+
+    private val resultViews = Array(8) { arrayOfNulls<ImageView>(4) }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,18 +100,10 @@ class Skocko : AppCompatActivity() {
         }
     }
 
-    private fun initResult() {
-        results[0] = binding.result0
-        results[1] = binding.result1
-        results[2] = binding.result2
-        results[3] = binding.result3
-        results[4] = binding.result4
-        results[5] = binding.result5
-    }
 
     private fun initButtons() {
         val tref = binding.imageViewTref
-        val herc = binding.imageViewherc
+        val herc = binding.imageViewHerc
         val karo = binding.imageViewKaro
         val pik = binding.imageViewPik
         val cd = binding.imageViewCd
@@ -166,13 +161,12 @@ class Skocko : AppCompatActivity() {
             row++
         }
         if (row == slots.size) {
-            if(currentRound < 3){
+            if (currentRound < 3) {
                 showResult()
                 stopTimer()
                 showProgressDialogOnNextRound()
                 moveToTheNextActivityWithDelay()
-            }
-            else {
+            } else {
                 showResult()
                 stopTimer()
                 showProgressDialogOnGameFinish()
@@ -187,6 +181,34 @@ class Skocko : AppCompatActivity() {
         for (i in 0..3) {
             val number = generator.nextInt(6)
             solution[i] = number
+        }
+    }
+
+    private fun initResult() {
+        resultViews[0] =
+            arrayOf(binding.result01, binding.results02, binding.results03, binding.result04)
+        resultViews[1] =
+            arrayOf(binding.result11, binding.results12, binding.results13, binding.result14)
+        resultViews[2] =
+            arrayOf(binding.result21, binding.results22, binding.results23, binding.result24)
+        resultViews[3] =
+            arrayOf(binding.result31, binding.results32, binding.results33, binding.result34)
+        resultViews[4] =
+            arrayOf(binding.result41, binding.results42, binding.results43, binding.result44)
+        resultViews[5] =
+            arrayOf(binding.result51, binding.results52, binding.results53, binding.result54)
+        resultViews[6] =
+            arrayOf(binding.result61, binding.results62, binding.results63, binding.result64)
+        resultViews[7] =
+            arrayOf(binding.result71, binding.results72, binding.results73, binding.result74)
+    }
+
+    // Helper function to set background color based on correct and misplaced signs
+    private fun setSignColor(imageView: ImageView, count: Int) {
+        when {
+            count > 0 -> imageView.setBackgroundColor(Color.RED)
+            count == 0 -> imageView.setBackgroundColor(Color.YELLOW)
+            else -> imageView.setBackgroundColor(Color.TRANSPARENT)
         }
     }
 
@@ -215,20 +237,29 @@ class Skocko : AppCompatActivity() {
                 }
             }
         }
-        "correct:$correct\nmisplaced:$misplaced".also { results[row]!!.text = it }
+        for (i in 0 until 4) {
+            val imageView = resultViews[row][i]!!
+
+            if (i < correct) {
+                // Set color for correct slots
+                setSignColor(imageView, 1)  // 1 represents correct
+            } else if (i < correct + misplaced) {
+                // Set color for misplaced slots
+                setSignColor(imageView, 0)  // 0 represents misplaced
+            } else {
+                // Set color for the remaining slots (if any)
+                setSignColor(imageView, -1)
+            }
+        }
+
         if (correct == 4) {
-
-            showProgressDialogOnGameFinish()
-
-
-            if(currentRound < 3){
+            if (currentRound < 3) {
                 showResult()
                 showScore()
                 stopTimer()
                 showProgressDialogOnNextRound()
                 moveToTheNextActivityWithDelay()
-            }
-            else {
+            } else {
                 showResult()
                 showScore()
                 stopTimer()
@@ -358,13 +389,12 @@ class Skocko : AppCompatActivity() {
         val handler = Handler()
 
         handler.postDelayed({
-            if(currentRound < 3) {
+            if (currentRound < 3) {
                 saveTotalScoreToLocalPreferences()
                 onSaveInstanceState(Bundle())
+                row = 0
                 recreate()
-            }
-
-            else {
+            } else {
                 saveTotalScoreToLocalPreferences()
                 val intent = Intent(this@Skocko, KorakPoKorak::class.java)
                 startActivity(intent)
