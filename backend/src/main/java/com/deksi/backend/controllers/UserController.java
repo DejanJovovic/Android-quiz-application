@@ -16,10 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -65,9 +62,12 @@ public class UserController {
         SecurityContextHolder.getContext().setAuthentication(auth);
         try {
             UserDetails userDetails = userDetailsService.loadUserByUsername(loginDTO.getUsername());
-            return ResponseEntity.ok(Map.of("token", tokenUtils.generateToken(userDetails)));
+            String userEmail = userService.findByUsername(loginDTO.getUsername()).getEmail();
+
+            return ResponseEntity.ok(Map.of("token", tokenUtils.generateToken(userDetails), "email", userEmail));
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid credentials"));
         }
     }
+
 }

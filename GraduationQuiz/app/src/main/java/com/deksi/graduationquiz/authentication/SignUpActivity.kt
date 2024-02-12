@@ -9,6 +9,7 @@ import com.deksi.graduationquiz.R
 import com.deksi.graduationquiz.authentication.api.SignUpService
 import com.deksi.graduationquiz.authentication.model.User
 import com.deksi.graduationquiz.databinding.ActivitySignUpBinding
+
 import com.deksi.graduationquiz.home.HomeActivity
 import com.google.android.material.snackbar.Snackbar
 import okhttp3.OkHttpClient
@@ -116,6 +117,7 @@ class SignUpActivity : AppCompatActivity() {
 //                            Snackbar.LENGTH_LONG
 //                        ).show()
                         val intent = Intent(applicationContext, LogInActivity::class.java)
+                        intent.putExtra("email", email)
                         startActivity(intent)
                     }
                     else{

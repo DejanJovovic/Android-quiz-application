@@ -112,7 +112,10 @@ class LogInActivity : AppCompatActivity() {
                     response: Response<LoginResponse>
                 ) {
                     if (response.isSuccessful) {
-                        val token = response.body()?.token
+                        val loginResponse = response.body()
+
+                        val token = loginResponse?.token
+                        val userEmail = loginResponse?.email
 
                         if (token != null) {
                             val sharedPrefs = getSharedPreferences("AuthToken", Context.MODE_PRIVATE)
@@ -124,6 +127,9 @@ class LogInActivity : AppCompatActivity() {
                         Toast.makeText(applicationContext, "Welcome $username!", Toast.LENGTH_LONG).show()
 
                         val intent = Intent(applicationContext, HomeActivity::class.java)
+                        intent.putExtra("username", username)
+                        intent.putExtra("password", password)
+                        intent.putExtra("email", userEmail)
                         startActivity(intent)
                     }
                     else{
