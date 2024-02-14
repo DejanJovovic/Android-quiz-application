@@ -1,7 +1,10 @@
 package com.deksi.graduationquiz.home
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
@@ -13,7 +16,9 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.deksi.graduationquiz.R
+import com.deksi.graduationquiz.authentication.LogInActivity
 import com.deksi.graduationquiz.databinding.ActivityHomeBinding
+import com.deksi.graduationquiz.home.fragments.LogoutConfirmationDialogFragment
 import com.deksi.graduationquiz.home.fragments.ProfileFragment
 
 
@@ -60,6 +65,14 @@ class HomeActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_home)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    fun logout() {
+
+        // treba da dodam da obrise i jwt token
+        val intent = Intent(this, LogInActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     private fun displayUsernameOnNavHome(){

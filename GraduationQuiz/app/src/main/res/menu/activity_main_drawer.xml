@@ -5,22 +5,79 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:orderInCategory="1"
+            android:title=""
+            android:enabled="false"
+            />
+        <item
             android:id="@+id/nav_home"
             android:icon="@drawable/baseline_home_24"
-            android:title="@string/menu_home" />
+            android:title="@string/menu_home"
+            android:orderInCategory="2"/>
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/baseline_account_24"
-            android:title="@string/profile" />
+            android:title="@string/profile"
+            android:orderInCategory="3"/>
+
+        <item
+            android:orderInCategory="4"
+            android:title=""
+            android:enabled="false"
+            />
+
+        <item
+            android:orderInCategory="5"
+            android:title=""
+            android:enabled="false"
+            />
+
+        <item
+            android:orderInCategory="6"
+            android:title=""
+            android:enabled="false"
+            />
+
+        <item
+            android:orderInCategory="7"
+            android:title=""
+            android:enabled="false"
+            />
+
+        <item
+            android:orderInCategory="8"
+            android:title=""
+            android:enabled="false"
+            />
+
+        <item
+            android:orderInCategory="9"
+            android:title=""
+            android:enabled="false"
+            />
+
+        <item
+            android:orderInCategory="10"
+            android:title=""
+            android:enabled="false"
+            />
+
+        <item
+            android:orderInCategory="11"
+            android:title=""
+            android:enabled="false"
+            />
 
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/baseline_settings_24"
-            android:title="@string/settings" />
-
+            android:title="@string/settings"
+            android:orderInCategory="12"/>
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/baseline_logout_24"
-            android:title="@string/log_out" />
+            android:title="@string/log_out"
+            android:orderInCategory="13"/>
+
     </group>
 </menu>
