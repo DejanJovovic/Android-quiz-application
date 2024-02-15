@@ -90,7 +90,7 @@ class LogInActivity : AppCompatActivity() {
             val sslSocketFactory = sslContext.socketFactory
 
             val retrofit = Retrofit.Builder()
-                .baseUrl("https://192.168.1.9:8080/api/users/")
+                .baseUrl("https://192.168.178.66:8080/api/users/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(
                     OkHttpClient.Builder()
@@ -127,6 +127,7 @@ class LogInActivity : AppCompatActivity() {
                         Toast.makeText(applicationContext, "Welcome $username!", Toast.LENGTH_LONG).show()
 
                         val intent = Intent(applicationContext, HomeActivity::class.java)
+                        intent.putExtra("loginType", "regular")
                         intent.putExtra("username", username)
                         intent.putExtra("password", password)
                         intent.putExtra("email", userEmail)

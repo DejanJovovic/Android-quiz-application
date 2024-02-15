@@ -1,5 +1,6 @@
 package com.deksi.graduationquiz.home
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -36,14 +37,23 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        displayUsernameOnNavHome()
-
         setSupportActionBar(binding.appBarHome.toolbar)
+        displayUsername()
+        appBarSetup()
 
-        binding.appBarHome.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
+//        binding.appBarHome.fab.setOnClickListener { view ->
+//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                .setAction("Action", null).show()
+//        }
+
+    }
+
+    //i need to check on companion object. What is it etc..
+    companion object {
+        var loginType: String? = null
+    }
+
+    private fun appBarSetup() {
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_home)
@@ -67,12 +77,14 @@ class HomeActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    fun logout() {
-
-        // treba da dodam da obrise i jwt token
-        val intent = Intent(this, LogInActivity::class.java)
-        startActivity(intent)
-        finish()
+    private fun displayUsername() {
+        val loginType = intent.getStringExtra("loginType")
+        HomeActivity.loginType = loginType
+        if (loginType == "regular") {
+            displayUsernameOnNavHome()
+        } else if (loginType == "guest") {
+            displayGuestUsernameOnNavHome()
+        }
     }
 
     private fun displayUsernameOnNavHome(){
@@ -85,5 +97,30 @@ class HomeActivity : AppCompatActivity() {
         displayUsername.text = username
 
     }
+
+    private fun displayGuestUsernameOnNavHome(){
+        val navView = findViewById<NavigationView>(R.id.nav_view)
+        val navHome = navView.getHeaderView(0)
+        val displayUsername = navHome.findViewById<TextView>(R.id.text_view_displayed_username)
+        val sharedPrefs = getSharedPreferences("GuestPreferences", Context.MODE_PRIVATE)
+        val guestUsername = sharedPrefs.getString("guestUsername", "")
+        displayUsername.text = guestUsername
+
+    }
+
+    fun logout() {
+
+        // Removing token from the sharedPreferences when the user logs out
+        val sharedPrefs = getSharedPreferences("AuthToken", Context.MODE_PRIVATE)
+        val editor = sharedPrefs.edit()
+        editor.remove("transferObject")
+        editor.apply()
+//        Log.d("TokenAfterLogout", "Token has been destroyed")
+
+        val intent = Intent(this, LogInActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
 
 }
