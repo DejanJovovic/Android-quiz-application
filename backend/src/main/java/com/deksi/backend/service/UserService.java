@@ -7,4 +7,8 @@ public interface UserService {
     User signUp(User user);
 
     User findByUsername(String username);
+
+    User findByEmail(String email);
+
+
 }
