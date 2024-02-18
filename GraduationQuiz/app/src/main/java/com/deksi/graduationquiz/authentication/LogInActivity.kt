@@ -1,5 +1,6 @@
 package com.deksi.graduationquiz.authentication
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -29,6 +30,7 @@ class LogInActivity : AppCompatActivity() {
 
 
     private lateinit var binding: ActivityLogInBinding
+    private var progressDialog: ProgressDialog? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLogInBinding.inflate(layoutInflater)
@@ -58,6 +60,7 @@ class LogInActivity : AppCompatActivity() {
 
             val username = binding.editTextUsername.text.toString()
             val password = binding.editTextPassword.text.toString()
+            onLoginProgressDialog()
 
 
             if (username.isEmpty()) {
@@ -124,6 +127,7 @@ class LogInActivity : AppCompatActivity() {
                             editor.apply()
 
                         }
+
                         Toast.makeText(applicationContext, "Welcome $username!", Toast.LENGTH_LONG).show()
 
                         val intent = Intent(applicationContext, HomeActivity::class.java)
@@ -132,6 +136,7 @@ class LogInActivity : AppCompatActivity() {
                         intent.putExtra("password", password)
                         intent.putExtra("email", userEmail)
                         startActivity(intent)
+                        dismissProgressDialog()
                     }
                     else{
                         Toast.makeText(applicationContext, "Wrong username or password!", Toast.LENGTH_LONG).show()
@@ -147,4 +152,15 @@ class LogInActivity : AppCompatActivity() {
 
         }
     }
+
+    private fun onLoginProgressDialog() {
+        progressDialog =
+            ProgressDialog.show(this, "Please wait", "Trying to login..", true, false)
+
+    }
+
+    private fun dismissProgressDialog() {
+        progressDialog?.dismiss()
+    }
+
 }

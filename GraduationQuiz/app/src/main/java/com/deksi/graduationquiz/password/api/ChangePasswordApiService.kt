@@ -6,5 +6,5 @@ import retrofit2.http.POST
 
 interface ChangePasswordApiService {
     @POST("change-password")
-    fun sendEmailForForgotPassword(@Body request: Map<String, String>): Call<Void>
+    fun sendEmailForForgotPassword(@Body request: Map<String, String>): Call<Map<String, Any>>
 }

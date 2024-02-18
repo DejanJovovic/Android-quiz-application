@@ -1,5 +1,6 @@
 package com.deksi.graduationquiz.password
 
+import android.app.ProgressDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -22,6 +23,7 @@ import javax.net.ssl.X509TrustManager
 class ForgotPasswordActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityForgotPasswordBinding
+    private var progressDialog: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,11 +49,22 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
             val email = emailEditText.text.toString().trim()
             if (email.isNotEmpty()) {
+                onSuccessProgressDialog()
                 sendEmailForChangePassword(email)
             } else {
                 Toast.makeText(this, "Please enter your email", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun onSuccessProgressDialog() {
+        progressDialog =
+            ProgressDialog.show(this, "Please wait", "Sending code..", true, false)
+
+    }
+
+    private fun dismissProgressDialog() {
+        progressDialog?.dismiss()
     }
 
     private fun sendEmailForChangePassword(email: String) {
@@ -96,22 +109,29 @@ class ForgotPasswordActivity : AppCompatActivity() {
         val request = mapOf("email" to email)
         val call = changePasswordService.sendEmailForForgotPassword(request)
 
-        call.enqueue(object : Callback<Void> {
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+        call.enqueue(object : Callback<Map<String, Any>> {
+            override fun onResponse(call: Call<Map<String, Any>>, response: Response<Map<String, Any>>) {
                 if (response.isSuccessful) {
-                    // Email sent successfully, show success message to the user
-                    Toast.makeText(
-                        this@ForgotPasswordActivity,
-                        "Verification code sent successfully",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    // Proceed to the next activity (ForgotPasswordVerificationActivity)
-                    startActivity(
-                        Intent(
+                    val responseData = response.body()
+                    val verificationCode = responseData?.get("verificationCode") as? String
+                    if (verificationCode != null) {
+                        // Email sent successfully, show success message to the user
+                        Toast.makeText(
+                            this@ForgotPasswordActivity, "Verification code sent successfully", Toast.LENGTH_SHORT
+                        ).show()
+                        dismissProgressDialog()
+                        val intent = Intent(this@ForgotPasswordActivity, ForgotPasswordVerificationActivity::class.java)
+                        intent.putExtra("verificationCode", verificationCode)
+                        intent.putExtra("email", email)
+                        startActivity(intent)
+                    } else {
+                        // Show error message to the user
+                        Toast.makeText(
                             this@ForgotPasswordActivity,
-                            ForgotPasswordVerificationActivity::class.java
-                        )
-                    )
+                            "Failed to retrieve verification code",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 } else {
                     // Show error message to the user
                     Toast.makeText(
@@ -122,7 +142,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<Void>, t: Throwable) {
+            override fun onFailure(call: Call<Map<String, Any>>, t: Throwable) {
                 // Handle network errors
                 Toast.makeText(
                     this@ForgotPasswordActivity,

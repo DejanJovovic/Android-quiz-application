@@ -70,4 +70,16 @@ public class UserController {
         }
     }
 
+    @PutMapping("/update-password")
+    public ResponseEntity<String> updatePassword(@RequestParam String email, @RequestParam String newPassword) {
+        try {
+            String encodedNewPassword = passwordEncoder.encode(newPassword);
+            userService.updatePassword(email, encodedNewPassword);
+            System.out.println("Password changed to: " + newPassword);
+            return ResponseEntity.ok("Password updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating password");
+        }
+    }
+
 }

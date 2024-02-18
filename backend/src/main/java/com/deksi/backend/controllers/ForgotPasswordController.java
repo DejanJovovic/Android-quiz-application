@@ -4,6 +4,8 @@ import com.deksi.backend.model.User;
 import com.deksi.backend.repository.UserRepository;
 import com.deksi.backend.service.UserService;
 import com.deksi.backend.service.impl.EmailSenderService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.mail.MessagingException;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -41,7 +45,15 @@ public class ForgotPasswordController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send verification code");
         }
 
-        return ResponseEntity.ok("Verification code sent successfully");
+        // Convert response map to JSON string
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            String responseJson = objectMapper.writeValueAsString(Collections.singletonMap("verificationCode", verificationCode));
+            System.out.println(responseJson);
+            return ResponseEntity.ok(responseJson);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to serialize response");
+        }
     }
 
     private String generateVerificationCode() {
