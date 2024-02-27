@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">GraduationQuiz</string>
     <string name="a1">A1</string>
@@ -10,7 +11,7 @@
     <string name="b3">B3</string>
     <string name="b4">B4</string>
     <string name="b">B</string>
-    <string name="konacno">KONACNO</string>
+    <string name="konacno">Final field</string>
     <string name="c">C</string>
     <string name="c1">C1</string>
     <string name="c2">C2</string>

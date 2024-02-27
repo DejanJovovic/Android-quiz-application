@@ -2,6 +2,8 @@ package com.deksi.graduationquiz
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
+import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -9,6 +11,7 @@ import com.deksi.graduationquiz.authentication.LogInActivity
 import com.deksi.graduationquiz.authentication.SignUpActivity
 import com.deksi.graduationquiz.databinding.ActivityMainBinding
 import com.deksi.graduationquiz.home.HomeActivity
+import java.util.Locale
 import java.util.Random
 
 class MainActivity : AppCompatActivity() {
@@ -21,6 +24,11 @@ class MainActivity : AppCompatActivity() {
 
 
         setupListeners()
+
+        val sharedPreferences = getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE)
+        val savedLanguage = sharedPreferences.getString("selectedLanguage", "en") // Default to English if no language is saved
+        
+        setLocale(this, savedLanguage!!)
 
     }
 
@@ -66,5 +74,16 @@ class MainActivity : AppCompatActivity() {
         return (1..length)
             .map { allowedChars[random.nextInt(allowedChars.length)] }
             .joinToString("")
+    }
+
+    private fun setLocale(context: Context, langCode: String) {
+        val locale = Locale(langCode)
+        Locale.setDefault(locale)
+
+        val resources: Resources = context.resources
+        val configuration: Configuration = resources.configuration
+        configuration.setLocale(locale)
+
+        resources.updateConfiguration(configuration, resources.displayMetrics)
     }
 }
