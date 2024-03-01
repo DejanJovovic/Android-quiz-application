@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="difficulty_options">
-        <item>Easy</item>
-        <item>Medium</item>
-        <item>Hard</item>
+        <item>Lako</item>
+        <item>Srednje</item>
+        <item>Teško</item>
     </string-array>
     <string-array name="languages">
-        <item>English</item>
-        <item>Serbian</item>
-        <item>Spanish</item>
+        <item>Engleski</item>
+        <item>Srpski</item>
+        <item>Španski</item>
     </string-array>
 </resources>

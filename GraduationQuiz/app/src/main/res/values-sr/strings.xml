@@ -97,7 +97,7 @@
     <string name="slagalica">Slagalica</string>
     <string name="remaining_lives_left_3">Preostali životi: 3</string>
     <string name="your_total_score_is">Vaš ukupan broj bodova je:</string>
-    <string name="you_have_successfully_completed_the_quiz">Uspešno se završili kviz!</string>
+    <string name="you_have_successfully_completed_the_quiz">Uspešno ste završili kviz!</string>
     <string name="back_to_home">Nazad na početnu stranicu</string>
     <string name="select_difficulty">Odaberite težinu</string>
     <string name="select">Izaberite</string>
@@ -109,4 +109,13 @@
     <string name="please_enter_your_verification_code">Molim vas unesite svoj verifikacioni kod.</string>
     <string name="change_language">Promeni jezik</string>
     <string name="save">Sačuvaj</string>
+    <string name="logout_confirmation">Da li ste sigurni da želite da se odjavite?</string>
+    <string name="yes">Da</string>
+    <string name="no">Ne</string>
+    <string name="dialog_title_difficulty">Izaberite težinu</string>
+    <string name="positive_button_text">U redu</string>
+    <string name="negative_button_text">Otkaži</string>
+    <string name="settings_confirmation">Da li ste sigurni?</string>
+    <string name="settings_confirmation_message">Da li želite da nastavite sa promenom jezika?</string>
+
 </resources>

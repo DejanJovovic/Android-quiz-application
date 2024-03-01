@@ -115,9 +115,9 @@
 
     <TextView
         android:id="@+id/text_view_dont_have_an_account"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
+        android:layout_marginStart="63dp"
         android:fontFamily="sans-serif-light"
         android:text="@string/don_t_have_an_account"
         android:textSize="16sp"
@@ -128,14 +128,14 @@
         android:id="@+id/text_view_sign_up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="60dp"
         android:fontFamily="sans-serif-black"
+        android:layout_marginStart="5dp"
         android:text="@string/sign_up"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="@+id/text_view_dont_have_an_account" />
+        app:layout_constraintStart_toEndOf="@+id/text_view_dont_have_an_account" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

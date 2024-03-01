@@ -1,6 +1,7 @@
 package com.deksi.graduationquiz.home.fragments
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -49,26 +50,59 @@ class HomeFragment : Fragment() {
     }
 
     private fun showDifficultyDialog() {
+
+        val sharedPreferences = requireContext().getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE)
+        val savedLanguage = sharedPreferences.getString("selectedLanguage", "en") ?: "en"
+
+        val positiveResourceId = resources.getIdentifier("positive_button_text", "string", requireContext().packageName)
+        val negativeResourceId = resources.getIdentifier("negative_button_text", "string", requireContext().packageName)
+        val positive = if (positiveResourceId != 0) {
+            getString(positiveResourceId)
+        } else {
+            // Fallback to English if translation is not found
+            getString(R.string.positive_button_text)
+        }
+        val negative = if (negativeResourceId != 0) {
+            getString(negativeResourceId)
+        } else {
+            // Fallback to English if translation is not found
+            getString(R.string.negative_button_text)
+        }
+
+        val messageId = resources.getIdentifier("dialog_title_difficulty", "string", requireContext().packageName)
+        val message = if (messageId != 0) {
+            getString(messageId)
+        } else {
+            // Fallback to English if translation is not found
+            getString(R.string.dialog_title_difficulty)
+        }
+
+        val difficultyOptionsResourceId = resources.getIdentifier("difficulty_options", "array", requireContext().packageName)
+        val difficultyOptions: Array<String> = if (difficultyOptionsResourceId != 0) {
+            resources.getStringArray(difficultyOptionsResourceId)
+        } else {
+            // Fallback to default difficulty options if translation is not found
+            resources.getStringArray(R.array.difficulty_options)
+        }
+
+
         val dialog = AlertDialog.Builder(requireContext())
-            .setTitle("Choose Difficulty")
+            .setTitle(message)
             .setView(R.layout.dialog_difficulty)
-            .setPositiveButton("OK") { _, _ ->
+            .setPositiveButton(positive) { _, _ ->
                 // Handle the selected difficulty
                 val selectedDifficulty = spinner.selectedItem as String
                 launchSudokuActivity(selectedDifficulty)
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(negative, null)
             .create()
 
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_difficulty, null)
         spinner = dialogView.findViewById(R.id.spinner_difficulty)
 
 
-        val adapter = ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.difficulty_options,
-            android.R.layout.simple_spinner_item
-        )
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, difficultyOptions)
+
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
 

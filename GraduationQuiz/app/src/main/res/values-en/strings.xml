@@ -109,4 +109,13 @@
     <string name="please_enter_your_verification_code">Please enter your verification code</string>
     <string name="change_language">Change language</string>
     <string name="save">Save</string>
+    <string name="logout_confirmation">Are you sure you want to log out?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="dialog_title_difficulty">Choose Difficulty</string>
+    <string name="positive_button_text">OK</string>
+    <string name="negative_button_text">Cancel</string>
+    <string name="settings_confirmation">Are you sure?</string>
+    <string name="settings_confirmation_message">Do you want to proceed with the language change?</string>
+
 </resources>

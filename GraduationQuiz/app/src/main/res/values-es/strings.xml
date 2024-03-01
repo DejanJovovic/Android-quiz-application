@@ -109,4 +109,13 @@
     <string name="please_enter_your_verification_code">Por favor ingrese su código de verificación</string>
     <string name="change_language">Cambiar idioma</string>
     <string name="save">Ahorrar</string>
+    <string name="logout_confirmation">¿Estás seguro de que quieres cerrar sesión?</string>
+    <string name="yes">Si</string>
+    <string name="no">No</string>
+    <string name="dialog_title_difficulty">Elige la dificultad</string>
+    <string name="positive_button_text">Aceptar</string>
+    <string name="negative_button_text">Cancelar</string>
+    <string name="settings_confirmation">Estas seguro?</string>
+    <string name="settings_confirmation_message">¿Quieres continuar con el cambio de idioma?</string>
+
 </resources>
