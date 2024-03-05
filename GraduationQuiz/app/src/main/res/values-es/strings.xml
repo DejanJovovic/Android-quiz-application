@@ -117,5 +117,28 @@
     <string name="negative_button_text">Cancelar</string>
     <string name="settings_confirmation">Estas seguro?</string>
     <string name="settings_confirmation_message">¿Quieres continuar con el cambio de idioma?</string>
-
+    <string name="sudoku_confirmation_message">¿Estás seguro de que quieres abandonar el juego?</string>
+    <string name="login_title">Espere por favor</string>
+    <string name="login_message">Intentando iniciar sesión..</string>
+    <string name="login_username_required">Se requiere nombre de usuario</string>
+    <string name="login_password_required">Se requiere contraseña</string>
+    <string name="signup_title">Espere por favor</string>
+    <string name="signup_message">Tratando de registrarse.</string>
+    <string name="signup_email_required">Correo electronico es requerido</string>
+    <string name="signup_username_required">Se requiere nombre de usuario</string>
+    <string name="signup_password_required">Se requiere contraseña</string>
+    <string name="signup_retype_required">Es necesario volver a escribir la contraseña</string>
+    <string name="signup_passwords_dont_match">Las contraseñas no coinciden</string>
+    <string name="forgot_password_title">Espere por favor</string>
+    <string name="forgot_password_message">Enviando código..</string>
+    <string name="forgot_password_verification_message_on_timeout">El tiempo ha terminado!</string>
+    <string name="forgot_password_verification_message_no_attempts_left">No quedan intentos!</string>
+    <string name="reset_password_required">Se requiere nueva contraseña</string>
+    <string name="reset_retype_required">Es necesario volver a escribir la nueva contraseña</string>
+    <string name="reset_passwords_dont_match">Las contraseñas no coinciden</string>
+    <string name="reset_password_message">Espere mientras cambiamos su contraseña</string>
+    <string name="sudoku_message_on_timeout">El tiempo ha terminado!</string>
+    <string name="sudoku_message_out_of_lives">Estas sin vidas!</string>
+    <string name="sudoku_message_congrats">Felicidades por ganar el juego!</string>
+    <string name="main_login">Acceso</string>
 </resources>

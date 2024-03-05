@@ -59,13 +59,11 @@ class HomeFragment : Fragment() {
         val positive = if (positiveResourceId != 0) {
             getString(positiveResourceId)
         } else {
-            // Fallback to English if translation is not found
             getString(R.string.positive_button_text)
         }
         val negative = if (negativeResourceId != 0) {
             getString(negativeResourceId)
         } else {
-            // Fallback to English if translation is not found
             getString(R.string.negative_button_text)
         }
 
@@ -73,7 +71,6 @@ class HomeFragment : Fragment() {
         val message = if (messageId != 0) {
             getString(messageId)
         } else {
-            // Fallback to English if translation is not found
             getString(R.string.dialog_title_difficulty)
         }
 
@@ -81,7 +78,6 @@ class HomeFragment : Fragment() {
         val difficultyOptions: Array<String> = if (difficultyOptionsResourceId != 0) {
             resources.getStringArray(difficultyOptionsResourceId)
         } else {
-            // Fallback to default difficulty options if translation is not found
             resources.getStringArray(R.array.difficulty_options)
         }
 

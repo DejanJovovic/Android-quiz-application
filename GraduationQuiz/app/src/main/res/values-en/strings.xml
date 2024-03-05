@@ -117,5 +117,30 @@
     <string name="negative_button_text">Cancel</string>
     <string name="settings_confirmation">Are you sure?</string>
     <string name="settings_confirmation_message">Do you want to proceed with the language change?</string>
+    <string name="sudoku_confirmation_message">Are you sure you want to leave the game?</string>
+    <string name="login_title">Please wait</string>
+    <string name="login_message">Trying to login..</string>
+    <string name="login_username_required">Username is required</string>
+    <string name="login_password_required">Password is required</string>
+    <string name="signup_title">Please wait</string>
+    <string name="signup_message">Trying to register.</string>
+    <string name="signup_email_required">Email is required</string>
+    <string name="signup_username_required">Username is required</string>
+    <string name="signup_password_required">Password is required</string>
+    <string name="signup_retype_required">Retype password is required</string>
+    <string name="signup_passwords_dont_match">Passwords do not match</string>
+    <string name="forgot_password_title">Please wait</string>
+    <string name="forgot_password_message">Sending code..</string>
+    <string name="forgot_password_verification_message_on_timeout">Time is up!</string>
+    <string name="forgot_password_verification_message_no_attempts_left">No attempts left!</string>
+    <string name="reset_password_required">New password is required</string>
+    <string name="reset_retype_required">Retype new password is required</string>
+    <string name="reset_passwords_dont_match">Passwords do not match</string>
+    <string name="reset_password_message">Please wait while we change your password</string>
+    <string name="sudoku_message_on_timeout">Time is up!</string>
+    <string name="sudoku_message_out_of_lives">You are out of lives!</string>
+    <string name="sudoku_message_congrats">Congrats on beating the game!</string>
+    <string name="main_login">Login</string>
+
 
 </resources>

@@ -117,5 +117,29 @@
     <string name="negative_button_text">Otkaži</string>
     <string name="settings_confirmation">Da li ste sigurni?</string>
     <string name="settings_confirmation_message">Da li želite da nastavite sa promenom jezika?</string>
+    <string name="sudoku_confirmation_message">Da li ste sigurni da želite da napustite ovu igru?</string>
+    <string name="login_title">Molim vas sačekajte</string>
+    <string name="login_message">Pokušavamo da vas prijavimo..</string>
+    <string name="login_username_required">Korisničko ime je obavezno</string>
+    <string name="login_password_required">Šifra je obavezna</string>
+    <string name="signup_title">Molim vas sačekajte</string>
+    <string name="signup_message">Pokušavamo da vas registrujemo..</string>
+    <string name="signup_email_required">Email je obavezan</string>
+    <string name="signup_username_required">Korisničko ime je obavezno</string>
+    <string name="signup_password_required">Šifra je obavezna</string>
+    <string name="signup_retype_required">Ponovljena šifra je obavezna</string>
+    <string name="signup_passwords_dont_match">Šifre se ne poklapaju</string>
+    <string name="forgot_password_title">Molim vas sačekajte</string>
+    <string name="forgot_password_message">Šaljemo kod..</string>
+    <string name="forgot_password_verification_message_on_timeout">Vreme je isteklo!</string>
+    <string name="forgot_password_verification_message_no_attempts_left">Nemate više pokušaja!</string>
+    <string name="reset_password_required">Nova šifra je obavezna</string>
+    <string name="reset_retype_required">Ponovljena nova šifra je obavezna</string>
+    <string name="reset_passwords_dont_match">Šifre se ne poklapaju</string>
+    <string name="reset_password_message">Molim vas sačekajte dok promenimo vašu lozinku</string>
+    <string name="sudoku_message_on_timeout">Vreme je isteklo!</string>
+    <string name="sudoku_message_out_of_lives">Ostali ste bez života!</string>
+    <string name="sudoku_message_congrats">Čestitamo na pobedi!</string>
+    <string name="main_login">Prijava</string>
 
 </resources>

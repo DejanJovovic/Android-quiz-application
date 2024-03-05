@@ -1,7 +1,9 @@
 package com.deksi.graduationquiz
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.res.Configuration
 import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
@@ -17,19 +19,24 @@ import java.util.Random
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setSelectedLanguage()
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
 
         setupListeners()
+    }
 
+    private fun setSelectedLanguage() {
         val sharedPreferences = getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE)
-        val savedLanguage = sharedPreferences.getString("selectedLanguage", "en") // Default to English if no language is saved
-        
-        setLocale(this, savedLanguage!!)
+        val savedLanguage = sharedPreferences.getString("selectedLanguage", "en")
 
+        setLocale(this, savedLanguage!!)
     }
 
     private fun setupListeners() {

@@ -18,6 +18,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
+import com.deksi.graduationquiz.MainActivity
 import com.deksi.graduationquiz.R
 import com.deksi.graduationquiz.authentication.LogInActivity
 import com.deksi.graduationquiz.databinding.FragmentSettingsBinding
@@ -57,7 +58,6 @@ class SettingsFragment : Fragment() {
         val languages: Array<String> = if (languagesResourceId != 0) {
             resources.getStringArray(languagesResourceId)
         } else {
-            // Fallback to default difficulty options if translation is not found
             resources.getStringArray(R.array.languages)
         }
 
@@ -122,13 +122,11 @@ class SettingsFragment : Fragment() {
         val yes = if (yesResourceId != 0) {
             getString(yesResourceId)
         } else {
-            // Fallback to English if translation is not found
             getString(R.string.yes)
         }
         val no = if (noResourceId != 0) {
             getString(noResourceId)
         } else {
-            // Fallback to English if translation is not found
             getString(R.string.no)
         }
 
@@ -144,10 +142,8 @@ class SettingsFragment : Fragment() {
         val message = if (messageId != 0) {
             getString(messageId)
         } else {
-            // Fallback to English if translation is not found
             getString(R.string.settings_confirmation_message)
         }
-
 
 
         val builder = AlertDialog.Builder(requireContext())
@@ -155,7 +151,7 @@ class SettingsFragment : Fragment() {
         builder.setMessage(message)
         builder.setPositiveButton(yes) { _, _ ->
             selectedLanguage?.let { setLanguage(it) }
-            val intent = Intent(requireContext(), LogInActivity::class.java)
+            val intent = Intent(requireContext(), MainActivity::class.java)
             startActivity(intent)
 
             requireActivity().finish()

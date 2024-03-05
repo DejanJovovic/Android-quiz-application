@@ -23,13 +23,11 @@ class LogoutConfirmationDialogFragment: DialogFragment() {
             val yes = if (yesResourceId != 0) {
                 getString(yesResourceId)
             } else {
-                // Fallback to English if translation is not found
                 getString(R.string.yes)
             }
             val no = if (noResourceId != 0) {
                 getString(noResourceId)
             } else {
-                // Fallback to English if translation is not found
                 getString(R.string.no)
             }
 
@@ -37,7 +35,6 @@ class LogoutConfirmationDialogFragment: DialogFragment() {
             val message = if (messageId != 0) {
                 getString(messageId)
             } else {
-                // Fallback to English if translation is not found
                 getString(R.string.logout_confirmation)
             }
 

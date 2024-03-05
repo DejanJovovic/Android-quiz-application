@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.widget.Toast
 import com.deksi.graduationquiz.R
 import com.deksi.graduationquiz.authentication.api.LoginRequest
@@ -36,12 +37,25 @@ class LogInActivity : AppCompatActivity() {
         binding = ActivityLogInBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-        val actionBar = supportActionBar
-        actionBar?.setDisplayHomeAsUpEnabled(true)
-
+        setUpActionBar()
         setupListeners()
 
+    }
+
+    private fun setUpActionBar() {
+        val actionBar = supportActionBar
+        actionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun setupListeners() {
@@ -62,15 +76,33 @@ class LogInActivity : AppCompatActivity() {
             val password = binding.editTextPassword.text.toString()
             onLoginProgressDialog()
 
+            getSavedLanguageBySharedPreferences()
+
+            val usernameResourceId = resources.getIdentifier("login_username_required", "string", packageName)
+            val usernameRequired = if (usernameResourceId != 0) {
+                getString(usernameResourceId)
+            } else {
+                getString(R.string.login_username_required)
+            }
+
+            val passwordResourceId = resources.getIdentifier("login_password_required", "string", packageName)
+            val passwordRequired = if (passwordResourceId != 0) {
+                getString(passwordResourceId)
+            } else {
+                getString(R.string.login_password_required)
+            }
+
 
             if (username.isEmpty()) {
-                binding.editTextUsername.error = "Username required"
+                binding.editTextUsername.error = usernameRequired
                 binding.editTextUsername.requestFocus()
+                dismissProgressDialog()
                 return@setOnClickListener
             }
             if (password.isEmpty()) {
-                binding.editTextPassword.error = "Password required"
+                binding.editTextPassword.error = passwordRequired
                 binding.editTextPassword.requestFocus()
+                dismissProgressDialog()
                 return@setOnClickListener
             }
 
@@ -140,6 +172,7 @@ class LogInActivity : AppCompatActivity() {
                     }
                     else{
                         Toast.makeText(applicationContext, "Wrong username or password!", Toast.LENGTH_LONG).show()
+                        dismissProgressDialog()
 
                     }
                 }
@@ -154,9 +187,29 @@ class LogInActivity : AppCompatActivity() {
     }
 
     private fun onLoginProgressDialog() {
-        progressDialog =
-            ProgressDialog.show(this, "Please wait", "Trying to login..", true, false)
+        getSavedLanguageBySharedPreferences()
 
+        val titleResourceId = resources.getIdentifier("login_title", "string", packageName)
+        val title = if (titleResourceId != 0) {
+            getString(titleResourceId)
+        } else {
+            getString(R.string.login_title)
+        }
+
+        val messageResourceId = resources.getIdentifier("login_message", "string", packageName)
+        val message = if (messageResourceId != 0) {
+            getString(messageResourceId)
+        } else {
+            getString(R.string.login_message)
+        }
+
+        progressDialog =
+            ProgressDialog.show(this, title, message, true, false)
+    }
+
+    private fun getSavedLanguageBySharedPreferences() {
+        val sharedPreferences = getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE)
+        val savedLanguage = sharedPreferences.getString("selectedLanguage", "en") ?: "en"
     }
 
     private fun dismissProgressDialog() {

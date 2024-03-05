@@ -109,7 +109,6 @@ class HomeActivity : AppCompatActivity() {
     }
 
     fun logout() {
-
         // Removing token from the sharedPreferences when the user logs out
         val sharedPrefs = getSharedPreferences("AuthToken", Context.MODE_PRIVATE)
         val editor = sharedPrefs.edit()
@@ -121,6 +120,5 @@ class HomeActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
-
 
 }

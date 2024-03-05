@@ -1,9 +1,11 @@
 package com.deksi.graduationquiz.password
 
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
 import com.deksi.graduationquiz.R
 import com.deksi.graduationquiz.databinding.ActivityForgotPasswordBinding
@@ -40,6 +42,16 @@ class ForgotPasswordActivity : AppCompatActivity() {
         actionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
 
     private fun setupListeners() {
 
@@ -58,9 +70,31 @@ class ForgotPasswordActivity : AppCompatActivity() {
     }
 
     private fun onSuccessProgressDialog() {
-        progressDialog =
-            ProgressDialog.show(this, "Please wait", "Sending code..", true, false)
 
+        getSavedLanguageBySharedPreferences()
+
+        val titleResourceId = resources.getIdentifier("forgot_password_title", "string", packageName)
+        val title = if (titleResourceId != 0) {
+            getString(titleResourceId)
+        } else {
+            getString(R.string.forgot_password_title)
+        }
+
+        val messageResourceId = resources.getIdentifier("forgot_password_message", "string", packageName)
+        val message = if (messageResourceId != 0) {
+            getString(messageResourceId)
+        } else {
+            getString(R.string.forgot_password_message)
+        }
+
+        progressDialog =
+            ProgressDialog.show(this, title, message, true, false)
+
+    }
+
+    private fun getSavedLanguageBySharedPreferences() {
+        val sharedPreferences = getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE)
+        val savedLanguage = sharedPreferences.getString("selectedLanguage", "en") ?: "en"
     }
 
     private fun dismissProgressDialog() {
@@ -133,7 +167,6 @@ class ForgotPasswordActivity : AppCompatActivity() {
                         ).show()
                     }
                 } else {
-                    // Show error message to the user
                     Toast.makeText(
                         this@ForgotPasswordActivity,
                         "Failed to send verification code",
@@ -143,7 +176,6 @@ class ForgotPasswordActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<Map<String, Any>>, t: Throwable) {
-                // Handle network errors
                 Toast.makeText(
                     this@ForgotPasswordActivity,
                     "Network error: ${t.message}",

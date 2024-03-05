@@ -1,7 +1,9 @@
 package com.deksi.graduationquiz.sudoku
 
 
+import android.app.AlertDialog
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +12,7 @@ import android.os.CountDownTimer
 import android.os.Handler
 import android.util.Log
 import android.view.Gravity
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -19,6 +22,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.deksi.graduationquiz.R
+import com.deksi.graduationquiz.authentication.LogInActivity
 import com.deksi.graduationquiz.databinding.ActivitySudokuBinding
 import com.deksi.graduationquiz.home.HomeActivity
 import com.deksi.graduationquiz.slagalica.activities.Skocko
@@ -42,27 +46,36 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
         super.onCreate(savedInstanceState)
         binding = ActivitySudokuBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         initTimer()
         setUpActionBar()
+        getDifficultyAndUpdateCells()
+        registerBoardViewListener()
+        forEachIndexButtons()
 
-        val difficulty = intent.getStringExtra("difficulty") ?: "easy"
+    }
 
-
-        binding.sudokuBoardView.registerListener(this)
-
-
-        viewModel = ViewModelProvider(this)[SudokuViewModel::class.java]
-        viewModel.sudokuGame = SudokuGame(listener = this, difficulty = difficulty)
-        // observing what's happening to the selecetedCellData
-        viewModel.sudokuGame.selectedCellLiveData.observe(this, Observer { updateSelectedCellUI(it) })
-        viewModel.sudokuGame.cellsLiveData.observe(this, Observer { updateCells(it) })
-
+    private fun forEachIndexButtons() {
         val buttons = listOf(binding.buttonOne, binding.buttonTwo, binding.buttonThree, binding.buttonFour, binding.buttonFive, binding.buttonSix,
             binding.buttonSeven, binding.buttonEight, binding.buttonNine)
 
         buttons.forEachIndexed { index, button ->
             button.setOnClickListener { viewModel.sudokuGame.handleInput(index + 1) }
         }
+    }
+
+    private fun registerBoardViewListener(){
+        binding.sudokuBoardView.registerListener(this)
+    }
+
+    private fun getDifficultyAndUpdateCells() {
+        val difficulty = intent.getStringExtra("difficulty") ?: "easy"
+
+        viewModel = ViewModelProvider(this)[SudokuViewModel::class.java]
+        viewModel.sudokuGame = SudokuGame(listener = this, difficulty = difficulty)
+        // observing what's happening to the selecetedCellData
+        viewModel.sudokuGame.selectedCellLiveData.observe(this, Observer { updateSelectedCellUI(it) })
+        viewModel.sudokuGame.cellsLiveData.observe(this, Observer { updateCells(it) })
     }
 
 
@@ -153,8 +166,17 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
     }
 
     private fun showProgressDialogOnTimeout() {
+        getSavedLanguageBySharedPreferences()
+
+        val messageResourceId = resources.getIdentifier("sudoku_message_on_timeout", "string", packageName)
+        val message = if (messageResourceId != 0) {
+            getString(messageResourceId)
+        } else {
+            getString(R.string.sudoku_message_on_timeout)
+        }
+
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle("Time is up!")
+        progressDialog!!.setMessage(message)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()
@@ -163,8 +185,17 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
     }
 
     private fun showProgressDialogOnGameFinish() {
+        getSavedLanguageBySharedPreferences()
+
+        val messageResourceId = resources.getIdentifier("sudoku_message_out_of_lives", "string", packageName)
+        val message = if (messageResourceId != 0) {
+            getString(messageResourceId)
+        } else {
+            getString(R.string.sudoku_message_out_of_lives)
+        }
+
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle("You are out of lives!")
+        progressDialog!!.setTitle(message)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()
@@ -173,8 +204,17 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
     }
 
     private fun showProgressDialogOnGameFinished() {
+        getSavedLanguageBySharedPreferences()
+
+        val messageResourceId = resources.getIdentifier("sudoku_message_congrats", "string", packageName)
+        val message = if (messageResourceId != 0) {
+            getString(messageResourceId)
+        } else {
+            getString(R.string.sudoku_message_congrats)
+        }
+
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle("Congrats on beating the game!")
+        progressDialog!!.setTitle(message)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()
@@ -182,17 +222,70 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
         startTimerProgressDialog()
     }
 
+    private fun getSavedLanguageBySharedPreferences() {
+        val sharedPreferences = getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE)
+        val savedLanguage = sharedPreferences.getString("selectedLanguage", "en") ?: "en"
+    }
+
     private fun setUpActionBar() {
         val actionBar = supportActionBar
 
         actionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         actionBar?.setCustomView(R.layout.action_bar_custom_title)
+        actionBar?.setDisplayHomeAsUpEnabled(true)
+
 
         val titleTextView =
             actionBar?.customView?.findViewById<TextView>(R.id.text_view_custom_title)
 
         titleTextView?.text = "Sudoku"
         titleTextView?.gravity = Gravity.CENTER
+    }
+
+    private fun showConfirmationDialog() {
+
+        val yesResourceId = resources.getIdentifier("yes", "string", packageName)
+        val noResourceId = resources.getIdentifier("no", "string", packageName)
+        val yes = if (yesResourceId != 0) {
+            getString(yesResourceId)
+        } else {
+            getString(R.string.yes)
+        }
+        val no = if (noResourceId != 0) {
+            getString(noResourceId)
+        } else {
+            getString(R.string.no)
+        }
+
+        val messageId = resources.getIdentifier("sudoku_confirmation_message", "string", packageName)
+        val message = if (messageId != 0) {
+            getString(messageId)
+        } else {
+            getString(R.string.sudoku_confirmation_message)
+        }
+
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage(message)
+        builder.setPositiveButton(yes) { _, _ ->
+            onBackPressed()
+            finish()
+        }
+        builder.setNegativeButton(no) { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        val dialog = builder.create()
+        dialog.show()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                showConfirmationDialog()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onDestroy() {

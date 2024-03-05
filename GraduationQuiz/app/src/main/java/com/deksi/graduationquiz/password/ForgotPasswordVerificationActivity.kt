@@ -1,6 +1,7 @@
 package com.deksi.graduationquiz.password
 
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -29,12 +30,19 @@ class ForgotPasswordVerificationActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initTimer()
-
-        // Retrieve the verification code from intent extras
-        verificationCode = intent.getStringExtra("verificationCode") ?: ""
-         email = intent.getStringExtra("email") ?: ""
-
+        setUpActionBar()
+        getVerificationCode()
         setOnClickListener()
+    }
+
+    private fun getVerificationCode() {
+        verificationCode = intent.getStringExtra("verificationCode") ?: ""
+        email = intent.getStringExtra("email") ?: ""
+    }
+
+    private fun setUpActionBar() {
+        val actionBar = supportActionBar
+        actionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun setOnClickListener() {
@@ -109,8 +117,17 @@ class ForgotPasswordVerificationActivity : AppCompatActivity() {
     }
 
     private fun showProgressDialogOnTimeout() {
+        getSavedLanguageBySharedPreferences()
+
+        val messageResourceId = resources.getIdentifier("forgot_password_verification_message_on_timeout", "string", packageName)
+        val message = if (messageResourceId != 0) {
+            getString(messageResourceId)
+        } else {
+            getString(R.string.forgot_password_verification_message_on_timeout)
+        }
+
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle("Time is up!")
+        progressDialog!!.setMessage(message)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()
@@ -119,13 +136,27 @@ class ForgotPasswordVerificationActivity : AppCompatActivity() {
     }
 
     private fun showProgressDialogNoAttemptsRemaining() {
+        getSavedLanguageBySharedPreferences()
+
+        val messageResourceId = resources.getIdentifier("forgot_password_verification_message_no_attempts_left", "string", packageName)
+        val message = if (messageResourceId != 0) {
+            getString(messageResourceId)
+        } else {
+            getString(R.string.forgot_password_verification_message_no_attempts_left)
+        }
+
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle("No attempts remaining!")
+        progressDialog!!.setMessage(message)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()
 
         startTimerProgressDialog()
+    }
+
+    private fun getSavedLanguageBySharedPreferences() {
+        val sharedPreferences = getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE)
+        val savedLanguage = sharedPreferences.getString("selectedLanguage", "en") ?: "en"
     }
 
     private fun dismissProgressDialog() {

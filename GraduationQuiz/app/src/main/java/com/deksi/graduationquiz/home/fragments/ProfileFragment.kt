@@ -47,7 +47,6 @@ class ProfileFragment : Fragment() {
 
     }
 
-    // ako se udje kao guest sve vrednosti su null, to treba izmeniti. Samo da dodam check if !null
     private fun showUserData() {
         val displayUsername = binding.editTextUsername
         val displayPassword = binding.editTextPassword

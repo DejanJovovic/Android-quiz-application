@@ -1,5 +1,7 @@
 package com.deksi.graduationquiz.password
 
+import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -25,40 +27,78 @@ class ResetPasswordActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityResetPasswordBinding
     private lateinit var email: String
+    private var progressDialog: ProgressDialog? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityResetPasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val actionBar = supportActionBar
-        actionBar?.setDisplayHomeAsUpEnabled(true)
-
-        email = intent.getStringExtra("email") ?: ""
-
-        setOnClickListener()
+        setUpActionBar()
+        getEmail()
+        resetPassword()
     }
 
-    private fun setOnClickListener() {
-        binding.buttonResetPasswordSubmit.setOnClickListener {
-            resetPassword()
-        }
+    private fun getEmail() {
+        email = intent.getStringExtra("email") ?: ""
+    }
+
+    private fun setUpActionBar() {
+        val actionBar = supportActionBar
+        actionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun resetPassword() {
-        val newPassword = binding.editTextNewPassword.text.toString()
-        val retypedPassword = binding.editTextRetypeNewPassword.text.toString()
 
-        if (newPassword.isEmpty() || retypedPassword.isEmpty()) {
-            Toast.makeText(this, "Please enter both passwords", Toast.LENGTH_SHORT).show()
-            return
+        binding.buttonResetPasswordSubmit.setOnClickListener {
+            val newPassword = binding.editTextNewPassword.text.toString()
+            val retypedPassword = binding.editTextRetypeNewPassword.text.toString()
+
+            getSavedLanguageBySharedPreferences()
+            val passwordResourceId = resources.getIdentifier("reset_password_required", "string", packageName)
+            val newPasswordRequired = if (passwordResourceId != 0) {
+                getString(passwordResourceId)
+            } else {
+                getString(R.string.reset_password_required)
+            }
+
+            val retypePasswordResourceId = resources.getIdentifier("reset_retype_required", "string", packageName)
+            val retypeNewPasswordRequired = if (retypePasswordResourceId != 0) {
+                getString(retypePasswordResourceId)
+            } else {
+                getString(R.string.reset_retype_required)
+            }
+
+            val passwordsDontMatchResourceId = resources.getIdentifier("reset_passwords_dont_match", "string", packageName)
+            val passwordsDontMatch = if (passwordsDontMatchResourceId != 0) {
+                getString(passwordsDontMatchResourceId)
+            } else {
+                getString(R.string.reset_passwords_dont_match)
+            }
+
+            if (newPassword.isEmpty()) {
+                binding.editTextNewPassword.error = newPasswordRequired
+                binding.editTextNewPassword.requestFocus()
+                dismissProgressDialog()
+                return@setOnClickListener
+            }
+
+            if (retypedPassword.isEmpty()) {
+                binding.editTextRetypeNewPassword.error = retypeNewPasswordRequired
+                binding.editTextRetypeNewPassword.requestFocus()
+                dismissProgressDialog()
+                return@setOnClickListener
+            }
+
+            if (newPassword != retypedPassword) {
+                binding.editTextRetypeNewPassword.error = passwordsDontMatch
+                binding.editTextRetypeNewPassword.requestFocus()
+                dismissProgressDialog()
+                return@setOnClickListener
+            }
+
+            onResetPasswordProgressDialog()
+            updatePasswordInDatabase(email, newPassword)
         }
-
-        if (newPassword != retypedPassword) {
-            Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        updatePasswordInDatabase(email, newPassword)
     }
 
     private fun updatePasswordInDatabase(email: String, newPassword: String) {
@@ -108,9 +148,10 @@ class ResetPasswordActivity : AppCompatActivity() {
                     val intent = Intent(this@ResetPasswordActivity, HomeActivity::class.java)
                     startActivity(intent)
                     finish()
+                    dismissProgressDialog()
                 } else {
-
                     Toast.makeText(this@ResetPasswordActivity, "Failed to update password", Toast.LENGTH_SHORT).show()
+                    dismissProgressDialog()
                 }
             }
 
@@ -119,5 +160,30 @@ class ResetPasswordActivity : AppCompatActivity() {
             }
         })
 
+    }
+
+    private fun onResetPasswordProgressDialog() {
+        getSavedLanguageBySharedPreferences()
+
+        val messageResourceId = resources.getIdentifier("reset_password_message", "string", packageName)
+        val message = if (messageResourceId != 0) {
+            getString(messageResourceId)
+        } else {
+            getString(R.string.reset_password_message)
+        }
+
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setMessage(message)
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.show()
+    }
+
+    private fun getSavedLanguageBySharedPreferences() {
+        val sharedPreferences = getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE)
+        val savedLanguage = sharedPreferences.getString("selectedLanguage", "en") ?: "en"
+    }
+
+    private fun dismissProgressDialog() {
+        progressDialog?.dismiss()
     }
 }
