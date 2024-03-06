@@ -9,10 +9,7 @@ import com.deksi.backend.slagalica.service.KorakPoKorakService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,9 +48,9 @@ public class KoZnaZnaController {
 //    }
 
     @GetMapping("/random-rounds")
-    public ResponseEntity<List<KoZnaZnaEntity>> getRandomRounds() {
+    public ResponseEntity<List<KoZnaZnaEntity>> getRandomRounds(@RequestParam(required = false, defaultValue = "en") String language) {
         int count = 5;
-        List<Long> randomRoundIds = koZnaZnaService.getRandomKoZnaZnaRounds(count);
+        List<Long> randomRoundIds = koZnaZnaService.getRandomKoZnaZnaRounds(language, count);
 
         if (!randomRoundIds.isEmpty()) {
             List<KoZnaZnaEntity> rounds = new ArrayList<>();

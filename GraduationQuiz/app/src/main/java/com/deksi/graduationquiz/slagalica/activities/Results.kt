@@ -57,8 +57,17 @@ class Results : AppCompatActivity() {
     }
 
     private fun showProgressDialogOnNextRound() {
+        getSavedLanguageBySharedPreferences()
+
+        val messageResourceId = resources.getIdentifier("results_message", "string", packageName)
+        val message = if (messageResourceId != 0) {
+            getString(messageResourceId)
+        } else {
+            getString(R.string.results_message)
+        }
+
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle("Thanks for playing Slagalica!")
+        progressDialog!!.setTitle(message)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()
@@ -86,6 +95,11 @@ class Results : AppCompatActivity() {
         }
 
         (countDownTimer as CountDownTimer).start()
+    }
+
+    private fun getSavedLanguageBySharedPreferences() {
+        val sharedPreferences = getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE)
+        val savedLanguage = sharedPreferences.getString("selectedLanguage", "en") ?: "en"
     }
 
     override fun onDestroy() {

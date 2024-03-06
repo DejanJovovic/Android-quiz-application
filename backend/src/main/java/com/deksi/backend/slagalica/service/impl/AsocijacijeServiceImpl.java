@@ -22,11 +22,11 @@ public class AsocijacijeServiceImpl implements AsocijacijeService {
     }
 
     @Override
-    public Long getRandomAsocijacijeRound(Long previousRoundId) {
+    public Long getRandomAsocijacijeRound(Long previousRoundId, String language) {
         Long randomRoundId;
 
         do {
-            Optional<AsocijacijeEntity> randomEntity = asocijacijeRepository.getRandomEntity();
+            Optional<AsocijacijeEntity> randomEntity = asocijacijeRepository.getRandomEntity(language);
             randomRoundId = randomEntity.map(AsocijacijeEntity::getId).orElse(null);
 
         } while (randomRoundId != null && randomRoundId.equals(previousRoundId));

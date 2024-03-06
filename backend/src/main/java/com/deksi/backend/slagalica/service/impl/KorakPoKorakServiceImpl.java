@@ -1,5 +1,6 @@
 package com.deksi.backend.slagalica.service.impl;
 
+import com.deksi.backend.slagalica.model.AsocijacijeEntity;
 import com.deksi.backend.slagalica.model.KorakPoKorakEntity;
 import com.deksi.backend.slagalica.repository.KorakPoKorakRepository;
 import com.deksi.backend.slagalica.service.KorakPoKorakService;
@@ -22,11 +23,11 @@ public class KorakPoKorakServiceImpl implements KorakPoKorakService {
     }
 
     @Override
-    public Long getRandomKorakPoKorakRound(Long previousRoundId) {
+    public Long getRandomKorakPoKorakRound(Long previousRoundId, String language) {
         Long randomRoundId;
 
         do {
-            Optional<KorakPoKorakEntity> randomEntity = korakPoKorakRepository.getRandomEntity();
+            Optional<KorakPoKorakEntity> randomEntity = korakPoKorakRepository.getRandomEntity(language);
             randomRoundId = randomEntity.map(KorakPoKorakEntity::getId).orElse(null);
 
         } while (randomRoundId != null && randomRoundId.equals(previousRoundId));

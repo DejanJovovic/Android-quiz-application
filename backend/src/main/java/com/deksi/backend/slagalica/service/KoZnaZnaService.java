@@ -9,5 +9,5 @@ public interface KoZnaZnaService {
 
     Optional<KoZnaZnaEntity> findOneById(Long id);
 
-    List<Long> getRandomKoZnaZnaRounds(int count);
+    List<Long> getRandomKoZnaZnaRounds(String language, int count);
 }

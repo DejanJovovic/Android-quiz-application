@@ -14,6 +14,6 @@ public interface KoZnaZnaRepository extends JpaRepository<KoZnaZnaEntity, Long> 
 
     List<KoZnaZnaEntity> findAll();
 
-    @Query(value = "SELECT * FROM koznazna ORDER BY RAND() LIMIT :count", nativeQuery = true)
-    List<KoZnaZnaEntity> getRandomEntities(@Param("count") int count);
+    @Query(value = "SELECT * FROM koznazna WHERE language = :language ORDER BY RAND() LIMIT :count", nativeQuery = true)
+    List<KoZnaZnaEntity> getRandomEntitiesByLanguage(@Param("language") String language, @Param("count") int count);
 }

@@ -17,5 +17,6 @@ public class KoZnaZnaDTO implements Serializable {
     private final String option3;
     private final String option4;
     private final String answer;
+    private final String language;
 
 }

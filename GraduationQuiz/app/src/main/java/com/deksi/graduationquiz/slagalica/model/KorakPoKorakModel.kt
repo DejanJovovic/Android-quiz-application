@@ -8,5 +8,6 @@ data class KorakPoKorakModel(
     val hint5: String,
     val hint6: String,
     val hint7: String,
-    val konacno: String
+    val konacno: String,
+    val language: String
 )

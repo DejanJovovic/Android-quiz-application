@@ -11,5 +11,6 @@ data class SpojniceModel(
     val right2: String,
     val right3: String,
     val right4: String,
-    val right5: String
+    val right5: String,
+    val language: String
 )

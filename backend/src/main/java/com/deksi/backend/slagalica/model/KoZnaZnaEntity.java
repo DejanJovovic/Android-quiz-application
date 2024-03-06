@@ -32,5 +32,8 @@ public class KoZnaZnaEntity {
 
     @Column(name = "answer")
     private String answer;
+
+    @Column(name = "language")
+    private String language;
 }
     

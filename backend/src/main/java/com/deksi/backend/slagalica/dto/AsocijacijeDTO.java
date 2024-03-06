@@ -32,4 +32,6 @@ public class AsocijacijeDTO implements Serializable {
     private final String konacnoC;
     private final String konacnoD;
     private final String konacno;
+    private final String language;
+
 }

@@ -445,7 +445,24 @@ class Asocijacije : AppCompatActivity() {
     }
 
     private fun onCreateProgressDialog() {
-        progressDialog = ProgressDialog.show(this, "Please wait", "Loading game..", true, false)
+
+        getSavedLanguageBySharedPreferences()
+
+        val titleResourceId = resources.getIdentifier("asocijacije_title_on_create", "string", packageName)
+        val title = if (titleResourceId != 0) {
+            getString(titleResourceId)
+        } else {
+            getString(R.string.asocijacije_title_on_create)
+        }
+
+        val messageResourceId = resources.getIdentifier("asocijacije_message_on_create", "string", packageName)
+        val message = if (messageResourceId != 0) {
+            getString(messageResourceId)
+        } else {
+            getString(R.string.asocijacije_message_on_create)
+        }
+
+        progressDialog = ProgressDialog.show(this, title, message, true, false)
 
     }
 
@@ -454,8 +471,17 @@ class Asocijacije : AppCompatActivity() {
     }
 
     private fun showProgressDialogOnTimeout() {
+        getSavedLanguageBySharedPreferences()
+
+        val messageResourceId = resources.getIdentifier("asocijacije_message_time_up", "string", packageName)
+        val message = if (messageResourceId != 0) {
+            getString(messageResourceId)
+        } else {
+            getString(R.string.asocijacije_message_time_up)
+        }
+
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle("Time is up!")
+        progressDialog!!.setTitle(message)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()
@@ -465,8 +491,18 @@ class Asocijacije : AppCompatActivity() {
 
 
     private fun showProgressDialogOnGameFinish() {
+
+        getSavedLanguageBySharedPreferences()
+
+        val messageResourceId = resources.getIdentifier("asocijacije_message_on_finish", "string", packageName)
+        val message = if (messageResourceId != 0) {
+            getString(messageResourceId)
+        } else {
+            getString(R.string.asocijacije_message_on_finish)
+        }
+
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle("Game is finished. Please wait..")
+        progressDialog!!.setTitle(message)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()
@@ -475,8 +511,18 @@ class Asocijacije : AppCompatActivity() {
     }
 
     private fun showProgressDialogOnNextRound() {
+
+        getSavedLanguageBySharedPreferences()
+
+        val messageResourceId = resources.getIdentifier("asocijacije_message_on_round_starting", "string", packageName)
+        val message = if (messageResourceId != 0) {
+            getString(messageResourceId, currentRound)
+        } else {
+            getString(R.string.asocijacije_message_on_round_starting)
+        }
+
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle("Round $currentRound is starting...")
+        progressDialog!!.setTitle(message)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()
@@ -576,6 +622,9 @@ class Asocijacije : AppCompatActivity() {
 
     private fun getRoundData() {
 
+        val sharedPreferences = getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE)
+        val savedLanguage = sharedPreferences.getString("selectedLanguage", "en") ?: "en"
+
         val trustAllCerts = arrayOf<TrustManager>(
             object : X509TrustManager {
                 override fun checkClientTrusted(
@@ -602,7 +651,7 @@ class Asocijacije : AppCompatActivity() {
         val sslSocketFactory = sslContext.socketFactory
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.178.66:8080/api/slagalica/")
+            .baseUrl("https://192.168.1.9:8080/api/slagalica/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -614,7 +663,7 @@ class Asocijacije : AppCompatActivity() {
 
         val asosijacijeService = retrofit.create(AsocijacijeApiService::class.java)
 
-        val call = asosijacijeService.getRandomRound()
+        val call = asosijacijeService.getRandomRound(savedLanguage)
 
         call.enqueue(object : Callback<AsocijacijeModel> {
             override fun onResponse(
@@ -638,6 +687,11 @@ class Asocijacije : AppCompatActivity() {
 
         })
 
+    }
+
+    private fun getSavedLanguageBySharedPreferences() {
+        val sharedPreferences = getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE)
+        val savedLanguage = sharedPreferences.getString("selectedLanguage", "en") ?: "en"
     }
 
     private fun setUpActionBar() {

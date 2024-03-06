@@ -22,5 +22,7 @@ public class SpojniceDTO implements Serializable {
     private final String right3;
     private final String right4;
     private final String right5;
+    private final String language;
+
 
 }

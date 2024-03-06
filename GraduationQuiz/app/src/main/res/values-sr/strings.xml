@@ -141,5 +141,36 @@
     <string name="sudoku_message_out_of_lives">Ostali ste bez života!</string>
     <string name="sudoku_message_congrats">Čestitamo na pobedi!</string>
     <string name="main_login">Prijava</string>
+    <string name="asocijacije_message_time_up">Vreme je isteklo!</string>
+    <string name="asocijacije_message_on_finish">Igra je završena.Molim vas sačekajte..</string>
+    <string name="asocijacije_message_on_round_starting">Runda %1$d počinje..</string>
+    <string name="asocijacije_title_on_create">Molim vas sačekajte</string>
+    <string name="asocijacije_message_on_create">Igra se učitava..</string>
+    <string name="korakpokorak_message_time_up">Vreme je isteklo!</string>
+    <string name="korakpokorak_message_on_finish">Igra je završena.Molim vas sačekajte..</string>
+    <string name="korakpokorak_message_on_round_starting">Runda %1$d počinje..</string>
+    <string name="korakpokorak_title_on_create">Molim vas sačekajte</string>
+    <string name="korakpokorak_message_on_create">Igra se učitava..</string>
+    <string name="koznazna_message_time_up">Vreme je isteklo!</string>
+    <string name="koznazna_message_on_finish">Igra je završena.Molim vas sačekajte..</string>
+    <string name="koznazna_title_on_create">Molim vas sačekajte</string>
+    <string name="koznazna_message_on_create">Igra se učitava..</string>
+    <string name="spojnice_message_time_up">Vreme je isteklo!</string>
+    <string name="spojnice_message_on_finish">Igra je završena.Molim vas sačekajte..</string>
+    <string name="spojnice_message_on_round_starting">Runda %1$d počinje..</string>
+    <string name="spojnice_title_on_create">Molim vas sačekajte</string>
+    <string name="spojnice_message_on_create">Igra se učitava..</string>
+    <string name="mojbroj_message_time_up">Vreme je isteklo!</string>
+    <string name="mojbroj_message_on_finish">Igra je završena.Molim vas sačekajte..</string>
+    <string name="mojbroj_message_on_round_starting">Runda %1$d počinje..</string>
+    <string name="skocko_message_time_up">Vreme je isteklo!</string>
+    <string name="skocko_message_on_finish">Igra je završena.Molim vas sačekajte..</string>
+    <string name="skocko_message_on_round_starting">Runda %1$d počinje..</string>
+    <string name="results_message">Hvala što ste igrali Slagalicu!</string>
+    <string name="koznazna_submit">Završi</string>
+    <string name="timer_score">Rezultat</string>
+
+
+
 
 </resources>

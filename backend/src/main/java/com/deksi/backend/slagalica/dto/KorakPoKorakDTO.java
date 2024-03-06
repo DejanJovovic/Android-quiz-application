@@ -19,4 +19,6 @@ public class KorakPoKorakDTO implements Serializable {
     private final String hint6;
     private final String hint7;
     private final String konacno;
+    private final String language;
+
 }

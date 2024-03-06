@@ -141,4 +141,35 @@
     <string name="sudoku_message_out_of_lives">Estas sin vidas!</string>
     <string name="sudoku_message_congrats">Felicidades por ganar el juego!</string>
     <string name="main_login">Acceso</string>
+    <string name="asocijacije_message_time_up">El tiempo ha terminado!</string>
+    <string name="asocijacije_message_on_finish">El juego ha terminado. Espere por favor..</string>
+    <string name="asocijacije_message_on_round_starting">La ronda %1$d está comenzando..</string>
+    <string name="asocijacije_title_on_create">Espere por favor</string>
+    <string name="asocijacije_message_on_create">Cargando el juego..</string>
+    <string name="korakpokorak_message_time_up">El tiempo ha terminado!</string>
+    <string name="korakpokorak_message_on_finish">El juego ha terminado. Espere por favor..</string>
+    <string name="korakpokorak_message_on_round_starting">La ronda %1$d está comenzando..</string>
+    <string name="korakpokorak_title_on_create">Espere por favor</string>
+    <string name="korakpokorak_message_on_create">Cargando el juego..</string>
+    <string name="koznazna_message_time_up">El tiempo ha terminado!</string>
+    <string name="koznazna_message_on_finish">El juego ha terminado. Espere por favor..</string>
+    <string name="koznazna_title_on_create">Espere por favor</string>
+    <string name="koznazna_message_on_create">Cargando el juego..</string>
+    <string name="spojnice_message_time_up">El tiempo ha terminado!</string>
+    <string name="spojnice_message_on_finish">El juego ha terminado. Espere por favor..</string>
+    <string name="spojnice_message_on_round_starting">La ronda %1$d está comenzando..</string>
+    <string name="spojnice_title_on_create">Espere por favor</string>
+    <string name="spojnice_message_on_create">Cargando el juego..</string>
+    <string name="mojbroj_message_time_up">El tiempo ha terminado!</string>
+    <string name="mojbroj_message_on_finish">El juego ha terminado. Espere por favor..</string>
+    <string name="mojbroj_message_on_round_starting">La ronda %1$d está comenzando..</string>
+    <string name="skocko_message_time_up">El tiempo ha terminado!</string>
+    <string name="skocko_message_on_finish">El juego ha terminado. Espere por favor..</string>
+    <string name="skocko_message_on_round_starting">La ronda %1$d está comenzando..</string>
+    <string name="results_message">Gracias por jugar Slagalica!</string>
+    <string name="koznazna_submit">Entregar</string>
+    <string name="timer_score">Puntaje</string>
+
+
+
 </resources>

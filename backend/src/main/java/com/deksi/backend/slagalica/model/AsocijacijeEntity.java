@@ -78,6 +78,7 @@ public class AsocijacijeEntity {
     @Column(name = "konacno")
     private String konacno;
 
-
+    @Column(name = "language")
+    private String language;
 
 }

@@ -107,10 +107,20 @@ class KoZnaZna : AppCompatActivity() {
                 // Display the next question
                 displayData()
             } else {
+
+                getSavedLanguageBySharedPreferences()
+
+                val messageResourceId = resources.getIdentifier("koznazna_submit", "string", packageName)
+                val message = if (messageResourceId != 0) {
+                    getString(messageResourceId)
+                } else {
+                    getString(R.string.koznazna_submit)
+                }
+
                 userAnswered = true
                 stopTimer()
                 val buttonNext = binding.buttonNextQuestion
-                buttonNext.text = "Submit"
+                buttonNext.text = message
 
                 buttonNext.setOnClickListener {
                     showProgressDialogOnGameEnd()
@@ -215,9 +225,23 @@ class KoZnaZna : AppCompatActivity() {
     }
 
     private fun onCreateProgressDialog() {
-        progressDialog =
-            ProgressDialog.show(this, "Please wait", "Loading questions..", true, false)
+        getSavedLanguageBySharedPreferences()
 
+        val titleResourceId = resources.getIdentifier("koznazna_title_on_create", "string", packageName)
+        val title = if (titleResourceId != 0) {
+            getString(titleResourceId)
+        } else {
+            getString(R.string.koznazna_title_on_create)
+        }
+
+        val messageResourceId = resources.getIdentifier("koznazna_message_on_create", "string", packageName)
+        val message = if (messageResourceId != 0) {
+            getString(messageResourceId)
+        } else {
+            getString(R.string.koznazna_message_on_create)
+        }
+
+        progressDialog = ProgressDialog.show(this, title, message, true, false)
     }
 
     private fun dismissProgressDialog() {
@@ -225,8 +249,17 @@ class KoZnaZna : AppCompatActivity() {
     }
 
     private fun showProgressDialogOnTimeout() {
+        getSavedLanguageBySharedPreferences()
+
+        val messageResourceId = resources.getIdentifier("koznazna_message_time_up", "string", packageName)
+        val message = if (messageResourceId != 0) {
+            getString(messageResourceId)
+        } else {
+            getString(R.string.koznazna_message_time_up)
+        }
+
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle("Time is up!")
+        progressDialog!!.setTitle(message)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()
@@ -235,8 +268,17 @@ class KoZnaZna : AppCompatActivity() {
     }
 
     private fun showProgressDialogOnGameEnd() {
+        getSavedLanguageBySharedPreferences()
+
+        val messageResourceId = resources.getIdentifier("koznazna_message_on_finish", "string", packageName)
+        val message = if (messageResourceId != 0) {
+            getString(messageResourceId)
+        } else {
+            getString(R.string.koznazna_message_on_finish)
+        }
+
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle("Game is finished. Please wait..")
+        progressDialog!!.setTitle(message)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()
@@ -270,6 +312,11 @@ class KoZnaZna : AppCompatActivity() {
     }
 
     private fun getRoundData() {
+
+        val sharedPreferences = getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE)
+        val savedLanguage = sharedPreferences.getString("selectedLanguage", "en") ?: "en"
+
+
         val trustAllCerts = arrayOf<TrustManager>(
             object : X509TrustManager {
                 override fun checkClientTrusted(
@@ -296,7 +343,7 @@ class KoZnaZna : AppCompatActivity() {
         val sslSocketFactory = sslContext.socketFactory
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.178.66:8080/api/koznazna/")
+            .baseUrl("https://192.168.1.9:8080/api/koznazna/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -308,7 +355,7 @@ class KoZnaZna : AppCompatActivity() {
 
         val koZnaZnaApiService = retrofit.create(KoZnaZnaApiService::class.java)
 
-        val call = koZnaZnaApiService.getRandomRounds()
+        val call = koZnaZnaApiService.getRandomRounds(savedLanguage)
 
         call.enqueue(object : Callback<List<KoZnaZnaModel>> {
             override fun onResponse(
@@ -332,6 +379,11 @@ class KoZnaZna : AppCompatActivity() {
             }
         })
 
+    }
+
+    private fun getSavedLanguageBySharedPreferences(){
+        val sharedPreferences = getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE)
+        val savedLanguage = sharedPreferences.getString("selectedLanguage", "en") ?: "en"
     }
 
     private fun setUpActionBar() {

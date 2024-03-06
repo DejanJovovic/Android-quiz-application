@@ -24,8 +24,8 @@ public class KoZnaZnaServiceImpl implements KoZnaZnaService {
     }
 
     @Override
-    public List<Long> getRandomKoZnaZnaRounds(int count) {
-        List<KoZnaZnaEntity> randomEntities = koZnaZnaRepository.getRandomEntities(count);
+    public List<Long> getRandomKoZnaZnaRounds(String language, int count) {
+        List<KoZnaZnaEntity> randomEntities = koZnaZnaRepository.getRandomEntitiesByLanguage(language, count);
         return randomEntities.stream()
                 .map(KoZnaZnaEntity::getId)
                 .collect(Collectors.toList());

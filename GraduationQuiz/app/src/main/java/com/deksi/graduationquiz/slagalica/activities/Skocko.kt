@@ -350,8 +350,17 @@ class Skocko : AppCompatActivity() {
     }
 
     private fun showProgressDialogOnTimeout() {
+        getSavedLanguageBySharedPreferences()
+
+        val messageResourceId = resources.getIdentifier("skocko_message_time_up", "string", packageName)
+        val message = if (messageResourceId != 0) {
+            getString(messageResourceId)
+        } else {
+            getString(R.string.skocko_message_time_up)
+        }
+
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle("Time is up!")
+        progressDialog!!.setTitle(message)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()
@@ -361,8 +370,17 @@ class Skocko : AppCompatActivity() {
 
 
     private fun showProgressDialogOnGameFinish() {
+        getSavedLanguageBySharedPreferences()
+
+        val messageResourceId = resources.getIdentifier("skocko_message_on_finish", "string", packageName)
+        val message = if (messageResourceId != 0) {
+            getString(messageResourceId)
+        } else {
+            getString(R.string.skocko_message_on_finish)
+        }
+
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle("Game is finished. Please wait..")
+        progressDialog!!.setTitle(message)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()
@@ -371,8 +389,17 @@ class Skocko : AppCompatActivity() {
     }
 
     private fun showProgressDialogOnNextRound() {
+        getSavedLanguageBySharedPreferences()
+
+        val messageResourceId = resources.getIdentifier("skocko_message_on_round_starting", "string", packageName)
+        val message = if (messageResourceId != 0) {
+            getString(messageResourceId, currentRound)
+        } else {
+            getString(R.string.skocko_message_on_round_starting)
+        }
+
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle("Round $currentRound is starting...")
+        progressDialog!!.setTitle(message)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()
@@ -426,6 +453,11 @@ class Skocko : AppCompatActivity() {
         // Remove the totalScore key from SharedPreferences
         editor.remove("totalScore")
         editor.apply()
+    }
+
+    private fun getSavedLanguageBySharedPreferences() {
+        val sharedPreferences = getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE)
+        val savedLanguage = sharedPreferences.getString("selectedLanguage", "en") ?: "en"
     }
 
     private fun setUpActionBar() {

@@ -21,5 +21,6 @@ data class AsocijacijeModel(
     val konacnoB: String,
     val konacnoC: String,
     val konacnoD: String,
-    val konacno: String
+    val konacno: String,
+    val language: String
 )

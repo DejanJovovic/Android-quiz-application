@@ -48,4 +48,6 @@ public class SpojniceEntity {
     @Column(name = "right5")
     private String right5;
 
+    @Column(name = "language")
+    private String language;
 }
