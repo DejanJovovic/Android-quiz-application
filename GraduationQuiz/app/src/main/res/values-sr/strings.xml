@@ -169,6 +169,17 @@
     <string name="results_message">Hvala što ste igrali Slagalicu!</string>
     <string name="koznazna_submit">Završi</string>
     <string name="timer_score">Rezultat</string>
+    <string name="timer_total_score">Vaš ukupan rezultat je</string>
+    <string name="on_back_pressed_game_message">Da li ste sigurni da želite da izađete iz igre?</string>
+    <string name="on_back_pressed_message">Da li ste sigurni da želite da izađete?</string>
+    <string name="forgot_password_email_required">Email je obavezan</string>
+    <string name="verification_code_incorrect">Netačan verifikacioni kod.Preostalo je još %1$d pokušaja.</string>
+    <string name="forgot_password_email_wrong">Email koji ste uneli je nevažeći. Molim vas pokušajte ponovo.</string>
+
+
+
+
+
 
 
 

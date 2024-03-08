@@ -1,6 +1,7 @@
 package com.deksi.graduationquiz.slagalica.activities
 
 
+import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
@@ -194,8 +195,16 @@ class KoZnaZna : AppCompatActivity() {
             override fun onTick(millisUntilFinished: Long) {
                 progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
 
+                val messageResourceId = resources.getIdentifier("timer_score", "string", packageName)
+                val messageScore = if (messageResourceId != 0) {
+                    getString(messageResourceId)
+                } else {
+                    getString(R.string.timer_score)
+                }
+
+
                 val secondsRemaining = millisUntilFinished / 1000
-                val message = "$secondsRemaining     Score: $totalScore"
+                val message = "$secondsRemaining     $messageScore: $totalScore"
                 progressDialog?.setMessage(message)
             }
 
@@ -343,7 +352,7 @@ class KoZnaZna : AppCompatActivity() {
         val sslSocketFactory = sslContext.socketFactory
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.1.9:8080/api/koznazna/")
+            .baseUrl("https://192.168.228.66:8080/api/koznazna/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -405,7 +414,38 @@ class KoZnaZna : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-        clearTotalScoreFromPreferences()
+
+        val messageResourceId = resources.getIdentifier("on_back_pressed_game_message", "string", packageName)
+        val message = if (messageResourceId != 0) {
+            getString(messageResourceId)
+        } else {
+            getString(R.string.on_back_pressed_game_message)
+        }
+
+        val yesResourceId = resources.getIdentifier("yes", "string", packageName)
+        val yes = if (yesResourceId != 0) {
+            getString(yesResourceId)
+        } else {
+            getString(R.string.yes)
+        }
+
+        val noResourceId = resources.getIdentifier("no", "string", packageName)
+        val no = if (noResourceId != 0) {
+            getString(noResourceId)
+        } else {
+            getString(R.string.no)
+        }
+
+        AlertDialog.Builder(this)
+            .setMessage(message)
+            .setPositiveButton(yes) { _, _ ->
+                super.onBackPressed()
+                clearTotalScoreFromPreferences()
+            }
+            .setNegativeButton(no) { _, _ ->
+                // Do nothing
+            }
+            .show()
+
     }
 }

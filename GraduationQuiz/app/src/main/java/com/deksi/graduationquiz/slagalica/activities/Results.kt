@@ -1,5 +1,6 @@
 package com.deksi.graduationquiz.slagalica.activities
 
+import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
@@ -39,8 +40,15 @@ class Results : AppCompatActivity() {
         // Retrieve the overall total score
         val totalScore = sharedPreferences.getInt("totalScore", 0)
 
+        val messageResourceId = resources.getIdentifier("timer_total_score", "string", packageName)
+        val messageScore = if (messageResourceId != 0) {
+            getString(messageResourceId)
+        } else {
+            getString(R.string.timer_total_score)
+        }
+
         // Now, 'totalScore' contains the sum of scores across all games
-        binding.textViewTotalScore.text = "Your total score is: $totalScore"
+        binding.textViewTotalScore.text = "$messageScore: $totalScore"
     }
 
     private fun clearTotalScoreFromPreferences() {
@@ -88,8 +96,6 @@ class Results : AppCompatActivity() {
 
             override fun onFinish() {
                 dismissProgressDialog()
-                val intent = Intent(this@Results, HomeActivity::class.java)
-                startActivity(intent)
                 finish()
             }
         }
@@ -108,7 +114,37 @@ class Results : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-        clearTotalScoreFromPreferences()
+        val messageResourceId = resources.getIdentifier("on_back_pressed_game_message", "string", packageName)
+        val message = if (messageResourceId != 0) {
+            getString(messageResourceId)
+        } else {
+            getString(R.string.on_back_pressed_game_message)
+        }
+
+        val yesResourceId = resources.getIdentifier("yes", "string", packageName)
+        val yes = if (yesResourceId != 0) {
+            getString(yesResourceId)
+        } else {
+            getString(R.string.yes)
+        }
+
+        val noResourceId = resources.getIdentifier("no", "string", packageName)
+        val no = if (noResourceId != 0) {
+            getString(noResourceId)
+        } else {
+            getString(R.string.no)
+        }
+
+        AlertDialog.Builder(this)
+            .setMessage(message)
+            .setPositiveButton(yes) { _, _ ->
+                super.onBackPressed()
+                clearTotalScoreFromPreferences()
+            }
+            .setNegativeButton(no) { _, _ ->
+                // Do nothing
+            }
+            .show()
+
     }
 }

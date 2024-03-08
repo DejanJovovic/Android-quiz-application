@@ -1,5 +1,6 @@
 package com.deksi.graduationquiz.password
 
+import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
@@ -60,11 +61,24 @@ class ForgotPasswordActivity : AppCompatActivity() {
         binding.buttonForgotPasswordSubmit.setOnClickListener {
 
             val email = emailEditText.text.toString().trim()
+
+            val emailResourceId = resources.getIdentifier("forgot_password_email_required", "string", packageName)
+            val emailRequired = if (emailResourceId != 0) {
+                getString(emailResourceId)
+            } else {
+                getString(R.string.forgot_password_email_required)
+            }
+
+            if (email.isEmpty()) {
+                binding.editTextEmailAddress.error = emailRequired
+                binding.editTextEmailAddress.requestFocus()
+                dismissProgressDialog()
+                return@setOnClickListener
+            }
+
             if (email.isNotEmpty()) {
                 onSuccessProgressDialog()
                 sendEmailForChangePassword(email)
-            } else {
-                Toast.makeText(this, "Please enter your email", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -128,7 +142,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
         val sslSocketFactory = sslContext.socketFactory
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.1.9:8080/api/users/")
+            .baseUrl("https://192.168.228.66:8080/api/users/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -167,11 +181,16 @@ class ForgotPasswordActivity : AppCompatActivity() {
                         ).show()
                     }
                 } else {
-                    Toast.makeText(
-                        this@ForgotPasswordActivity,
-                        "Failed to send verification code",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    val emailWrongResourceId = resources.getIdentifier("forgot_password_email_wrong", "string", packageName)
+                    val emailWrong = if (emailWrongResourceId != 0) {
+                        getString(emailWrongResourceId)
+                    } else {
+                        getString(R.string.forgot_password_email_wrong)
+                    }
+
+                    binding.editTextEmailAddress.error = emailWrong
+                    binding.editTextEmailAddress.requestFocus()
+                    dismissProgressDialog()
                 }
             }
 
@@ -184,5 +203,4 @@ class ForgotPasswordActivity : AppCompatActivity() {
             }
         })
     }
-
 }

@@ -169,6 +169,17 @@
     <string name="results_message">Gracias por jugar Slagalica!</string>
     <string name="koznazna_submit">Entregar</string>
     <string name="timer_score">Puntaje</string>
+    <string name="timer_total_score">Tu puntuación total es</string>
+    <string name="on_back_pressed_game_message">¿Estás seguro de que quieres abandonar el juego?</string>
+    <string name="on_back_pressed_message">Estás seguro que quieres irte?</string>
+    <string name="forgot_password_email_required">Correo electronico es requerido</string>
+    <string name="verification_code_incorrect">Código de verificación incorrecto.Restan %1$d intentos</string>
+    <string name="forgot_password_email_wrong">El correo electrónico que ingresaste no es válido. Inténtalo nuevamente.</string>
+
+
+
+
+
 
 
 

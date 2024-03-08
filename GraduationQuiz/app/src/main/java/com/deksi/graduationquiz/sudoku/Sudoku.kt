@@ -154,9 +154,6 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
         val handler = Handler()
 
         handler.postDelayed({
-            val intent = Intent(this@Sudoku, HomeActivity::class.java)
-            startActivity(intent)
-
             finish()
         }, delayMillis)
     }
@@ -176,7 +173,7 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
         }
 
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setMessage(message)
+        progressDialog!!.setTitle(message)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()
@@ -231,7 +228,7 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
         val actionBar = supportActionBar
 
         actionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-        actionBar?.setCustomView(R.layout.action_bar_custom_title)
+        actionBar?.setCustomView(R.layout.action_bar_custom_title_sudoku)
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
 
@@ -286,6 +283,42 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onBackPressed() {
+
+        val messageResourceId = resources.getIdentifier("on_back_pressed_message", "string", packageName)
+        val message = if (messageResourceId != 0) {
+            getString(messageResourceId)
+        } else {
+            getString(R.string.on_back_pressed_message)
+        }
+
+        val yesResourceId = resources.getIdentifier("yes", "string", packageName)
+        val yes = if (yesResourceId != 0) {
+            getString(yesResourceId)
+        } else {
+            getString(R.string.yes)
+        }
+
+        val noResourceId = resources.getIdentifier("no", "string", packageName)
+        val no = if (noResourceId != 0) {
+            getString(noResourceId)
+        } else {
+            getString(R.string.no)
+        }
+
+        AlertDialog.Builder(this)
+            .setMessage(message)
+            .setPositiveButton(yes) { _, _ ->
+                super.onBackPressed()
+                finish()
+            }
+            .setNegativeButton(no) { _, _ ->
+                // Do nothing
+            }
+            .show()
+
     }
 
     override fun onDestroy() {

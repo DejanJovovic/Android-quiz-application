@@ -1,5 +1,6 @@
 package com.deksi.graduationquiz.home
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -119,6 +120,42 @@ class HomeActivity : AppCompatActivity() {
         val intent = Intent(this, LogInActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+    override fun onBackPressed() {
+
+        val messageResourceId = resources.getIdentifier("on_back_pressed_message", "string", packageName)
+        val message = if (messageResourceId != 0) {
+            getString(messageResourceId)
+        } else {
+            getString(R.string.on_back_pressed_message)
+        }
+
+        val yesResourceId = resources.getIdentifier("yes", "string", packageName)
+        val yes = if (yesResourceId != 0) {
+            getString(yesResourceId)
+        } else {
+            getString(R.string.yes)
+        }
+
+        val noResourceId = resources.getIdentifier("no", "string", packageName)
+        val no = if (noResourceId != 0) {
+            getString(noResourceId)
+        } else {
+            getString(R.string.no)
+        }
+
+        AlertDialog.Builder(this)
+            .setMessage(message)
+            .setPositiveButton(yes) { _, _ ->
+                super.onBackPressed()
+                finish()
+            }
+            .setNegativeButton(no) { _, _ ->
+                // Do nothing
+            }
+            .show()
+
     }
 
 }

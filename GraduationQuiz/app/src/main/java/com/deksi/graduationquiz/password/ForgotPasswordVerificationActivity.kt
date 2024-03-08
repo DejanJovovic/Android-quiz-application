@@ -1,5 +1,6 @@
 package com.deksi.graduationquiz.password
 
+import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
@@ -7,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
+import android.view.MenuItem
 import android.widget.Toast
 import com.deksi.graduationquiz.R
 import com.deksi.graduationquiz.databinding.ActivityForgotPasswordVerificationBinding
@@ -45,6 +47,16 @@ class ForgotPasswordVerificationActivity : AppCompatActivity() {
         actionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     private fun setOnClickListener() {
         binding.buttonSubmit.setOnClickListener {
             checkCode()
@@ -65,10 +77,16 @@ class ForgotPasswordVerificationActivity : AppCompatActivity() {
                 attemptsRemaining--
                 if (attemptsRemaining > 0) {
                     // Still attempts remaining, show remaining attempts message
-                    Toast.makeText(
-                        this, "Incorrect verification code. $attemptsRemaining attempts remaining.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    val verificationCodeId = resources.getIdentifier("verification_code_incorrect", "string", packageName)
+                    val verificationCodeRequired = if (verificationCodeId != 0) {
+                        getString(verificationCodeId, attemptsRemaining)
+                    } else {
+                        getString(R.string.verification_code_incorrect)
+                    }
+
+                    binding.editTextVerificationCode.error = verificationCodeRequired
+                    binding.editTextVerificationCode.requestFocus()
+
                 }
                 else {
                     stopTimer()
@@ -127,7 +145,7 @@ class ForgotPasswordVerificationActivity : AppCompatActivity() {
         }
 
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setMessage(message)
+        progressDialog!!.setTitle(message)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()
@@ -146,7 +164,7 @@ class ForgotPasswordVerificationActivity : AppCompatActivity() {
         }
 
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setMessage(message)
+        progressDialog!!.setTitle(message)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()
@@ -168,10 +186,43 @@ class ForgotPasswordVerificationActivity : AppCompatActivity() {
         val handler = Handler()
 
         handler.postDelayed({
-            val intent = Intent(this@ForgotPasswordVerificationActivity, HomeActivity::class.java)
-            startActivity(intent)
-
             finish()
         }, delayMilis)
+    }
+
+    override fun onBackPressed() {
+
+        val messageResourceId = resources.getIdentifier("on_back_pressed_message", "string", packageName)
+        val message = if (messageResourceId != 0) {
+            getString(messageResourceId)
+        } else {
+            getString(R.string.on_back_pressed_message)
+        }
+
+        val yesResourceId = resources.getIdentifier("yes", "string", packageName)
+        val yes = if (yesResourceId != 0) {
+            getString(yesResourceId)
+        } else {
+            getString(R.string.yes)
+        }
+
+        val noResourceId = resources.getIdentifier("no", "string", packageName)
+        val no = if (noResourceId != 0) {
+            getString(noResourceId)
+        } else {
+            getString(R.string.no)
+        }
+
+        AlertDialog.Builder(this)
+            .setMessage(message)
+            .setPositiveButton(yes) { _, _ ->
+                super.onBackPressed()
+                finish()
+            }
+            .setNegativeButton(no) { _, _ ->
+                // Do nothing
+            }
+            .show()
+
     }
 }

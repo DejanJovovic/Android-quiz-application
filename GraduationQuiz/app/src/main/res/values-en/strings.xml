@@ -169,6 +169,12 @@
     <string name="results_message">Thanks for playing Slagalica!</string>
     <string name="koznazna_submit">Submit</string>
     <string name="timer_score">Score</string>
+    <string name="timer_total_score">Your total score is</string>
+    <string name="on_back_pressed_game_message">Are you sure you want to leave the game?</string>
+    <string name="on_back_pressed_message">Are you sure you want to leave?</string>
+    <string name="forgot_password_email_required">Email is required</string>
+    <string name="verification_code_incorrect">Incorrect verification code.%1$d attempts remaining.</string>
+    <string name="forgot_password_email_wrong">The email you entered is invalid.Please try again.</string>
 
 
 
