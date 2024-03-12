@@ -430,7 +430,7 @@ class Spojnice : AppCompatActivity() {
 
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.1.9:8080/api/spojnice/")
+            .baseUrl("https://192.168.228.66:8080/api/spojnice/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()

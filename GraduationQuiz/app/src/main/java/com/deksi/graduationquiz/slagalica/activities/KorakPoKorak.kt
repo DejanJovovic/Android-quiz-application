@@ -400,7 +400,7 @@ class KorakPoKorak : AppCompatActivity() {
         val sslSocketFactory = sslContext.socketFactory
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.1.9:8080/api/korakPoKorak/")
+            .baseUrl("https://192.168.228.66:8080/api/korakPoKorak/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()

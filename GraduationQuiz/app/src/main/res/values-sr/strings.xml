@@ -175,12 +175,29 @@
     <string name="forgot_password_email_required">Email je obavezan</string>
     <string name="verification_code_incorrect">Netačan verifikacioni kod.Preostalo je još %1$d pokušaja.</string>
     <string name="forgot_password_email_wrong">Email koji ste uneli je nevažeći. Molim vas pokušajte ponovo.</string>
-
-
-
-
-
-
+    <string name="welcome_title">Dobro došli u Slagalicu!</string>
+    <string name="welcome_message"><![CDATA[Prevucite kroz ovaj vodič za više informacija o pojedinim igrama.
+]]></string>
+    <string name="koznazna_title">Ko zna zna</string>
+    <string name="koznazna_message"><![CDATA[Pogodi tačan odgovor od ponuđena 4.\nTačan odgovor je + 10 poena.\nNetačan odgovor je - 5 poena.
+]]></string>
+    <string name="spojnice_title">Spojnice</string>
+    <string name="spojnice_message"><![CDATA[Pogodi prave parove za konkretnu temu.\nTačni parovi su + 2 boda.\nPostoje dve runde ove igre.
+]]></string>
+    <string name="asocijacije_title">Asocijacije</string>
+    <string name="asocijacije_message"><![CDATA[Pogodite konačno polje na osnovu skrivenih pomoćnih polja.\nSvaka pogođena kolona je + 2 boda.\n+ 1 bod za svako neotvoreno skriveno polje.\nKonačno polje vredi 7 bodova.\nPostoje dve runde ove igre.
+]]></string>
+    <string name="skocko_title">Skočko</string>
+    <string name="skocko_message"><![CDATA[Pronađite pravu kombinaciju 4 znaka.\nPrvi i drugi pokušaj vrede + 20 poena.\nTreći i četvrti + 15 poena.\nPeti i šesti + 10 poena.\nPostoje dve runde ove igre.
+]]></string>
+    <string name="korakpokorak_title">Korak po korak</string>
+    <string name="korakpokorak_message"><![CDATA[Pronađite skriveni pojam.\nPrva skrivena pomoć je najteža, dok je poslednja najlakša.\nMaksimalan broj poena za ovu igru je + 20 poena.\n2 poena se gubi za svaku otvorenu skrivenu pomoć.\nPostoje dve runde ove igre.
+]]></string>
+    <string name="mojbroj_title">Moj broj</string>
+    <string name="mojbroj_message"><![CDATA[Pronađite traženi broj.\n+ 20 poena ako se pronađe tačan traženi broj\n+ 5 poena ako je izraz blizu traženom broju.\nPostoje dve runde ove igre.
+]]></string>
+    <string name="allow_tutorials">Dozvoli tutorijale</string>
+    <string name="allow">Dozvoli</string>
 
 
 

@@ -5,9 +5,11 @@ import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
+import android.util.Log
 import android.view.Gravity
 import android.widget.Button
 import android.widget.TextView
@@ -17,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.deksi.graduationquiz.R
 import com.deksi.graduationquiz.databinding.ActivityKoZnaZnaBinding
 import com.deksi.graduationquiz.slagalica.api.KoZnaZnaApiService
+import com.deksi.graduationquiz.slagalica.fragments.TutorialDialogFragment
 import com.deksi.graduationquiz.slagalica.model.KoZnaZnaModel
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -30,7 +33,7 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
-class KoZnaZna : AppCompatActivity() {
+class KoZnaZna : AppCompatActivity(), TutorialDialogFragment.CloseButtonClickListener {
 
     private lateinit var binding: ActivityKoZnaZnaBinding
     private var questions: List<KoZnaZnaModel> = emptyList()
@@ -111,7 +114,8 @@ class KoZnaZna : AppCompatActivity() {
 
                 getSavedLanguageBySharedPreferences()
 
-                val messageResourceId = resources.getIdentifier("koznazna_submit", "string", packageName)
+                val messageResourceId =
+                    resources.getIdentifier("koznazna_submit", "string", packageName)
                 val message = if (messageResourceId != 0) {
                     getString(messageResourceId)
                 } else {
@@ -195,7 +199,8 @@ class KoZnaZna : AppCompatActivity() {
             override fun onTick(millisUntilFinished: Long) {
                 progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
 
-                val messageResourceId = resources.getIdentifier("timer_score", "string", packageName)
+                val messageResourceId =
+                    resources.getIdentifier("timer_score", "string", packageName)
                 val messageScore = if (messageResourceId != 0) {
                     getString(messageResourceId)
                 } else {
@@ -236,14 +241,16 @@ class KoZnaZna : AppCompatActivity() {
     private fun onCreateProgressDialog() {
         getSavedLanguageBySharedPreferences()
 
-        val titleResourceId = resources.getIdentifier("koznazna_title_on_create", "string", packageName)
+        val titleResourceId =
+            resources.getIdentifier("koznazna_title_on_create", "string", packageName)
         val title = if (titleResourceId != 0) {
             getString(titleResourceId)
         } else {
             getString(R.string.koznazna_title_on_create)
         }
 
-        val messageResourceId = resources.getIdentifier("koznazna_message_on_create", "string", packageName)
+        val messageResourceId =
+            resources.getIdentifier("koznazna_message_on_create", "string", packageName)
         val message = if (messageResourceId != 0) {
             getString(messageResourceId)
         } else {
@@ -260,7 +267,8 @@ class KoZnaZna : AppCompatActivity() {
     private fun showProgressDialogOnTimeout() {
         getSavedLanguageBySharedPreferences()
 
-        val messageResourceId = resources.getIdentifier("koznazna_message_time_up", "string", packageName)
+        val messageResourceId =
+            resources.getIdentifier("koznazna_message_time_up", "string", packageName)
         val message = if (messageResourceId != 0) {
             getString(messageResourceId)
         } else {
@@ -279,7 +287,8 @@ class KoZnaZna : AppCompatActivity() {
     private fun showProgressDialogOnGameEnd() {
         getSavedLanguageBySharedPreferences()
 
-        val messageResourceId = resources.getIdentifier("koznazna_message_on_finish", "string", packageName)
+        val messageResourceId =
+            resources.getIdentifier("koznazna_message_on_finish", "string", packageName)
         val message = if (messageResourceId != 0) {
             getString(messageResourceId)
         } else {
@@ -325,6 +334,8 @@ class KoZnaZna : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE)
         val savedLanguage = sharedPreferences.getString("selectedLanguage", "en") ?: "en"
 
+        val username = intent.getStringExtra("username").toString()
+        val tutorialSharedPreferences = getSharedPreferences("TutorialPreferences", Context.MODE_PRIVATE)
 
         val trustAllCerts = arrayOf<TrustManager>(
             object : X509TrustManager {
@@ -373,10 +384,23 @@ class KoZnaZna : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     questions = response.body() ?: emptyList()
-                    displayData()
+                    val isTutorialShown = tutorialSharedPreferences.getBoolean(username, false)
+                    Log.d("KoZnaZna", "Is tutorial shown for $username: $isTutorialShown")
+                    if (!isTutorialShown) {
+                        showTutorialDialog(object :
+                            TutorialDialogFragment.CloseButtonClickListener {
+                            override fun onCloseButtonClicked() {
+                                initTimer()
+                                displayData()
+                                tutorialSharedPreferences.edit().putBoolean(username, true).apply()
+                            }
+                        }, username)
+                    } else {
+                        // Tutorial already shown for this email, proceed with existing logic
+                        initTimer()
+                        displayData()
+                    }
                     dismissProgressDialog()
-                    initTimer()
-
 
                 } else {
                     Toast.makeText(this@KoZnaZna, "Error fetching data", Toast.LENGTH_SHORT).show()
@@ -390,7 +414,146 @@ class KoZnaZna : AppCompatActivity() {
 
     }
 
-    private fun getSavedLanguageBySharedPreferences(){
+    override fun onCloseButtonClicked() {
+        initTimer()
+        displayData()
+    }
+
+    private fun showTutorialDialog(listener: TutorialDialogFragment.CloseButtonClickListener, username: String?) {
+        getSavedLanguageBySharedPreferences()
+
+        /** Welcome text **/
+        val welcomeTitleResourceId = resources.getIdentifier("welcome_title", "string", packageName)
+        val welcomeTitle = if (welcomeTitleResourceId != 0) {
+            getString(welcomeTitleResourceId)
+        } else {
+            getString(R.string.welcome_title)
+        }
+
+        val welcomeMessageResourceId =
+            resources.getIdentifier("welcome_message", "string", packageName)
+        val welcomeMessage = if (welcomeMessageResourceId != 0) {
+            getString(welcomeMessageResourceId)
+        } else {
+            getString(R.string.welcome_message)
+        }
+
+        /** KoZnaZna text **/
+        val koznaznaTitleResourceId =
+            resources.getIdentifier("koznazna_title", "string", packageName)
+        val koznaznaTitle = if (koznaznaTitleResourceId != 0) {
+            getString(koznaznaTitleResourceId)
+        } else {
+            getString(R.string.koznazna_title)
+        }
+
+        val koznaznaMessageResourceId =
+            resources.getIdentifier("koznazna_message", "string", packageName)
+        val koznaznaMessage = if (koznaznaMessageResourceId != 0) {
+            getString(koznaznaMessageResourceId)
+        } else {
+            getString(R.string.koznazna_message)
+        }
+
+        /** Spojnice text **/
+        val spojniceTitleResourceId =
+            resources.getIdentifier("spojnice_title", "string", packageName)
+        val spojniceTitle = if (spojniceTitleResourceId != 0) {
+            getString(spojniceTitleResourceId)
+        } else {
+            getString(R.string.spojnice_title)
+        }
+
+        val spojniceMessageResourceId =
+            resources.getIdentifier("spojnice_message", "string", packageName)
+        val spojniceMessage = if (spojniceMessageResourceId != 0) {
+            getString(spojniceMessageResourceId)
+        } else {
+            getString(R.string.spojnice_message)
+        }
+
+        /** Asocijacije text **/
+        val asocijacijeTitleResourceId =
+            resources.getIdentifier("asocijacije_title", "string", packageName)
+        val asocijacijeTitle = if (asocijacijeTitleResourceId != 0) {
+            getString(asocijacijeTitleResourceId)
+        } else {
+            getString(R.string.asocijacije_title)
+        }
+
+        val asocijacijeMessageResourceId =
+            resources.getIdentifier("asocijacije_message", "string", packageName)
+        val asocijacijeMessage = if (asocijacijeMessageResourceId != 0) {
+            getString(asocijacijeMessageResourceId)
+        } else {
+            getString(R.string.asocijacije_message)
+        }
+
+        /** Skocko text **/
+        val skockoTitleResourceId = resources.getIdentifier("skocko_title", "string", packageName)
+        val skockoTitle = if (skockoTitleResourceId != 0) {
+            getString(skockoTitleResourceId)
+        } else {
+            getString(R.string.skocko_title)
+        }
+
+        val skockoMessageResourceId =
+            resources.getIdentifier("skocko_message", "string", packageName)
+        val skockoMessage = if (skockoMessageResourceId != 0) {
+            getString(skockoMessageResourceId)
+        } else {
+            getString(R.string.skocko_message)
+        }
+
+        /** Korak po korak text **/
+        val korakpokorakTitleResourceId =
+            resources.getIdentifier("korakpokorak_title", "string", packageName)
+        val korakpokorakTitle = if (korakpokorakTitleResourceId != 0) {
+            getString(korakpokorakTitleResourceId)
+        } else {
+            getString(R.string.korakpokorak_title)
+        }
+
+        val korakpokorakMessageResourceId =
+            resources.getIdentifier("korakpokorak_message", "string", packageName)
+        val korakpokorakMessage = if (korakpokorakMessageResourceId != 0) {
+            getString(korakpokorakMessageResourceId)
+        } else {
+            getString(R.string.korakpokorak_message)
+        }
+
+        /** Moj broj text **/
+        val mojbrojTitleResourceId = resources.getIdentifier("mojbroj_title", "string", packageName)
+        val mojbrojTitle = if (mojbrojTitleResourceId != 0) {
+            getString(mojbrojTitleResourceId)
+        } else {
+            getString(R.string.mojbroj_title)
+        }
+
+        val mojbrojMessageResourceId =
+            resources.getIdentifier("mojbroj_message", "string", packageName)
+        val mojbrojMessage = if (mojbrojMessageResourceId != 0) {
+            getString(mojbrojMessageResourceId)
+        } else {
+            getString(R.string.mojbroj_message)
+        }
+
+        /** List of titles and messages **/
+        val textList = listOf(
+            Pair(welcomeTitle, welcomeMessage),
+            Pair(koznaznaTitle, koznaznaMessage),
+            Pair(spojniceTitle, spojniceMessage),
+            Pair(asocijacijeTitle, asocijacijeMessage),
+            Pair(skockoTitle, skockoMessage),
+            Pair(korakpokorakTitle, korakpokorakMessage),
+            Pair(mojbrojTitle, mojbrojMessage)
+
+        )
+        val dialogFragment = TutorialDialogFragment.newInstance(textList, listener, username ?: "")
+        dialogFragment.show(supportFragmentManager, "TutorialDialogFragment")
+    }
+
+    private fun getSavedLanguageBySharedPreferences() {
         val sharedPreferences = getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE)
         val savedLanguage = sharedPreferences.getString("selectedLanguage", "en") ?: "en"
     }
@@ -415,7 +578,8 @@ class KoZnaZna : AppCompatActivity() {
 
     override fun onBackPressed() {
 
-        val messageResourceId = resources.getIdentifier("on_back_pressed_game_message", "string", packageName)
+        val messageResourceId =
+            resources.getIdentifier("on_back_pressed_game_message", "string", packageName)
         val message = if (messageResourceId != 0) {
             getString(messageResourceId)
         } else {

@@ -12,7 +12,9 @@ import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.deksi.graduationquiz.R
+import com.deksi.graduationquiz.authentication.viewModel.UsernameViewModel
 import com.deksi.graduationquiz.databinding.FragmentHomeBinding
+import com.deksi.graduationquiz.home.HomeActivity
 
 import com.deksi.graduationquiz.slagalica.activities.KoZnaZna
 import com.deksi.graduationquiz.sudoku.Sudoku
@@ -21,6 +23,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var spinner: Spinner
+    private lateinit var usernameViewModel: UsernameViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,6 +37,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        usernameViewModel = ViewModelProvider(requireActivity()).get(UsernameViewModel::class.java)
 
         setUpListeners()
     }
@@ -41,8 +45,13 @@ class HomeFragment : Fragment() {
     private fun setUpListeners() {
         binding.buttonSlagalica.setOnClickListener {
             val intent = Intent(context, KoZnaZna::class.java)
+            val username: String = if (HomeActivity.loginType == "regular") {
+                usernameViewModel.regularUsername
+            } else {
+                usernameViewModel.guestUsername
+            }
+            intent.putExtra("username", username)
             startActivity(intent)
-
         }
         binding.buttonSudoku.setOnClickListener {
             showDifficultyDialog()

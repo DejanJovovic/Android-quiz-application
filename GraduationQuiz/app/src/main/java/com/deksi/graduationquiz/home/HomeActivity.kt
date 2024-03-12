@@ -17,8 +17,10 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.deksi.graduationquiz.R
 import com.deksi.graduationquiz.authentication.LogInActivity
+import com.deksi.graduationquiz.authentication.viewModel.UsernameViewModel
 import com.deksi.graduationquiz.databinding.ActivityHomeBinding
 import com.deksi.graduationquiz.home.fragments.LogoutConfirmationDialogFragment
 import com.deksi.graduationquiz.home.fragments.ProfileFragment
@@ -31,6 +33,7 @@ class HomeActivity : AppCompatActivity() {
     lateinit var username: String
     lateinit var email: String
     lateinit var password: String
+    private lateinit var usernameViewModel: UsernameViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +44,14 @@ class HomeActivity : AppCompatActivity() {
         setSupportActionBar(binding.appBarHome.toolbar)
         displayUsername()
         appBarSetup()
+
+        usernameViewModel = ViewModelProvider(this).get(UsernameViewModel::class.java)
+        val regularUsername = intent.getStringExtra("username").toString()
+        val sharedPrefs = getSharedPreferences("GuestPreferences", Context.MODE_PRIVATE)
+        val guestUsername = sharedPrefs.getString("guestUsername", "")
+
+        usernameViewModel.regularUsername = regularUsername
+        usernameViewModel.guestUsername = guestUsername ?: ""
 
 //        binding.appBarHome.fab.setOnClickListener { view ->
 //            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -96,7 +107,6 @@ class HomeActivity : AppCompatActivity() {
         email = intent.getStringExtra("email").toString()
         password = intent.getStringExtra("password").toString()
         displayUsername.text = username
-
     }
 
     private fun displayGuestUsernameOnNavHome(){
@@ -106,7 +116,6 @@ class HomeActivity : AppCompatActivity() {
         val sharedPrefs = getSharedPreferences("GuestPreferences", Context.MODE_PRIVATE)
         val guestUsername = sharedPrefs.getString("guestUsername", "")
         displayUsername.text = guestUsername
-
     }
 
     fun logout() {

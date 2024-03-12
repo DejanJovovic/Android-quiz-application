@@ -18,10 +18,13 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import com.deksi.graduationquiz.MainActivity
 import com.deksi.graduationquiz.R
 import com.deksi.graduationquiz.authentication.LogInActivity
+import com.deksi.graduationquiz.authentication.viewModel.UsernameViewModel
 import com.deksi.graduationquiz.databinding.FragmentSettingsBinding
+import com.deksi.graduationquiz.home.HomeActivity
 import java.util.Locale
 
 
@@ -30,6 +33,8 @@ class SettingsFragment : Fragment() {
     private lateinit var binding: FragmentSettingsBinding
     private lateinit var spinner: Spinner
     private var selectedLanguage: String? = null
+    private lateinit var usernameViewModel: UsernameViewModel
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,10 +47,46 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        usernameViewModel = ViewModelProvider(requireActivity()).get(UsernameViewModel::class.java)
+
 
         setOnClickListeners()
         setOnItemSelectedListener()
 
+    }
+
+    private fun setOnClickListeners() {
+        binding.buttonSaveChangedLanguage.setOnClickListener {
+            showConfirmationDialog()
+        }
+        binding.buttonAllowTutorials.setOnClickListener {
+            val username = getUsername()
+            resetTutorialPreferences(username)
+            Toast.makeText(requireContext(), "Tutorial preferences reset", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun resetTutorialPreferences(username: String) {
+        Log.d("SettingsFragment", "Resetting tutorial preferences for username: $username")
+        val sharedPreferences = requireContext().getSharedPreferences("TutorialPreferences", Context.MODE_PRIVATE)
+        val isRemoved = sharedPreferences.edit().remove(username).commit()
+        if (isRemoved) {
+            Log.d("SettingsFragment", "Tutorial preferences successfully reset for username: $username")
+        } else {
+            Log.e("SettingsFragment", "Failed to reset tutorial preferences for username: $username")
+        }
+        val isTutorialShownAfterReset = sharedPreferences.getBoolean(username, false)
+        Log.d("SettingsFragment", "Is tutorial shown after reset: $isTutorialShownAfterReset")
+    }
+
+    private fun getUsername(): String {
+        val username: String = if (HomeActivity.loginType == "regular") {
+            usernameViewModel.regularUsername
+        } else {
+            usernameViewModel.guestUsername
+        }
+        Log.d("SettingsFragment", "Username obtained: $username")
+        return username
     }
 
     private fun setOnItemSelectedListener() {
@@ -85,11 +126,7 @@ class SettingsFragment : Fragment() {
         }
     }
 
-    private fun setOnClickListeners() {
-        binding.buttonSaveChangedLanguage.setOnClickListener {
-            showConfirmationDialog()
-        }
-    }
+
 
     private fun setLanguage(languageCode: String) {
         saveLanguagePreference(languageCode)

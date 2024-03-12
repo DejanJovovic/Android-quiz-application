@@ -174,7 +174,28 @@
     <string name="forgot_password_email_required">Email is required</string>
     <string name="verification_code_incorrect">Incorrect verification code.%1$d attempts remaining.</string>
     <string name="forgot_password_email_wrong">The email you entered is invalid.Please try again.</string>
-
-
+    <string name="welcome_title">Welcome to Slagalica!</string>
+    <string name="welcome_message"><![CDATA[Please swipe through this tutorial for more info about individual games.
+]]></string>
+    <string name="koznazna_title">Ko zna zna</string>
+    <string name="koznazna_message"><![CDATA[Guess the correct answer out of the offered 4.\nCorrect answer is + 10 points.\nWrong answer is - 5 points.
+]]></string>
+    <string name="spojnice_title">Spojnice</string>
+    <string name="spojnice_message"><![CDATA[Guess the right pairs for the specific topic.\nCorrect pairs are + 2 points.\nThere are two rounds of this game.
+]]></string>
+    <string name="asocijacije_title">Asocijacije</string>
+    <string name="asocijacije_message"><![CDATA[Guess the final field based on the hidden hints.\nEvery guessed column is + 2 points.\n+ 1 point for every unopened hidden field.\nFinal field is worth 7 points.\nThere are two rounds of this game.
+]]></string>
+    <string name="skocko_title">Skocko</string>
+    <string name="skocko_message"><![CDATA[Find the right combination of 4 signs.\nFirst and second try are worth + 20 points.\nThird and forth + 15 points.\nFifth and sixth + 10 points.\nThere are two rounds of this game.
+]]></string>
+    <string name="korakpokorak_title">Korak po korak</string>
+    <string name="korakpokorak_message"><![CDATA[Find the hidden term.\nFirst hint is the hardest, while the last one is the easiest.\nMaximum points for this game are + 20 points.\nAnd - 2 is lost for every opened hint.\nThere are two rounds of this game.
+]]></string>
+    <string name="mojbroj_title">Moj broj</string>
+    <string name="mojbroj_message"><![CDATA[Find the required number.\n+ 20 points if the required number is found.\n+ 5 points if the expression is close to the required number.\nThere are two rounds of this game.
+]]></string>
+    <string name="allow_tutorials">Allow tutorials</string>
+    <string name="allow">Allow</string>
 
 </resources>

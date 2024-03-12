@@ -175,11 +175,29 @@
     <string name="forgot_password_email_required">Correo electronico es requerido</string>
     <string name="verification_code_incorrect">Código de verificación incorrecto.Restan %1$d intentos</string>
     <string name="forgot_password_email_wrong">El correo electrónico que ingresaste no es válido. Inténtalo nuevamente.</string>
-
-
-
-
-
+    <string name="welcome_title">Bienvenido a Slagalica!</string>
+    <string name="welcome_message"><![CDATA[Deslízate por este tutorial para obtener más información sobre juegos individuales.
+]]></string>
+    <string name="koznazna_title">Ko zna zna</string>
+    <string name="koznazna_message"><![CDATA[Adivina la respuesta correcta a partir de lo ofrecido 4.\nLa respuesta correcta es + 10 puntos.\nLa respuesta incorrecta es - 5 puntos.
+]]></string>
+    <string name="spojnice_title">Spojnice</string>
+    <string name="spojnice_message"><![CDATA[Adivina los pares correctos para el tema especifico.\nLos pares correctos son + 2 puntos.\nHay dos rondas de este juego.
+]]></string>
+    <string name="asocijacije_title">Asocijacije</string>
+    <string name="asocijacije_message"><![CDATA[Adivina el campo final basándose en las pistas ocultas.\nCada columna adivinada es + 2 puntos.\n+ 1 punto por cada campo oculto sin abrir.\nEl campo final vale 7 puntos.\nHay dos rondas de este juego.
+]]></string>
+    <string name="skocko_title">Skocko</string>
+    <string name="skocko_message"><![CDATA[Encuentra la combinación correcta de 4 signos.\nEl primer y segundo intento valen + 20 puntos.\nTercero y cuarto + 15 puntos.\nQuinto y sexto + 10 puntos.\nHay dos rondas de este juego.
+]]></string>
+    <string name="korakpokorak_title">Korak po korak</string>
+    <string name="korakpokorak_message"><![CDATA[Encuentra el término oculto.\nLa primera pista es la más difícil, mientras que la última es la más fácil.\nLos puntos máximos para este juego son + 20 puntos.\nY - 2 se pierde por cada pista abierta.\nHay dos rondas de este juego.
+]]></string>
+    <string name="mojbroj_title">Moj broj</string>
+    <string name="mojbroj_message"><![CDATA[Encuentre el número requerido.\n+ 20 puntos si se encuentra el número requerido.\n+ 5 puntos si la expresión se acerca al número requerido.\nHay dos rondas de este juego.
+]]></string>
+    <string name="allow_tutorials">Permitir tutoriales</string>
+    <string name="allow">Permitir</string>
 
 
 
