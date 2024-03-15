@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
+import android.text.Editable
 import android.util.Log
 import android.view.Gravity
 import android.widget.Button
@@ -101,9 +102,8 @@ class KorakPoKorak : AppCompatActivity() {
 
 
     private fun checkAndUpdateField(editText: EditText?, expectedValue: String) {
-        if (editText?.text.toString() == expectedValue) {
+        if (editText?.text.toString().trim().equals(expectedValue.trim(), ignoreCase = true)) {
             editText?.setBackgroundResource(R.drawable.round_green_reveal)
-
 
             // Calculate the score based on the hints revealed
             totalScore = when (currentHintIndex) {
@@ -118,7 +118,6 @@ class KorakPoKorak : AppCompatActivity() {
             }
 
 
-
             // Automatically show corresponding values when the user enters the right value
             when (editText) {
                 konacno -> {
@@ -130,15 +129,15 @@ class KorakPoKorak : AppCompatActivity() {
                         korakPoKorakResponse?.hint5,
                         korakPoKorakResponse?.hint6,
                         korakPoKorakResponse?.hint7,
+                        korakPoKorakResponse?.konacno
                     )
                 }
             }
-            if(currentRound < 3){
+            if (currentRound < 3) {
                 stopTimer()
                 showProgressDialogOnNextRound()
                 moveToNextActivityWithDelay()
-            }
-            else {
+            } else {
                 stopTimer()
                 showProgressDialogOnGameFinish()
                 moveToNextActivityWithDelay()
@@ -149,7 +148,7 @@ class KorakPoKorak : AppCompatActivity() {
     }
 
     private fun showValues(vararg values: String?) {
-        if (values.size >= 7) {
+        if (values.size >= 8) {
             // Set text on corresponding buttons
             binding.buttonHint1.text = values[0]
             binding.buttonHint2.text = values[1]
@@ -158,11 +157,29 @@ class KorakPoKorak : AppCompatActivity() {
             binding.buttonHint5.text = values[4]
             binding.buttonHint6.text = values[5]
             binding.buttonHint7.text = values[6]
+            binding.editTextKonacnoKorakPoKorak.text = Editable.Factory.getInstance().newEditable(values[7])
 
         } else {
             Log.e("showValues", "Not enough non-null values provided")
         }
 
+    }
+
+    private fun displayValuesOnTimeout() {
+        if (korakPoKorakResponse != null) {
+            showValues(
+                korakPoKorakResponse?.hint1,
+                korakPoKorakResponse?.hint2,
+                korakPoKorakResponse?.hint3,
+                korakPoKorakResponse?.hint4,
+                korakPoKorakResponse?.hint5,
+                korakPoKorakResponse?.hint6,
+                korakPoKorakResponse?.hint7,
+                korakPoKorakResponse?.konacno
+            )
+        } else {
+            Log.e("displayValuesOnTimeout", "korakPoKorakResponse is null")
+        }
     }
 
     private fun updateKorakPoKorak() {
@@ -194,7 +211,8 @@ class KorakPoKorak : AppCompatActivity() {
             override fun onTick(millisUntilFinished: Long) {
                 progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
 
-                val messageResourceId = resources.getIdentifier("timer_score", "string", packageName)
+                val messageResourceId =
+                    resources.getIdentifier("timer_score", "string", packageName)
                 val messageScore = if (messageResourceId != 0) {
                     getString(messageResourceId)
                 } else {
@@ -223,14 +241,16 @@ class KorakPoKorak : AppCompatActivity() {
     private fun onCreateProgressDialog() {
         getSavedLanguageBySharedPreferences()
 
-        val titleResourceId = resources.getIdentifier("korakpokorak_title_on_create", "string", packageName)
+        val titleResourceId =
+            resources.getIdentifier("korakpokorak_title_on_create", "string", packageName)
         val title = if (titleResourceId != 0) {
             getString(titleResourceId)
         } else {
             getString(R.string.korakpokorak_title_on_create)
         }
 
-        val messageResourceId = resources.getIdentifier("korakpokorak_message_on_create", "string", packageName)
+        val messageResourceId =
+            resources.getIdentifier("korakpokorak_message_on_create", "string", packageName)
         val message = if (messageResourceId != 0) {
             getString(messageResourceId)
         } else {
@@ -247,7 +267,8 @@ class KorakPoKorak : AppCompatActivity() {
     private fun showProgressDialogOnTimeout() {
         getSavedLanguageBySharedPreferences()
 
-        val messageResourceId = resources.getIdentifier("korakpokorak_message_time_up", "string", packageName)
+        val messageResourceId =
+            resources.getIdentifier("korakpokorak_message_time_up", "string", packageName)
         val message = if (messageResourceId != 0) {
             getString(messageResourceId)
         } else {
@@ -267,7 +288,8 @@ class KorakPoKorak : AppCompatActivity() {
     private fun showProgressDialogOnGameFinish() {
         getSavedLanguageBySharedPreferences()
 
-        val messageResourceId = resources.getIdentifier("korakpokorak_message_on_finish", "string", packageName)
+        val messageResourceId =
+            resources.getIdentifier("korakpokorak_message_on_finish", "string", packageName)
         val message = if (messageResourceId != 0) {
             getString(messageResourceId)
         } else {
@@ -286,7 +308,8 @@ class KorakPoKorak : AppCompatActivity() {
     private fun showProgressDialogOnNextRound() {
         getSavedLanguageBySharedPreferences()
 
-        val messageResourceId = resources.getIdentifier("korakpokorak_message_on_round_starting", "string", packageName)
+        val messageResourceId =
+            resources.getIdentifier("korakpokorak_message_on_round_starting", "string", packageName)
         val message = if (messageResourceId != 0) {
             getString(messageResourceId, currentRound)
         } else {
@@ -307,14 +330,12 @@ class KorakPoKorak : AppCompatActivity() {
         val handler = Handler()
 
         handler.postDelayed({
-            if(currentRound < 3) {
+            if (currentRound < 3) {
                 saveTotalScoreToLocalPreferences()
                 onSaveInstanceState(Bundle())
                 recreate()
                 clearKonacnoField()
-            }
-
-            else {
+            } else {
                 saveTotalScoreToLocalPreferences()
                 val intent = Intent(this@KorakPoKorak, MojBroj::class.java)
                 startActivity(intent)
@@ -352,22 +373,6 @@ class KorakPoKorak : AppCompatActivity() {
         konacno?.text?.clear()
     }
 
-    private fun displayValuesOnTimeout() {
-        if (korakPoKorakResponse != null) {
-            showValues(
-                korakPoKorakResponse?.hint1,
-                korakPoKorakResponse?.hint2,
-                korakPoKorakResponse?.hint3,
-                korakPoKorakResponse?.hint4,
-                korakPoKorakResponse?.hint5,
-                korakPoKorakResponse?.hint6,
-                korakPoKorakResponse?.hint7
-            )
-        } else {
-            Log.e("displayValuesOnTimeout", "korakPoKorakResponse is null")
-        }
-    }
-
 
     private fun getRoundData() {
 
@@ -400,7 +405,7 @@ class KorakPoKorak : AppCompatActivity() {
         val sslSocketFactory = sslContext.socketFactory
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.228.66:8080/api/korakPoKorak/")
+            .baseUrl("https://192.168.134.66:8080/api/korakPoKorak/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -438,7 +443,7 @@ class KorakPoKorak : AppCompatActivity() {
 
     }
 
-    private fun getSavedLanguageBySharedPreferences(){
+    private fun getSavedLanguageBySharedPreferences() {
         val sharedPreferences = getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE)
         val savedLanguage = sharedPreferences.getString("selectedLanguage", "en") ?: "en"
     }
@@ -462,7 +467,8 @@ class KorakPoKorak : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        val messageResourceId = resources.getIdentifier("on_back_pressed_game_message", "string", packageName)
+        val messageResourceId =
+            resources.getIdentifier("on_back_pressed_game_message", "string", packageName)
         val message = if (messageResourceId != 0) {
             getString(messageResourceId)
         } else {

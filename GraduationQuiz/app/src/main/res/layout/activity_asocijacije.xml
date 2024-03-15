@@ -99,7 +99,8 @@
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textColorHint="@color/white" />
+                android:textColorHint="@color/white"
+                android:inputType="textCapWords"/>
 
         </LinearLayout>
 
@@ -172,7 +173,8 @@
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textColorHint="@color/white" />
+                android:textColorHint="@color/white"
+                android:inputType="textCapWords"/>
 
         </LinearLayout>
     </LinearLayout>
@@ -189,7 +191,8 @@
         android:textColorHint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linear_layoutAB" />
+        app:layout_constraintTop_toBottomOf="@+id/linear_layoutAB"
+        android:inputType="textCapWords"/>
 
 
     <LinearLayout
@@ -217,7 +220,8 @@
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textColorHint="@color/white" />
+                android:textColorHint="@color/white"
+                android:inputType="textCapWords"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_C1"
@@ -289,7 +293,8 @@
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textColorHint="@color/white">
+                android:textColorHint="@color/white"
+                android:inputType="textCapWords">
 
             </EditText>
 

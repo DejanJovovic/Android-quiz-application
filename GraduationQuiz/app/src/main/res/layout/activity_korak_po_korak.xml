@@ -232,6 +232,7 @@
         android:background="@color/edit_text_asosijacije"
         android:hint="@string/konacno_korak_po_korak"
         android:textAlignment="center"
+        android:inputType="textCapWords"
         android:textColor="@color/white"
         android:textColorHint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"

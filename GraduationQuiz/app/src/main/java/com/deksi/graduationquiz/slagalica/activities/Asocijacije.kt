@@ -174,7 +174,7 @@ class Asocijacije : AppCompatActivity() {
     }
 
     private fun checkAndUpdateField(editText: EditText?, expectedValue: String) {
-        if (editText?.text.toString().trim() == expectedValue.trim()) {
+        if (editText?.text.toString().trim().equals(expectedValue.trim(), ignoreCase = true)) {
             // Check if the editText is already revealed (has the green background)
             if (editText == konacno && !konacnoGuessed ||
                 editText == konacnoA && !konacnoAGuessed ||
@@ -660,7 +660,7 @@ class Asocijacije : AppCompatActivity() {
         val sslSocketFactory = sslContext.socketFactory
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.228.66:8080/api/slagalica/")
+            .baseUrl("https://192.168.134.66:8080/api/slagalica/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()

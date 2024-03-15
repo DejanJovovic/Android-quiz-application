@@ -49,6 +49,7 @@ dependencies {
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation ("androidx.preference:preference:1.2.0")
     implementation ("org.mozilla:rhino:1.7.14")
+    implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
 
 
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")

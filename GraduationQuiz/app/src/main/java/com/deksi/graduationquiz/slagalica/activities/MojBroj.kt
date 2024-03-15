@@ -47,7 +47,6 @@ class MojBroj : AppCompatActivity() {
         }
 
         init()
-        initTimer()
         setUpFinalResultButtons()
         setUpActionBar()
 
@@ -241,6 +240,7 @@ class MojBroj : AppCompatActivity() {
             }
 
             6 -> {
+                initTimer()
                 enableButtons()
                 generated = true
                 secondMediumDigit.text = number
