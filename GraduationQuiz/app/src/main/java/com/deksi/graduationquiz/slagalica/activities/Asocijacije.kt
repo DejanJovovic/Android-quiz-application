@@ -18,6 +18,7 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.deksi.graduationquiz.R
+import com.deksi.graduationquiz.authentication.mediaPlayer.MediaPlayerManager
 import com.deksi.graduationquiz.databinding.ActivityAsocijacijeBinding
 import com.deksi.graduationquiz.slagalica.api.AsocijacijeApiService
 import com.deksi.graduationquiz.slagalica.model.AsocijacijeModel
@@ -660,7 +661,7 @@ class Asocijacije : AppCompatActivity() {
         val sslSocketFactory = sslContext.socketFactory
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.134.66:8080/api/slagalica/")
+            .baseUrl("https://192.168.1.9:8080/api/slagalica/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -761,6 +762,10 @@ class Asocijacije : AppCompatActivity() {
         // Save the state
         outState.putInt("currentRound", currentRound)
         outState.putInt("totalScore", totalScore)
+    }
+    override fun onResume() {
+        super.onResume()
+        MediaPlayerManager.start()
     }
 
 }

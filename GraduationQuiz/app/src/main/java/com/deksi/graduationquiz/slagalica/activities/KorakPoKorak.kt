@@ -17,6 +17,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import com.deksi.graduationquiz.R
+import com.deksi.graduationquiz.authentication.mediaPlayer.MediaPlayerManager
 import com.deksi.graduationquiz.databinding.ActivityKorakPoKorakBinding
 import com.deksi.graduationquiz.slagalica.api.KorakPoKorakApiService
 import com.deksi.graduationquiz.slagalica.model.KorakPoKorakModel
@@ -405,7 +406,7 @@ class KorakPoKorak : AppCompatActivity() {
         val sslSocketFactory = sslContext.socketFactory
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.134.66:8080/api/korakPoKorak/")
+            .baseUrl("https://192.168.1.9:8080/api/korakPoKorak/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -507,5 +508,9 @@ class KorakPoKorak : AppCompatActivity() {
         // Save the state
         outState.putInt("currentRound", currentRound)
         outState.putInt("totalScore", totalScore)
+    }
+    override fun onResume() {
+        super.onResume()
+        MediaPlayerManager.start()
     }
 }

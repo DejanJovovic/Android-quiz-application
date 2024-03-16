@@ -6,6 +6,7 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -23,6 +24,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.deksi.graduationquiz.R
 import com.deksi.graduationquiz.authentication.LogInActivity
+import com.deksi.graduationquiz.authentication.mediaPlayer.MediaPlayerManager
 import com.deksi.graduationquiz.databinding.ActivitySudokuBinding
 import com.deksi.graduationquiz.home.HomeActivity
 import com.deksi.graduationquiz.slagalica.activities.Skocko
@@ -41,6 +43,8 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
     private var progressDialog: ProgressDialog? = null
     private var countDownTimer: CountDownTimer? = null
     private val totalTime: Long = 5000
+    private var score  = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +56,7 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
         getDifficultyAndUpdateCells()
         registerBoardViewListener()
         forEachIndexButtons()
+        startBackgroundMusic()
 
     }
 
@@ -94,9 +99,19 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
     }
 
     override fun onRemainingLivesChanged(remainingLives: Int) {
-        binding.textViewSudokuLives.text = "Remaining lives left: $remainingLives"
+
+        val remainingLivesResourceId = resources.getIdentifier("remaining_lives_left_3", "string", packageName)
+        val remainingLivesLeft = if (remainingLivesResourceId != 0) {
+            getString(remainingLivesResourceId)
+        } else {
+            getString(R.string.remaining_lives_left_3)
+        }
+
+        // there is a bug here. It doesn't display 3 at the start, but it does decrease when the mistake is made
+        binding.textViewSudokuLives.text = "$remainingLivesLeft: $remainingLives"
         
         if (remainingLives == 0) {
+            score = 0
             stopTimer()
             showProgressDialogOnGameFinish()
             moveToNextActivityWithDelay()
@@ -104,6 +119,7 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
     }
 
     override fun onGameFinished() {
+        score =+ 20
         stopTimer()
         showProgressDialogOnGameFinished()
         moveToNextActivityWithDelay()
@@ -130,8 +146,16 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
         countDownTimer = object : CountDownTimer(totalTime, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
+
+                val messageResourceId = resources.getIdentifier("timer_score", "string", packageName)
+                val messageScore = if (messageResourceId != 0) {
+                    getString(messageResourceId)
+                } else {
+                    getString(R.string.timer_score)
+                }
+
                 val secondsRemaining = millisUntilFinished / 1000
-                val message = "$secondsRemaining     Score: "
+                val message = "$secondsRemaining     $messageScore: $score"
                 progressDialog?.setMessage(message)
 
             }
@@ -321,8 +345,25 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
 
     }
 
+    private fun startBackgroundMusic() {
+        MediaPlayerManager.initMediaPlayer(this, R.raw.sample_music)
+
+        MediaPlayerManager.start()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         timeLeft?.cancel()
+        MediaPlayerManager.release()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        MediaPlayerManager.pause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        MediaPlayerManager.start()
     }
 }

@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import com.deksi.graduationquiz.R
+import com.deksi.graduationquiz.authentication.mediaPlayer.MediaPlayerManager
 import com.deksi.graduationquiz.databinding.ActivityMojBrojBinding
 import com.deksi.graduationquiz.home.HomeActivity
 import org.mozilla.javascript.Context
@@ -49,7 +50,6 @@ class MojBroj : AppCompatActivity() {
         init()
         setUpFinalResultButtons()
         setUpActionBar()
-
     }
 
     private fun init() {
@@ -475,6 +475,7 @@ class MojBroj : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         timeLeft?.cancel()
+        MediaPlayerManager.release()
     }
 
     override fun onBackPressed() {
@@ -517,6 +518,11 @@ class MojBroj : AppCompatActivity() {
         // Save the state
         outState.putInt("currentRound", currentRound)
         outState.putInt("totalScore", totalScore)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        MediaPlayerManager.start()
     }
 
 }

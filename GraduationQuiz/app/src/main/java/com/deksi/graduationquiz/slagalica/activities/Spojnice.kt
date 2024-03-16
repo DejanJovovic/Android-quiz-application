@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import com.deksi.graduationquiz.R
+import com.deksi.graduationquiz.authentication.mediaPlayer.MediaPlayerManager
 import com.deksi.graduationquiz.databinding.ActivitySpojniceBinding
 import com.deksi.graduationquiz.slagalica.api.SpojniceApiService
 import com.deksi.graduationquiz.slagalica.model.SpojniceModel
@@ -430,7 +431,7 @@ class Spojnice : AppCompatActivity() {
 
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.134.66:8080/api/spojnice/")
+            .baseUrl("https://192.168.1.9:8080/api/spojnice/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -530,4 +531,11 @@ class Spojnice : AppCompatActivity() {
         outState.putInt("currentRound", currentRound)
         outState.putInt("totalScore", totalScore)
     }
+
+
+    override fun onResume() {
+        super.onResume()
+        MediaPlayerManager.start()
+    }
+
 }

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
 
     <application
         android:allowBackup="true"
@@ -21,7 +22,8 @@
             android:exported="false" />
         <activity
             android:name=".slagalica.activities.Results"
-            android:exported="false" />
+            android:exported="false"
+            android:label=""/>
         <activity
             android:name=".sudoku.Sudoku"
             android:exported="false" />
