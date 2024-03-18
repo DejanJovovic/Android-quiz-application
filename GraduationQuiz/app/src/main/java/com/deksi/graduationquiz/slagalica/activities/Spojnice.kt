@@ -516,6 +516,7 @@ class Spojnice : AppCompatActivity() {
             .setMessage(message)
             .setPositiveButton(yes) { _, _ ->
                 super.onBackPressed()
+                MediaPlayerManager.release()
                 clearTotalScoreFromPreferences()
             }
             .setNegativeButton(no) { _, _ ->

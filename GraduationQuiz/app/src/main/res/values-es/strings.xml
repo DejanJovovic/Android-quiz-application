@@ -95,7 +95,7 @@
     <string name="finish">Finalizar</string>
     <string name="sudoku">Sudoku</string>
     <string name="slagalica">Slagalica</string>
-    <string name="remaining_lives_left_3">Quedan vidas restantes</string>
+    <string name="remaining_lives_left_3">Quedan vidas restantes: 3</string>
     <string name="your_total_score_is">Tu puntuación total es:</string>
     <string name="you_have_successfully_completed_the_quiz">Has completado con éxito el cuestionario!</string>
     <string name="back_to_home">De vuelta a casa</string>
@@ -198,6 +198,8 @@
 ]]></string>
     <string name="allow_tutorials">Permitir tutoriales</string>
     <string name="allow">Permitir</string>
+    <string name="remaining_lives_left">Quedan vidas restantes</string>
+
 
 
 

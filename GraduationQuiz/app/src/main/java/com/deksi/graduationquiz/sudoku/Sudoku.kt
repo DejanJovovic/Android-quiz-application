@@ -45,7 +45,6 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
     private val totalTime: Long = 5000
     private var score  = 0
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySudokuBinding.inflate(layoutInflater)
@@ -57,6 +56,7 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
         registerBoardViewListener()
         forEachIndexButtons()
         startBackgroundMusic()
+
 
     }
 
@@ -100,14 +100,13 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
 
     override fun onRemainingLivesChanged(remainingLives: Int) {
 
-        val remainingLivesResourceId = resources.getIdentifier("remaining_lives_left_3", "string", packageName)
+        val remainingLivesResourceId = resources.getIdentifier("remaining_lives_left", "string", packageName)
         val remainingLivesLeft = if (remainingLivesResourceId != 0) {
             getString(remainingLivesResourceId)
         } else {
-            getString(R.string.remaining_lives_left_3)
+            getString(R.string.remaining_lives_left)
         }
 
-        // there is a bug here. It doesn't display 3 at the start, but it does decrease when the mistake is made
         binding.textViewSudokuLives.text = "$remainingLivesLeft: $remainingLives"
         
         if (remainingLives == 0) {
@@ -289,6 +288,7 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
         builder.setMessage(message)
         builder.setPositiveButton(yes) { _, _ ->
             onBackPressed()
+            MediaPlayerManager.release()
             finish()
         }
         builder.setNegativeButton(no) { dialog, _ ->

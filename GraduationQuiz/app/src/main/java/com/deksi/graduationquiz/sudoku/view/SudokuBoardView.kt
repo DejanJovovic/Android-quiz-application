@@ -52,7 +52,7 @@ class SudokuBoardView(context: Context, atrributeSet: AttributeSet) : View(conte
     private val textPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
         color = Color.BLACK
-        textSize = 54F
+        textSize = 62F
     }
 
 
@@ -135,13 +135,16 @@ class SudokuBoardView(context: Context, atrributeSet: AttributeSet) : View(conte
 
                 val textBounds = Rect()
                 textPaint.getTextBounds(valueString, 0, valueString.length, textBounds)
-                val textWidth = textPaint.measureText(valueString)
+                val textWidth = textBounds.width()
                 val textHeight = textBounds.height()
+
+                val x = (col * cellSizePixels) + cellSizePixels / 2 - textWidth / 2
+                val y = (row * cellSizePixels) + cellSizePixels / 2 + textHeight / 2
 
                 canvas.drawText(
                     valueString,
-                    (col * cellSizePixels) + cellSizePixels / 2 - textWidth / 2,
-                    (row * cellSizePixels) + cellSizePixels / 2 - textHeight / 2,
+                    x,
+                    y,
                     textPaint
                 )
             }
