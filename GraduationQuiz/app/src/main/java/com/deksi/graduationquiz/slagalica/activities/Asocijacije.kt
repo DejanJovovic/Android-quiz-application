@@ -18,7 +18,7 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.deksi.graduationquiz.R
-import com.deksi.graduationquiz.authentication.mediaPlayer.MediaPlayerManager
+import com.deksi.graduationquiz.mediaPlayer.MediaPlayerManager
 import com.deksi.graduationquiz.databinding.ActivityAsocijacijeBinding
 import com.deksi.graduationquiz.slagalica.api.AsocijacijeApiService
 import com.deksi.graduationquiz.slagalica.model.AsocijacijeModel

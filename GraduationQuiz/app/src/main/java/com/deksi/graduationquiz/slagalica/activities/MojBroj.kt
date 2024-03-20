@@ -14,7 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import com.deksi.graduationquiz.R
-import com.deksi.graduationquiz.authentication.mediaPlayer.MediaPlayerManager
+import com.deksi.graduationquiz.mediaPlayer.MediaPlayerManager
 import com.deksi.graduationquiz.databinding.ActivityMojBrojBinding
 import com.deksi.graduationquiz.home.HomeActivity
 import org.mozilla.javascript.Context

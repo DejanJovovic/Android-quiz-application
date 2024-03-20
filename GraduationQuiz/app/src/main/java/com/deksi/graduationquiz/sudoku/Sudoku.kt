@@ -24,7 +24,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.deksi.graduationquiz.R
 import com.deksi.graduationquiz.authentication.LogInActivity
-import com.deksi.graduationquiz.authentication.mediaPlayer.MediaPlayerManager
+import com.deksi.graduationquiz.mediaPlayer.MediaPlayerManager
 import com.deksi.graduationquiz.databinding.ActivitySudokuBinding
 import com.deksi.graduationquiz.home.HomeActivity
 import com.deksi.graduationquiz.slagalica.activities.Skocko

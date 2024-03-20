@@ -1,4 +1,4 @@
-package com.deksi.graduationquiz.authentication.mediaPlayer
+package com.deksi.graduationquiz.mediaPlayer
 
 import android.content.Context
 import android.media.MediaPlayer

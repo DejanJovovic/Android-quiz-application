@@ -17,7 +17,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import com.deksi.graduationquiz.R
-import com.deksi.graduationquiz.authentication.mediaPlayer.MediaPlayerManager
+import com.deksi.graduationquiz.mediaPlayer.MediaPlayerManager
 import com.deksi.graduationquiz.databinding.ActivityKorakPoKorakBinding
 import com.deksi.graduationquiz.slagalica.api.KorakPoKorakApiService
 import com.deksi.graduationquiz.slagalica.model.KorakPoKorakModel

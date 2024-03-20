@@ -71,6 +71,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/spojnice/get/{id}").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/koznazna/random-rounds").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/koznazna/get/{id}").permitAll()
+                .antMatchers("/websocket").permitAll()
                 .anyRequest().authenticated();
 
         httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
