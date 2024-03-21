@@ -39,11 +39,11 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
 
     private lateinit var viewModel: SudokuViewModel
     private lateinit var binding: ActivitySudokuBinding
-    private var timeLeft: CountDownTimer? = null
+    private var time: CountDownTimer? = null
     private var progressDialog: ProgressDialog? = null
     private var countDownTimer: CountDownTimer? = null
-    private val totalTime: Long = 5000
-    private var score  = 0
+    private val countDownTime: Long = 5000
+    private var elapsedTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,7 +110,6 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
         binding.textViewSudokuLives.text = "$remainingLivesLeft: $remainingLives"
         
         if (remainingLives == 0) {
-            score = 0
             stopTimer()
             showProgressDialogOnGameFinish()
             moveToNextActivityWithDelay()
@@ -118,7 +117,6 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
     }
 
     override fun onGameFinished() {
-        score =+ 20
         stopTimer()
         showProgressDialogOnGameFinished()
         moveToNextActivityWithDelay()
@@ -127,34 +125,41 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
 
 
     private fun initTimer() {
-        val timerText = binding.textViewTimeLeft
-        timeLeft = object : CountDownTimer(120000, 1000) {
+        val timerText = binding.textViewTime
+        time = object : CountDownTimer(Long.MAX_VALUE, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                timerText.text = (millisUntilFinished / 1000).toString()
+                elapsedTime += 1000
+                timerText.text = (elapsedTime / 1000).toString()
             }
 
             override fun onFinish() {
-                showProgressDialogOnTimeout()
-                moveToNextActivityWithDelay()
             }
         }
-        (timeLeft as CountDownTimer).start()
+        (time as CountDownTimer).start()
     }
 
     private fun startTimerProgressDialog() {
-        countDownTimer = object : CountDownTimer(totalTime, 1000) {
+        countDownTimer = object : CountDownTimer(countDownTime, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                progressDialog?.progress = (totalTime - millisUntilFinished).toInt()
+                progressDialog?.progress = (countDownTime - millisUntilFinished).toInt()
 
-                val messageResourceId = resources.getIdentifier("timer_score", "string", packageName)
-                val messageScore = if (messageResourceId != 0) {
+                val messageResourceId = resources.getIdentifier("timer_time", "string", packageName)
+                val messageTime = if (messageResourceId != 0) {
                     getString(messageResourceId)
                 } else {
-                    getString(R.string.timer_score)
+                    getString(R.string.timer_time)
                 }
 
+                val messageSecondsResourceId = resources.getIdentifier("timer_seconds", "string", packageName)
+                val messageSeconds = if (messageSecondsResourceId != 0) {
+                    getString(messageSecondsResourceId)
+                } else {
+                    getString(R.string.timer_seconds)
+                }
+
+                val totalTime = elapsedTime / 1000
                 val secondsRemaining = millisUntilFinished / 1000
-                val message = "$secondsRemaining     $messageScore: $score"
+                val message = "$secondsRemaining     $messageTime: $totalTime $messageSeconds"
                 progressDialog?.setMessage(message)
 
             }
@@ -168,7 +173,7 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
     }
 
     private fun stopTimer() {
-        timeLeft?.cancel()
+        time?.cancel()
     }
 
 
@@ -185,25 +190,6 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
         progressDialog?.dismiss()
     }
 
-    private fun showProgressDialogOnTimeout() {
-        getSavedLanguageBySharedPreferences()
-
-        val messageResourceId = resources.getIdentifier("sudoku_message_on_timeout", "string", packageName)
-        val message = if (messageResourceId != 0) {
-            getString(messageResourceId)
-        } else {
-            getString(R.string.sudoku_message_on_timeout)
-        }
-
-        progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle(message)
-        progressDialog!!.setCancelable(false)
-        progressDialog!!.max = totalTime.toInt()
-        progressDialog!!.show()
-
-        startTimerProgressDialog()
-    }
-
     private fun showProgressDialogOnGameFinish() {
         getSavedLanguageBySharedPreferences()
 
@@ -217,7 +203,7 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
         progressDialog = ProgressDialog(this)
         progressDialog!!.setTitle(message)
         progressDialog!!.setCancelable(false)
-        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.max = countDownTime.toInt()
         progressDialog!!.show()
 
         startTimerProgressDialog()
@@ -236,7 +222,7 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
         progressDialog = ProgressDialog(this)
         progressDialog!!.setTitle(message)
         progressDialog!!.setCancelable(false)
-        progressDialog!!.max = totalTime.toInt()
+        progressDialog!!.max = countDownTime.toInt()
         progressDialog!!.show()
 
         startTimerProgressDialog()
@@ -353,7 +339,7 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
 
     override fun onDestroy() {
         super.onDestroy()
-        timeLeft?.cancel()
+        time?.cancel()
         MediaPlayerManager.release()
     }
 

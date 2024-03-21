@@ -421,6 +421,7 @@ class MojBroj : AppCompatActivity() {
                 onSaveInstanceState(Bundle())
                 recreate()
             } else {
+                MediaPlayerManager.release()
                 saveTotalScoreToLocalPreferences()
                 val intent = Intent(this@MojBroj, Results::class.java)
                 startActivity(intent)
@@ -475,7 +476,6 @@ class MojBroj : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         timeLeft?.cancel()
-        MediaPlayerManager.release()
     }
 
     override fun onBackPressed() {

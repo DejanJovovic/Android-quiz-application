@@ -1,6 +1,7 @@
 package com.deksi.graduationquiz.slagalica.activities
 
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Context
@@ -18,8 +19,8 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import com.deksi.graduationquiz.R
-import com.deksi.graduationquiz.mediaPlayer.MediaPlayerManager
 import com.deksi.graduationquiz.databinding.ActivityKoZnaZnaBinding
+import com.deksi.graduationquiz.mediaPlayer.MediaPlayerManager
 import com.deksi.graduationquiz.slagalica.api.KoZnaZnaApiService
 import com.deksi.graduationquiz.slagalica.fragments.TutorialDialogFragment
 import com.deksi.graduationquiz.slagalica.model.KoZnaZnaModel
@@ -366,7 +367,7 @@ class KoZnaZna : AppCompatActivity(), TutorialDialogFragment.CloseButtonClickLis
         val sslSocketFactory = sslContext.socketFactory
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.134.66:8080/api/koznazna/")
+            .baseUrl("https://192.168.1.9:8080/api/koznazna/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()

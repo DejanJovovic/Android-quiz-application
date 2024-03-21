@@ -100,7 +100,7 @@ class HomeFragment : Fragment() {
             .hostnameVerifier { hostname, session -> true } // Allow all hostnames
             .build()
 
-        webSocketManager.connect(okHttpClient,"https://192.168.228.66:8080/websocket")
+        webSocketManager.connect(okHttpClient,"https://192.168.1.9:8080/websocket")
     }
 
     private fun setUpListeners() {

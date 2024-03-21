@@ -14,7 +14,7 @@
         android:layout_marginBottom="48dp">
 
         <TextView
-            android:id="@+id/text_view_time_left"
+            android:id="@+id/text_view_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"

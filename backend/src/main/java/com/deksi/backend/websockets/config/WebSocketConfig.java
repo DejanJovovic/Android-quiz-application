@@ -1,7 +1,7 @@
-package com.deksi.backend.config;
+package com.deksi.backend.websockets.config;
 
+import com.deksi.backend.websockets.handlers.WebSocketHandler;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.*;
 
 @Configuration

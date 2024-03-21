@@ -168,7 +168,9 @@
     <string name="skocko_message_on_round_starting">La ronda %1$d está comenzando..</string>
     <string name="results_message">Gracias por jugar Slagalica!</string>
     <string name="koznazna_submit">Entregar</string>
+    <string name="timer_time">Tiempo total</string>
     <string name="timer_score">Puntaje</string>
+    <string name="timer_seconds">segundos</string>
     <string name="timer_total_score">Tu puntuación total es</string>
     <string name="on_back_pressed_game_message">¿Estás seguro de que quieres abandonar el juego?</string>
     <string name="on_back_pressed_message">Estás seguro que quieres irte?</string>
