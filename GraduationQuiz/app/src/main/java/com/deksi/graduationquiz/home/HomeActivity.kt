@@ -53,11 +53,6 @@ class HomeActivity : AppCompatActivity() {
         usernameViewModel.regularUsername = regularUsername
         usernameViewModel.guestUsername = guestUsername ?: ""
 
-//        binding.appBarHome.fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show()
-//        }
-
     }
 
     //i need to check on companion object. What is it etc..
@@ -71,17 +66,11 @@ class HomeActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_home)
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_profile, R.id.nav_logout
+                R.id.nav_home, R.id.nav_profile, R.id.nav_logout, R.id.nav_ranking_list
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.home, menu)
-        return true
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -161,7 +150,6 @@ class HomeActivity : AppCompatActivity() {
                 finish()
             }
             .setNegativeButton(no) { _, _ ->
-                // Do nothing
             }
             .show()
 

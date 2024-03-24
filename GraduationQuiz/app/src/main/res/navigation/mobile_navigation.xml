@@ -28,4 +28,10 @@
         android:name="com.deksi.graduationquiz.home.fragments.LogoutConfirmationDialogFragment"
         android:label="" />
 
+    <fragment
+        android:id="@+id/nav_ranking_list"
+        android:name="com.deksi.graduationquiz.home.fragments.RankingListFragment"
+        android:label="@string/ranking_list"
+        tools:layout="@layout/fragment_ranking_list" />
+
 </navigation>

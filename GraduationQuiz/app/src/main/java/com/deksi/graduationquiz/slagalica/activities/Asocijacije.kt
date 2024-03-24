@@ -172,6 +172,19 @@ class Asocijacije : AppCompatActivity() {
             }
             buttonText?.let { button.text = it }
         }
+
+        if(buttonId.startsWith("a")){
+            binding.editTextKonacnoA.isEnabled = true
+        }
+        else if(buttonId.startsWith("b")){
+            binding.editTextKonacnoB.isEnabled = true
+        }
+        else if(buttonId.startsWith("c")){
+            binding.editTextKonacnoC.isEnabled = true
+        }
+        else if(buttonId.startsWith("d")){
+            binding.editTextKonacnoD.isEnabled = true
+        }
     }
 
     private fun checkAndUpdateField(editText: EditText?, expectedValue: String) {
@@ -196,6 +209,7 @@ class Asocijacije : AppCompatActivity() {
                         binding.buttonA4.text = asocijacijeResponse?.a4
                         pointsA += 2
                         konacnoAGuessed = true
+                        binding.editTextKonacno.isEnabled = true
 
                     }
 
@@ -206,6 +220,7 @@ class Asocijacije : AppCompatActivity() {
                         binding.buttonB4.text = asocijacijeResponse?.b4
                         pointsB += 2
                         konacnoBGuessed = true
+                        binding.editTextKonacno.isEnabled = true
 
 
                     }
@@ -217,6 +232,7 @@ class Asocijacije : AppCompatActivity() {
                         binding.buttonC4.text = asocijacijeResponse?.c4
                         pointsC += 2
                         konacnoCGuessed = true
+                        binding.editTextKonacno.isEnabled = true
 
                     }
 
@@ -227,6 +243,7 @@ class Asocijacije : AppCompatActivity() {
                         binding.buttonD4.text = asocijacijeResponse?.d4
                         pointsD += 2
                         konacnoDGuessed = true
+                        binding.editTextKonacno.isEnabled = true
 
                     }
 

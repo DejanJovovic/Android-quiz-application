@@ -46,17 +46,6 @@
             android:entries="@array/difficulty_options"
             android:visibility="gone"/>
 
-        <Button
-            android:id="@+id/button_send_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Send Message"
-            android:layout_marginTop="48dp"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:backgroundTint="@color/edit_text_asosijacije"
-            android:textColor="@color/white"/>
-
-
     </LinearLayout>
 
 

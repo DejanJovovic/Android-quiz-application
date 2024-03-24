@@ -200,6 +200,8 @@
     <string name="allow_tutorials">Allow tutorials</string>
     <string name="allow">Allow</string>
     <string name="remaining_lives_left">Remaining lives left</string>
+    <string name="ranking_list">Ranking list</string>
+    <string name="points">Points</string>
 
 
 </resources>

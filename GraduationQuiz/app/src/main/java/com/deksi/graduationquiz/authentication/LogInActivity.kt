@@ -160,8 +160,6 @@ class LogInActivity : AppCompatActivity() {
 
                         }
 
-                        Toast.makeText(applicationContext, "Welcome $username!", Toast.LENGTH_LONG).show()
-
                         val intent = Intent(applicationContext, HomeActivity::class.java)
                         intent.putExtra("loginType", "regular")
                         intent.putExtra("username", username)

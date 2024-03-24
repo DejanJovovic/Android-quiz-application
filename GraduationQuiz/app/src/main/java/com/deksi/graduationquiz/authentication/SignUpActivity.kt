@@ -67,9 +67,6 @@ class SignUpActivity : AppCompatActivity() {
             val retypePassword = binding.editTextRetypePassword.text.toString()
             onSignUpProgressDialog()
 
-
-            //*** if checks and language change based on which one is selected
-
             getSavedLanguageBySharedPreferences()
 
             val emailResourceId = resources.getIdentifier("signup_email_required", "string", packageName)
@@ -161,7 +158,7 @@ class SignUpActivity : AppCompatActivity() {
             val sslSocketFactory = sslContext.socketFactory
 
             val retrofit = Retrofit.Builder()
-                .baseUrl("https://192.168.228.66:8080/api/users/")
+                .baseUrl("https://192.168.1.9:8080/api/users/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(
                     OkHttpClient.Builder()
@@ -181,11 +178,6 @@ class SignUpActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<User>, response: Response<User>) {
                     if (response.isSuccessful) {
                         Toast.makeText(applicationContext, "User signed up successfully!", Toast.LENGTH_LONG).show()
-//                        Snackbar.make(
-//                            binding.buttonGetStarted,
-//                            "User signed up successfully!",
-//                            Snackbar.LENGTH_LONG
-//                        ).show()
                         val intent = Intent(applicationContext, LogInActivity::class.java)
                         intent.putExtra("email", email)
                         startActivity(intent)

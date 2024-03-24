@@ -63,6 +63,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/users/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users/change-password").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/users/update-password").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/users/update-score").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/users/user-scores").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/slagalica/random-round").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/slagalica/get/{id}").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/korakPoKorak/random-round").permitAll()
@@ -71,7 +73,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/spojnice/get/{id}").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/koznazna/random-rounds").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/koznazna/get/{id}").permitAll()
-                .antMatchers("/websocket").permitAll()
                 .anyRequest().authenticated();
 
         httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);

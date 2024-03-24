@@ -99,6 +99,7 @@
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
+                android:enabled="false"
                 android:textColorHint="@color/white"
                 android:inputType="textCapWords"/>
 
@@ -173,6 +174,7 @@
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
+                android:enabled="false"
                 android:textColorHint="@color/white"
                 android:inputType="textCapWords"/>
 
@@ -190,6 +192,7 @@
         android:textColor="@color/white"
         android:textColorHint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
+        android:enabled="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linear_layoutAB"
         android:inputType="textCapWords"/>
@@ -220,6 +223,7 @@
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
+                android:enabled="false"
                 android:textColorHint="@color/white"
                 android:inputType="textCapWords"/>
 
@@ -293,6 +297,7 @@
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
+                android:enabled="false"
                 android:textColorHint="@color/white"
                 android:inputType="textCapWords">
 

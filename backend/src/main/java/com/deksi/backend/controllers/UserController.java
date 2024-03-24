@@ -2,7 +2,10 @@ package com.deksi.backend.controllers;
 
 import com.deksi.backend.dto.LoginDTO;
 import com.deksi.backend.dto.UserDTO;
+import com.deksi.backend.dto.UserScoresDTO;
 import com.deksi.backend.model.User;
+import com.deksi.backend.model.UserScore;
+import com.deksi.backend.repository.UserScoreRepository;
 import com.deksi.backend.security.TokenUtils;
 import com.deksi.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -38,6 +42,9 @@ public class UserController {
 
     @Autowired
     private TokenUtils tokenUtils;
+
+    @Autowired
+    private UserScoreRepository userScoreRepository;
 
 
     @PostMapping("/signup")
@@ -82,4 +89,25 @@ public class UserController {
         }
     }
 
+    @PostMapping("/update-score")
+    public ResponseEntity<String> updateScore(@RequestBody UserScore userScore) {
+        // Check if the user exists in the database
+        UserScore existingUserScore = userScoreRepository.findByUsername(userScore.getUsername());
+
+        if (existingUserScore != null) {
+            // Update the user's totalScore
+            existingUserScore.setTotalPoints(userScore.getTotalPoints());
+            userScoreRepository.save(existingUserScore);
+            return ResponseEntity.ok("Score updated successfully");
+        } else {
+            // Create a new record for the user
+            userScoreRepository.save(userScore);
+            return ResponseEntity.ok("New user score created successfully");
+        }
+    }
+
+    @GetMapping("/user-scores")
+    public List<UserScore> getUserScores() {
+        return userScoreRepository.findAll();
+    }
 }

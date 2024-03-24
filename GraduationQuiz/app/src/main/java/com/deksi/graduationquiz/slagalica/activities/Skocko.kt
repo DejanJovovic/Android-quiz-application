@@ -49,7 +49,7 @@ class Skocko : AppCompatActivity() {
         )
     }
 
-    private val resultViews = Array(8) { arrayOfNulls<ImageView>(4) }
+    private val resultViews = Array(7) { arrayOfNulls<ImageView>(4) }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -200,8 +200,6 @@ class Skocko : AppCompatActivity() {
         resultViews[5] =
             arrayOf(binding.result51, binding.results52, binding.results53, binding.result54)
         resultViews[6] =
-            arrayOf(binding.result61, binding.results62, binding.results63, binding.result64)
-        resultViews[7] =
             arrayOf(binding.result71, binding.results72, binding.results73, binding.result74)
     }
 

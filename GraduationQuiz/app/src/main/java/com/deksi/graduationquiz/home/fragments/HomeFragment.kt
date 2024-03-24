@@ -19,22 +19,14 @@ import com.deksi.graduationquiz.databinding.FragmentHomeBinding
 import com.deksi.graduationquiz.home.HomeActivity
 
 import com.deksi.graduationquiz.slagalica.activities.KoZnaZna
+import com.deksi.graduationquiz.slagalica.activities.MojBroj
 import com.deksi.graduationquiz.sudoku.Sudoku
-import com.deksi.graduationquiz.webSocket.GameStateMessage
-import com.deksi.graduationquiz.webSocket.WebSocketManager
-import okhttp3.OkHttpClient
-import java.security.SecureRandom
-import java.security.cert.X509Certificate
-import javax.net.ssl.SSLContext
-import javax.net.ssl.TrustManager
-import javax.net.ssl.X509TrustManager
 
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var spinner: Spinner
     private lateinit var usernameViewModel: UsernameViewModel
-    private lateinit var webSocketManager: WebSocketManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,57 +42,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         usernameViewModel = ViewModelProvider(requireActivity()).get(UsernameViewModel::class.java)
 
-        webSocketConnection()
         setUpListeners()
-    }
-
-    private fun webSocketConnection() {
-        webSocketManager = WebSocketManager(object : WebSocketManager.WebSocketEventListener {
-            override fun onConnectionOpened() {
-                // Handle WebSocket connection opened
-            }
-
-            override fun onGameStateReceived(message: GameStateMessage) {
-                activity?.runOnUiThread {
-                    // Update UI with received message
-                    Toast.makeText(context, "Received message: ${message.gameState} ", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onConnectionClosed() {
-                // Handle WebSocket connection closed
-            }
-
-            override fun onConnectionFailure(error: String) {
-                Log.e("WebSocketManager", "WebSocket connection failure: $error")
-            }
-        })
-
-        val trustAllCerts = arrayOf<TrustManager>(
-            object : X509TrustManager {
-                override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {
-                }
-
-                override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {
-                }
-
-                override fun getAcceptedIssuers(): Array<X509Certificate> {
-                    return arrayOf()
-                }
-            }
-        )
-
-        val sslContext = SSLContext.getInstance("SSL")
-        sslContext.init(null, trustAllCerts, SecureRandom())
-
-        val sslSocketFactory = sslContext.socketFactory
-
-        val okHttpClient = OkHttpClient.Builder()
-            .sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
-            .hostnameVerifier { hostname, session -> true } // Allow all hostnames
-            .build()
-
-        webSocketManager.connect(okHttpClient,"https://192.168.1.9:8080/websocket")
     }
 
     private fun setUpListeners() {
@@ -113,14 +55,13 @@ class HomeFragment : Fragment() {
             }
             intent.putExtra("username", username)
             startActivity(intent)
+            val sharedPreferences = requireActivity().getSharedPreferences("UsernamePref", Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            editor.putString("username", username)
+            editor.apply()
         }
         binding.buttonSudoku.setOnClickListener {
             showDifficultyDialog()
-        }
-        binding.buttonSendMessage.setOnClickListener {
-            // Send a message when the button is clicked
-            val message = "Hello, WebSocket!"
-            webSocketManager.sendMessage(message)
         }
     }
 

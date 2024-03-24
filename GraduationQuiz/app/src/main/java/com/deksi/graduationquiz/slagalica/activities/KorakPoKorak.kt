@@ -92,8 +92,6 @@ class KorakPoKorak : AppCompatActivity() {
                 else -> null
             }
 
-
-
             buttonText?.let {
                 button.text = it
                 currentHintIndex++
