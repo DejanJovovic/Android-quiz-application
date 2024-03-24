@@ -203,6 +203,11 @@
     <string name="remaining_lives_left">Quedan vidas restantes</string>
     <string name="ranking_list">Lista de clasificación</string>
     <string name="points">Puntos</string>
+    <string name="position">Posición</string>
+    <string name="sudoku_ranking_list">SudokuListaDeClasificación</string>
+    <string name="time">Tiempo(s)</string>
+
+
 
 
 

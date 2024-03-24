@@ -24,6 +24,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.deksi.graduationquiz.R
 import com.deksi.graduationquiz.authentication.LogInActivity
+import com.deksi.graduationquiz.authentication.api.SudokuUserTimeService
+import com.deksi.graduationquiz.authentication.api.UserScoreService
+import com.deksi.graduationquiz.authentication.model.SudokuUserTime
+import com.deksi.graduationquiz.authentication.model.UserScore
 import com.deksi.graduationquiz.mediaPlayer.MediaPlayerManager
 import com.deksi.graduationquiz.databinding.ActivitySudokuBinding
 import com.deksi.graduationquiz.home.HomeActivity
@@ -33,6 +37,17 @@ import com.deksi.graduationquiz.sudoku.game.Cell
 import com.deksi.graduationquiz.sudoku.game.SudokuGame
 import com.deksi.graduationquiz.sudoku.view.SudokuBoardView
 import com.deksi.graduationquiz.sudoku.viewModel.SudokuViewModel
+import okhttp3.OkHttpClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.security.SecureRandom
+import java.security.cert.X509Certificate
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
+import javax.net.ssl.X509TrustManager
 
 
 class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.SudokuGameListener {
@@ -43,7 +58,7 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
     private var progressDialog: ProgressDialog? = null
     private var countDownTimer: CountDownTimer? = null
     private val countDownTime: Long = 5000
-    private var elapsedTime: Long = 0
+    private var elapsedTime: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +72,73 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
         forEachIndexButtons()
         startBackgroundMusic()
 
+
+    }
+
+    private fun saveUsernameAndTotalTime() {
+
+        val usernameSharedPreferences = getSharedPreferences("UsernamePref", Context.MODE_PRIVATE)
+        val username = usernameSharedPreferences.getString("username", "")
+
+        val trustAllCerts = arrayOf<TrustManager>(
+            object : X509TrustManager {
+                override fun checkClientTrusted(
+                    chain: Array<out X509Certificate>?,
+                    authType: String?
+                ) {
+                }
+
+                override fun checkServerTrusted(
+                    chain: Array<out X509Certificate>?,
+                    authType: String?
+                ) {
+                }
+
+                override fun getAcceptedIssuers(): Array<X509Certificate> {
+                    return arrayOf()
+                }
+            }
+        )
+
+        val sslContext = SSLContext.getInstance("SSL")
+        sslContext.init(null, trustAllCerts, SecureRandom())
+
+        val sslSocketFactory = sslContext.socketFactory
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://192.168.1.9:8080/api/users/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(
+                OkHttpClient.Builder()
+                    .sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
+                    .hostnameVerifier { _, _ -> true }
+                    .build()
+            )
+            .build()
+
+        val sudokuUserTimeService = retrofit.create(SudokuUserTimeService::class.java)
+        val time = elapsedTime / 1000
+        val userTime = SudokuUserTime(username!!, time)
+
+        val call = sudokuUserTimeService.updateTime(userTime)
+
+        call?.enqueue(object: Callback<Void?> {
+            override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
+                if(response.isSuccessful){
+
+                    Toast.makeText(applicationContext, "Score updated successfully", Toast.LENGTH_SHORT).show()
+                } else {
+
+                    val errorMessage = "Error: ${response.code()} ${response.message()}"
+                    Toast.makeText(applicationContext, errorMessage, Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<Void?>, t: Throwable) {
+                Toast.makeText(applicationContext, "API call failed", Toast.LENGTH_SHORT).show()
+            }
+
+        })
 
     }
 
@@ -165,6 +247,7 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
             }
 
             override fun onFinish() {
+                saveUsernameAndTotalTime()
                 dismissProgressDialog()
             }
         }

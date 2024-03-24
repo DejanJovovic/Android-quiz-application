@@ -30,8 +30,14 @@
 
     <fragment
         android:id="@+id/nav_ranking_list"
-        android:name="com.deksi.graduationquiz.home.fragments.RankingListFragment"
+        android:name="com.deksi.graduationquiz.home.fragments.SlagalicaRankingListFragment"
         android:label="@string/ranking_list"
         tools:layout="@layout/fragment_ranking_list" />
+
+    <fragment
+        android:id="@+id/nav_sudoku_ranking_list"
+        android:name="com.deksi.graduationquiz.home.fragments.SudokuRankingListFragment"
+        android:label="@string/sudoku_ranking_list"
+        tools:layout="@layout/fragment_sudoku_ranking_list" />
 
 </navigation>

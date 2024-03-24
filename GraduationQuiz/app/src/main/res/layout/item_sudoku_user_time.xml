@@ -40,7 +40,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/points"
+            android:text="@string/time"
             android:textSize="16sp"
             android:textStyle="bold"
             android:padding="8dp"
@@ -81,7 +81,7 @@
             android:layout_height="match_parent"
             android:background="@android:color/darker_gray"/>
         <TextView
-            android:id="@+id/pointsTextView"
+            android:id="@+id/timeTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

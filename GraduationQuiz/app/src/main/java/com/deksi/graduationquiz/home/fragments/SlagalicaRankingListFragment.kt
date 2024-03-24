@@ -7,12 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.deksi.graduationquiz.authentication.adapters.UserScoreAdapter
 import com.deksi.graduationquiz.authentication.api.GetUserScoreService
 import com.deksi.graduationquiz.authentication.model.UserScore
-import com.deksi.graduationquiz.authentication.viewModel.UsernameViewModel
 import com.deksi.graduationquiz.databinding.FragmentRankingListBinding
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -27,7 +25,7 @@ import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
 
-class RankingListFragment : Fragment() {
+class SlagalicaRankingListFragment : Fragment() {
 
     private lateinit var binding: FragmentRankingListBinding
 
@@ -102,9 +100,10 @@ class RankingListFragment : Fragment() {
 
     // Function to display user scores in UI
     private fun showUserScores(userScores: List<UserScore>) {
+        val sortedUserScores = userScores.sortedByDescending { it.totalPoints }
         val recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        val adapter = UserScoreAdapter(userScores)
+        val adapter = UserScoreAdapter(sortedUserScores)
         recyclerView.adapter = adapter
     }
 

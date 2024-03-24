@@ -19,7 +19,7 @@ class UserScoreAdapter(private val userScores: List<UserScore>) :
 
     override fun onBindViewHolder(holder: UserScoreViewHolder, position: Int) {
         val userScore = userScores[position]
-        holder.bind(userScore)
+        holder.bind(userScore, position + 1)
     }
 
     override fun getItemCount(): Int {
@@ -27,11 +27,12 @@ class UserScoreAdapter(private val userScores: List<UserScore>) :
     }
 
     inner class UserScoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val positionTextView: TextView = itemView.findViewById(R.id.positionTextView)
         private val usernameTextView: TextView = itemView.findViewById(R.id.usernameTextView)
         private val pointsTextView: TextView = itemView.findViewById(R.id.pointsTextView)
 
-        fun bind(userScore: UserScore) {
-            val username = userScore.username
+        fun bind(userScore: UserScore, position: Int) {
+            positionTextView.text = position.toString()
             usernameTextView.text = userScore.username
             pointsTextView.text = userScore.totalPoints.toString()
         }

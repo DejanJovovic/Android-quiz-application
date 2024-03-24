@@ -201,7 +201,12 @@
     <string name="allow_tutorials">Dozvoli tutorijale</string>
     <string name="allow">Dozvoli</string>
     <string name="remaining_lives_left">Preostali životi</string>
-    <string name="ranking_list">Rang lista</string>
+    <string name="ranking_list">Slagalica rang lista</string>
     <string name="points">Poeni</string>
+    <string name="position">Pozicija</string>
+    <string name="sudoku_ranking_list">Sudoku rang lista</string>
+    <string name="time">Vreme(s)</string>
+
+
 
 </resources>

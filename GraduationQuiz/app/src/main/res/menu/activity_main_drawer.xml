@@ -27,10 +27,10 @@
             android:orderInCategory="4"/>
 
         <item
-            android:orderInCategory="5"
-            android:title=""
-            android:enabled="false"
-            />
+            android:id="@+id/nav_sudoku_ranking_list"
+            android:icon="@drawable/baseline_bar_chart_24"
+            android:title="@string/sudoku_ranking_list"
+            android:orderInCategory="5"/>
 
         <item
             android:orderInCategory="6"

@@ -3,8 +3,10 @@ package com.deksi.backend.controllers;
 import com.deksi.backend.dto.LoginDTO;
 import com.deksi.backend.dto.UserDTO;
 import com.deksi.backend.dto.UserScoresDTO;
+import com.deksi.backend.model.SudokuUserTime;
 import com.deksi.backend.model.User;
 import com.deksi.backend.model.UserScore;
+import com.deksi.backend.repository.SudokuUserTimeRepository;
 import com.deksi.backend.repository.UserScoreRepository;
 import com.deksi.backend.security.TokenUtils;
 import com.deksi.backend.service.UserService;
@@ -46,6 +48,8 @@ public class UserController {
     @Autowired
     private UserScoreRepository userScoreRepository;
 
+    @Autowired
+    private SudokuUserTimeRepository sudokuUserTimeRepository;
 
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody UserDTO userDTO) {
@@ -109,5 +113,26 @@ public class UserController {
     @GetMapping("/user-scores")
     public List<UserScore> getUserScores() {
         return userScoreRepository.findAll();
+    }
+
+    @PostMapping("/sudoku-update-time")
+    public ResponseEntity<String> updateTime(@RequestBody SudokuUserTime sudokuUserTime) {
+        // Check if the user exists in the database
+        SudokuUserTime existingUserTime = sudokuUserTimeRepository.findByUsername(sudokuUserTime.getUsername());
+
+        if (existingUserTime != null) {
+            existingUserTime.setTotalTime(sudokuUserTime.getTotalTime());
+            sudokuUserTimeRepository.save(existingUserTime);
+            return ResponseEntity.ok("Time updated successfully");
+        } else {
+            // Create a new record for the user
+            sudokuUserTimeRepository.save(sudokuUserTime);
+            return ResponseEntity.ok("New user time created successfully");
+        }
+    }
+
+    @GetMapping("/sudoku-user-time")
+    public List<SudokuUserTime> getSudokuUserTime() {
+        return sudokuUserTimeRepository.findAll();
     }
 }

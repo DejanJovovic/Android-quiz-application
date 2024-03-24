@@ -55,14 +55,18 @@ class HomeFragment : Fragment() {
             }
             intent.putExtra("username", username)
             startActivity(intent)
-            val sharedPreferences = requireActivity().getSharedPreferences("UsernamePref", Context.MODE_PRIVATE)
-            val editor = sharedPreferences.edit()
-            editor.putString("username", username)
-            editor.apply()
+            saveUsernameToSharedPreferences(username)
         }
         binding.buttonSudoku.setOnClickListener {
             showDifficultyDialog()
         }
+    }
+
+    private fun saveUsernameToSharedPreferences(username: String) {
+        val sharedPreferences = requireActivity().getSharedPreferences("UsernamePref", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("username", username)
+        editor.apply()
     }
 
     private fun showDifficultyDialog() {
@@ -125,6 +129,12 @@ class HomeFragment : Fragment() {
     private fun launchSudokuActivity(difficulty: String) {
         val intent = Intent(context, Sudoku::class.java)
         intent.putExtra("difficulty", difficulty)
+        val username: String = if (HomeActivity.loginType == "regular") {
+            usernameViewModel.regularUsername
+        } else {
+            usernameViewModel.guestUsername
+        }
+        saveUsernameToSharedPreferences(username)
         startActivity(intent)
     }
 }
