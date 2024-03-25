@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
+    android:background="@drawable/background6"
     android:padding="16dp"
     tools:context=".slagalica.activities.KoZnaZna">
 
@@ -31,26 +31,39 @@
             tools:text="@string/_1_10"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
-            android:textColor="@color/question_text_color" />
+            android:textColor="@color/textColor" />
 
+    <LinearLayout
+        android:layout_width="70dp"
+        android:layout_height="33dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp"
+        android:background="#EDEAEA"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/text_view_time_left"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="38dp"
+            android:layout_height="25dp"
             android:layout_gravity="center"
-            android:layout_marginTop="12dp"/>
+            android:layout_marginStart="4dp"
+            android:textStyle="bold"
+            android:textColor="@color/textColor"
+            android:textSize="20sp"
+            />
+
+    </LinearLayout>
 
         <TextView
             android:id="@+id/text_view_question"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
-            android:background="@color/edit_text_asosijacije"
+            android:background="@drawable/round_pink"
             android:gravity="center"
             android:minHeight="100dp"
             android:padding="20dp"
-            android:textColor="@color/white"
+            android:textColor="@color/textColor"
             android:textSize="16sp"
             tools:text="@string/question_will_come_here" />
 
@@ -62,7 +75,7 @@
             android:layout_marginTop="40dp"
             android:background="@drawable/round_white"
             android:textAllCaps="false"
-            android:textColor="@color/edit_text_asosijacije"
+            android:textColor="@color/textColor"
             tools:text="@string/option_1">
 
         </androidx.appcompat.widget.AppCompatButton>
@@ -75,7 +88,7 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/round_white"
             android:textAllCaps="false"
-            android:textColor="@color/edit_text_asosijacije"
+            android:textColor="@color/textColor"
             tools:text="@string/option_2">
 
         </androidx.appcompat.widget.AppCompatButton>
@@ -88,7 +101,7 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/round_white"
             android:textAllCaps="false"
-            android:textColor="@color/edit_text_asosijacije"
+            android:textColor="@color/textColor"
             tools:text="@string/option_3">
 
         </androidx.appcompat.widget.AppCompatButton>
@@ -100,7 +113,7 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/round_white"
             android:textAllCaps="false"
-            android:textColor="@color/edit_text_asosijacije"
+            android:textColor="@color/textColor"
             tools:text="@string/option_4">
 
         </androidx.appcompat.widget.AppCompatButton>
@@ -111,11 +124,10 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="88dp"
-            android:background="@drawable/round_green"
-            android:elevation="0dp"
+            android:background="@drawable/round_blue"
             android:text="@string/next"
             android:textAllCaps="false"
-            android:textColor="@color/white">
+            android:textColor="@color/textColor">
 
         </androidx.appcompat.widget.AppCompatButton>
 

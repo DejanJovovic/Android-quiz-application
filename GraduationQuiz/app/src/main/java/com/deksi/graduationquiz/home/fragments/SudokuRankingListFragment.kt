@@ -68,7 +68,7 @@ class SudokuRankingListFragment : Fragment() {
         val sslSocketFactory = sslContext.socketFactory
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.1.9:8080/api/users/")
+            .baseUrl("https://192.168.31.66:8080/api/users/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -101,7 +101,7 @@ class SudokuRankingListFragment : Fragment() {
 
     // Function to display user scores in UI
     private fun showUserScores(userTime: List<SudokuUserTime>) {
-        val sortedUsersByTime = userTime.sortedByDescending { it.totalTime }
+        val sortedUsersByTime = userTime.sortedBy { it.totalTime }
         val recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         val adapter = SudokuUserTimeAdapter(sortedUsersByTime)

@@ -4,24 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background3"
     tools:context=".sudoku.Sudoku">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <LinearLayout
+        android:layout_width="70dp"
+        android:layout_height="33dp"
         android:layout_above="@id/sudoku_board_view"
-        android:gravity="center"
-        android:layout_marginBottom="48dp">
+        android:layout_marginStart="175dp"
+        android:layout_marginBottom="32dp"
+        android:background="#EDEAEA"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/text_view_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:fontFamily="sans-serif-medium"
-            android:textColor="@color/black" />
+            android:layout_width="38dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="4dp"
+            android:textStyle="bold"
+            android:textColor="@color/textColor"
+            android:textSize="20sp" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <com.deksi.graduationquiz.sudoku.view.SudokuBoardView
         android:id="@+id/sudoku_board_view"
@@ -44,7 +49,7 @@
             android:text="@string/remaining_lives_left_3"
             android:textSize="16sp"
             android:fontFamily="sans-serif-medium"
-            android:textColor="@color/black" />
+            android:textColor="@color/textColor" />
 
     </RelativeLayout>
 
@@ -64,8 +69,9 @@
             android:layout_height="wrap_content"
             android:layout_row="0"
             android:layout_column="0"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/edit_text_asosijacije"
+            android:layout_margin="5dp"
+            android:textColor="@color/textColor"
+            android:backgroundTint="@color/blueButton"
             android:elevation="0dp"
             android:text="1" />
 
@@ -75,8 +81,9 @@
             android:layout_height="wrap_content"
             android:layout_row="0"
             android:layout_column="1"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/edit_text_asosijacije"
+            android:layout_margin="5dp"
+            android:textColor="@color/textColor"
+            android:backgroundTint="@color/blueButton"
             android:elevation="0dp"
             android:text="2" />
 
@@ -84,8 +91,9 @@
             android:id="@+id/button_three"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/edit_text_asosijacije"
+            android:textColor="@color/textColor"
+            android:layout_margin="5dp"
+            android:backgroundTint="@color/blueButton"
             android:elevation="0dp"
             android:layout_row="0"
             android:layout_column="2"
@@ -95,9 +103,10 @@
             android:id="@+id/button_four"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/edit_text_asosijacije"
+            android:textColor="@color/textColor"
+            android:backgroundTint="@color/blueButton"
             android:elevation="0dp"
+            android:layout_margin="5dp"
             android:layout_row="1"
             android:layout_column="0"
             android:text="4" />
@@ -106,9 +115,10 @@
             android:id="@+id/button_five"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/edit_text_asosijacije"
+            android:textColor="@color/textColor"
+            android:backgroundTint="@color/blueButton"
             android:elevation="0dp"
+            android:layout_margin="5dp"
             android:layout_row="1"
             android:layout_column="1"
             android:text="5" />
@@ -117,8 +127,9 @@
             android:id="@+id/button_six"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/edit_text_asosijacije"
+            android:textColor="@color/textColor"
+            android:layout_margin="5dp"
+            android:backgroundTint="@color/blueButton"
             android:elevation="0dp"
             android:layout_row="1"
             android:layout_column="2"
@@ -130,8 +141,9 @@
             android:layout_height="wrap_content"
             android:layout_row="2"
             android:layout_column="0"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/edit_text_asosijacije"
+            android:layout_margin="5dp"
+            android:textColor="@color/textColor"
+            android:backgroundTint="@color/blueButton"
             android:elevation="0dp"
             android:text="7" />
 
@@ -141,8 +153,9 @@
             android:layout_height="wrap_content"
             android:layout_row="2"
             android:layout_column="1"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/edit_text_asosijacije"
+            android:layout_margin="5dp"
+            android:textColor="@color/textColor"
+            android:backgroundTint="@color/blueButton"
             android:elevation="0dp"
             android:text="8" />
 
@@ -152,8 +165,9 @@
             android:layout_height="wrap_content"
             android:layout_row="2"
             android:layout_column="2"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/edit_text_asosijacije"
+            android:layout_margin="5dp"
+            android:textColor="@color/textColor"
+            android:backgroundTint="@color/blueButton"
             android:elevation="0dp"
             android:text="9" />
 

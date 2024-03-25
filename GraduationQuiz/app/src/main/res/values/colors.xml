@@ -10,5 +10,8 @@
     <color name="green_button">#00C853</color>
     <color name="correctColor">#ED3124</color>
     <color name="misplacedColor">#D4E626</color>
+    <color name="textColor">#551804</color>
+    <color name="blueButton">#c3cccf</color>
+    <color name="pinkButton">#e1bda3</color>
 
 </resources>

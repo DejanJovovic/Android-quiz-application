@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="@color/background_color"
+    android:background="@drawable/background2"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".home.fragments.ProfileFragment">
 
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
             android:text="@string/email"
-            android:textColor="@color/black"
+            android:textColor="@color/textColor"
             android:textStyle="bold" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -35,9 +35,10 @@
             <EditText
                 android:id="@+id/edit_text_email"
                 style="@style/NoUnderlineEditTextStyle"
-                android:textColor="@color/black"
+                android:textColor="@color/textColor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="18sp"
                 android:enabled="false"
                 android:inputType="textPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -50,7 +51,7 @@
             android:fontFamily="sans-serif-light"
             android:layout_marginTop="24dp"
             android:text="@string/username"
-            android:textColor="@color/black"
+            android:textColor="@color/textColor"
             android:textStyle="bold" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -62,9 +63,10 @@
             <EditText
                 android:id="@+id/edit_text_username"
                 style="@style/NoUnderlineEditTextStyle"
-                android:textColor="@color/black"
+                android:textColor="@color/textColor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="18sp"
                 android:enabled="false"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -75,7 +77,7 @@
             android:fontFamily="sans-serif-light"
             android:layout_marginTop="24dp"
             android:text="@string/password"
-            android:textColor="@color/black"
+            android:textColor="@color/textColor"
             android:textStyle="bold" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -89,8 +91,9 @@
                 android:id="@+id/edit_text_password"
                 style="@style/NoUnderlineEditTextStyle"
                 android:layout_width="match_parent"
-                android:textColor="@color/black"
+                android:textColor="@color/textColor"
                 android:layout_height="wrap_content"
+                android:textSize="18sp"
                 android:enabled="false"
                 android:inputType="textPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -101,8 +104,8 @@
             android:layout_marginTop="32dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:backgroundTint="@color/edit_text_asosijacije"
-            android:textColor="@color/white"
+            android:background="@drawable/round_blue"
+            android:textColor="@color/textColor"
             android:text="@string/change"/>
 
     </LinearLayout>

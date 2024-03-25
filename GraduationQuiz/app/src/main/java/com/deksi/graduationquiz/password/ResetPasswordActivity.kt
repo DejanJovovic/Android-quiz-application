@@ -6,8 +6,12 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.deksi.graduationquiz.R
 import com.deksi.graduationquiz.databinding.ActivityResetPasswordBinding
 import com.deksi.graduationquiz.home.HomeActivity
@@ -87,6 +91,7 @@ class ResetPasswordActivity : AppCompatActivity() {
                 getString(R.string.reset_passwords_dont_match)
             }
 
+
             if (newPassword.isEmpty()) {
                 binding.editTextNewPassword.error = newPasswordRequired
                 binding.editTextNewPassword.requestFocus()
@@ -140,7 +145,7 @@ class ResetPasswordActivity : AppCompatActivity() {
 
         val sslSocketFactory = sslContext.socketFactory
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.1.9:8080/api/users/")
+            .baseUrl("https://192.168.31.66:8080/api/users/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -182,8 +187,12 @@ class ResetPasswordActivity : AppCompatActivity() {
             getString(R.string.reset_password_message)
         }
 
+        val messageSpannable = SpannableString(message).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@ResetPasswordActivity, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setMessage(message)
+        progressDialog!!.setMessage(messageSpannable)
         progressDialog!!.setCancelable(false)
         progressDialog!!.show()
     }
@@ -220,13 +229,23 @@ class ResetPasswordActivity : AppCompatActivity() {
             getString(R.string.no)
         }
 
+        val yesSpannable = SpannableString(yes).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@ResetPasswordActivity, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        val noSpannable = SpannableString(no).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@ResetPasswordActivity, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        val messageSpannable = SpannableString(message).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@ResetPasswordActivity, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
         AlertDialog.Builder(this)
-            .setMessage(message)
-            .setPositiveButton(yes) { _, _ ->
+            .setMessage(messageSpannable)
+            .setPositiveButton(yesSpannable) { _, _ ->
                 super.onBackPressed()
                 finish()
             }
-            .setNegativeButton(no) { _, _ ->
+            .setNegativeButton(noSpannable) { _, _ ->
                 // Do nothing
             }
             .show()

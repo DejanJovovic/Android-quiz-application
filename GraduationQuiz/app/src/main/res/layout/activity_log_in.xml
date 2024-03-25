@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="@color/background_color"
+    android:background="@drawable/background1"
     tools:context=".authentication.LogInActivity">
 
     <LinearLayout
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-black"
             android:text="@string/login"
-            android:textColor="@color/black"
+            android:textColor="@color/textColor"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:fontFamily="sans-serif-light"
+            android:textColor="@color/textColor"
             android:text="@string/login_to_your_account_to_continue_from_where_you_stopped"
             android:textSize="16sp" />
 
@@ -43,7 +44,7 @@
             android:layout_marginTop="24dp"
             android:fontFamily="sans-serif-light"
             android:text="@string/username"
-            android:textColor="@color/black"
+            android:textColor="@color/textColor"
             android:textStyle="bold" />
 
 
@@ -58,6 +59,8 @@
                 style="@style/NoUnderlineEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/textColor"
                 android:inputType="textCapWords" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -69,7 +72,7 @@
             android:layout_marginTop="24dp"
             android:fontFamily="sans-serif-light"
             android:text="@string/password"
-            android:textColor="@color/black"
+            android:textColor="@color/textColor"
             android:textStyle="bold" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -84,6 +87,8 @@
                 style="@style/NoUnderlineEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/textColor"
                 android:inputType="textPassword" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -95,19 +100,18 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="@string/forgot_password"
-            android:textColor="@color/black"
+            android:textColor="@color/textColor"
             android:textSize="16sp"
             android:textStyle="bold" />
 
-        <com.google.android.material.button.MaterialButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_login"
-            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:backgroundTint="@color/green_button"
+            android:background="@drawable/round_blue"
             android:text="@string/login"
-            android:textColor="@color/white" />
+            android:textColor="@color/textColor" />
 
 
     </LinearLayout>
@@ -119,6 +123,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="63dp"
         android:fontFamily="sans-serif-light"
+        android:textColor="@color/textColor"
         android:text="@string/don_t_have_an_account"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -131,7 +136,7 @@
         android:fontFamily="sans-serif-black"
         android:layout_marginStart="5dp"
         android:text="@string/sign_up"
-        android:textColor="@color/black"
+        android:textColor="@color/textColor"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"

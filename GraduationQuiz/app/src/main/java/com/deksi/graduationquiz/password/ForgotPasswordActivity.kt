@@ -6,8 +6,12 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.deksi.graduationquiz.R
 import com.deksi.graduationquiz.databinding.ActivityForgotPasswordBinding
 import com.deksi.graduationquiz.password.api.ChangePasswordApiService
@@ -69,6 +73,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
                 getString(R.string.forgot_password_email_required)
             }
 
+
             if (email.isEmpty()) {
                 binding.editTextEmailAddress.error = emailRequired
                 binding.editTextEmailAddress.requestFocus()
@@ -101,8 +106,16 @@ class ForgotPasswordActivity : AppCompatActivity() {
             getString(R.string.forgot_password_message)
         }
 
+        val titleSpannable = SpannableString(title).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@ForgotPasswordActivity, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        val messageSpannable = SpannableString(message).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@ForgotPasswordActivity, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
         progressDialog =
-            ProgressDialog.show(this, title, message, true, false)
+            ProgressDialog.show(this, titleSpannable, messageSpannable, true, false)
 
     }
 
@@ -142,7 +155,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
         val sslSocketFactory = sslContext.socketFactory
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.1.9:8080/api/users/")
+            .baseUrl("https://192.168.31.66:8080/api/users/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()

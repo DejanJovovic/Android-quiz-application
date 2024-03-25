@@ -7,8 +7,12 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.deksi.graduationquiz.R
 import com.deksi.graduationquiz.authentication.api.UserScoreService
 import com.deksi.graduationquiz.authentication.model.UserScore
@@ -79,7 +83,7 @@ class Results : AppCompatActivity() {
         val sslSocketFactory = sslContext.socketFactory
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.1.9:8080/api/users/")
+            .baseUrl("https://192.168.31.66:8080/api/users/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -135,8 +139,12 @@ class Results : AppCompatActivity() {
             getString(R.string.timer_total_score)
         }
 
+        val messageScoreSpannable = SpannableString(messageScore).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Results, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
         // Now, 'totalScore' contains the sum of scores across all games
-        binding.textViewTotalScore.text = "$messageScore: $totalScore"
+        binding.textViewTotalScore.text = "$messageScoreSpannable: $totalScore"
     }
 
     private fun clearTotalScoreFromPreferences() {
@@ -162,8 +170,12 @@ class Results : AppCompatActivity() {
             getString(R.string.results_message)
         }
 
+        val messageSpannable = SpannableString(message).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Results, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle(message)
+        progressDialog!!.setTitle(messageSpannable)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()
@@ -223,13 +235,23 @@ class Results : AppCompatActivity() {
             getString(R.string.no)
         }
 
+        val yesSpannable = SpannableString(yes).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Results, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        val noSpannable = SpannableString(no).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Results, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        val messageSpannable = SpannableString(message).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Results, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
         AlertDialog.Builder(this)
-            .setMessage(message)
-            .setPositiveButton(yes) { _, _ ->
+            .setMessage(messageSpannable)
+            .setPositiveButton(yesSpannable) { _, _ ->
                 super.onBackPressed()
                 clearTotalScoreFromPreferences()
             }
-            .setNegativeButton(no) { _, _ ->
+            .setNegativeButton(noSpannable) { _, _ ->
                 // Do nothing
             }
             .show()

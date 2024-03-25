@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
+    android:background="@drawable/background6"
     android:padding="16dp"
     tools:context=".slagalica.activities.MojBroj">
 
@@ -18,101 +18,107 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/text_view_time_left"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <LinearLayout
+            android:layout_width="70dp"
+            android:layout_height="33dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="48dp" />
+            android:background="#EDEAEA"
+            android:orientation="vertical">
 
-        <Button
+            <TextView
+                android:id="@+id/text_view_time_left"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:textStyle="bold"
+                android:textColor="@color/textColor"
+                android:layout_gravity="center"
+                android:textSize="20sp"
+                android:layout_marginBottom="48dp" />
+
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_final_result"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:backgroundTint="@color/edit_text_asosijacije"
-            android:textColor="@color/white" />
+            android:background="@drawable/round_blue"
+            android:textColor="@color/textColor" />
 
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_first_single_digit"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/edit_text_asosijacije"
+                android:background="@drawable/round_blue"
                 android:enabled="false"
                 android:text=""
-                android:textColor="@color/white" />
+                android:textColor="@color/textColor" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_second_single_digit"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:backgroundTint="@color/edit_text_asosijacije"
+                android:background="@drawable/round_blue"
                 android:enabled="false"
                 android:text=""
-                android:textColor="@color/white" />
+                android:textColor="@color/textColor" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_third_single_digit"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:backgroundTint="@color/edit_text_asosijacije"
+                android:background="@drawable/round_blue"
                 android:enabled="false"
                 android:text=""
-                android:textColor="@color/white" />
+                android:textColor="@color/textColor" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_fourth_single_digit"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:backgroundTint="@color/edit_text_asosijacije"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/round_blue"
                 android:enabled="false"
                 android:text=""
-                android:textColor="@color/white" />
+                android:textColor="@color/textColor" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_first_medium_digit"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="184dp"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/edit_text_asosijacije"
+                android:background="@drawable/round_blue"
                 android:enabled="false"
                 android:text=""
-                android:textColor="@color/white" />
+                android:textColor="@color/textColor" />
 
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_second_medium_digit"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="186dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:backgroundTint="@color/edit_text_asosijacije"
+                android:background="@drawable/round_blue"
                 android:enabled="false"
                 android:text=""
-                android:textColor="@color/white" />
+                android:textColor="@color/textColor" />
 
         </LinearLayout>
 
@@ -120,75 +126,76 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_plus"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:backgroundTint="@color/green_button"
+                android:background="@drawable/round_green_reveal"
                 android:enabled="false"
+                android:textColor="@color/textColor"
                 android:text="@string/plus" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_minus"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="5dp"
-                android:backgroundTint="@color/green_button"
+                android:background="@drawable/round_green_reveal"
                 android:enabled="false"
+                android:textColor="@color/textColor"
                 android:text="@string/minus" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_multiply"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="5dp"
-                android:backgroundTint="@color/green_button"
+                android:background="@drawable/round_green_reveal"
                 android:enabled="false"
+                android:textColor="@color/textColor"
                 android:text="@string/multiply" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_divide"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="5dp"
-                android:backgroundTint="@color/green_button"
+                android:background="@drawable/round_green_reveal"
                 android:enabled="false"
+                android:textColor="@color/textColor"
                 android:text="@string/divider" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_open_brackets"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="5dp"
-                android:backgroundTint="@color/green_button"
+                android:background="@drawable/round_green_reveal"
                 android:enabled="false"
+                android:textColor="@color/textColor"
                 android:text="@string/open_brackets" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_close_brackets"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="5dp"
-                android:backgroundTint="@color/green_button"
+                android:background="@drawable/round_green_reveal"
                 android:enabled="false"
+                android:textColor="@color/textColor"
                 android:text="@string/close_brackets" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_delete"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="4dp"
-                android:backgroundTint="@color/green_button"
+                android:background="@drawable/round_green_reveal"
                 android:enabled="false"
+                android:textColor="@color/textColor"
                 android:text="@string/delete" />
         </LinearLayout>
 
@@ -197,32 +204,30 @@
             android:id="@+id/text_view_user_input"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginTop="16dp"
-            android:background="@color/edit_text_asosijacije"
-            android:textColor="@color/white" />
+            android:layout_marginTop="10dp"
+            android:background="@drawable/round_pink"
+            android:textColor="@color/textColor" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_stop_digits"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@color/green_button"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/round_green_reveal"
             android:text="@string/stop"
             android:textAllCaps="true"
-            android:textColor="@color/white" />
+            android:textColor="@color/textColor" />
 
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_done"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="84dp"
             android:enabled="false"
-            android:backgroundTint="@color/edit_text_asosijacije"
+            android:background="@drawable/round_blue"
             android:text="@string/done"
-            android:textColor="@color/white" />
+            android:textColor="@color/textColor" />
 
 
     </LinearLayout>

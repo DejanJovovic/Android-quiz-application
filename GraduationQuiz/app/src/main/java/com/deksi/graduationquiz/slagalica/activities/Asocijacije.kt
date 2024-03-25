@@ -8,6 +8,9 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.text.Editable
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.Gravity
 import android.widget.Button
@@ -393,6 +396,10 @@ class Asocijacije : AppCompatActivity() {
                     getString(R.string.timer_score)
                 }
 
+                val messageScoreSpannable = SpannableString(messageScore).apply {
+                    setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Asocijacije, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+
                 val secondsRemaining = millisUntilFinished / 1000
                 totalScore = pointsA + openedCluesA + pointsB + openedCluesB + pointsC + openedCluesC + pointsD + openedCluesD + userPoints
 //                Toast.makeText(applicationContext, "pA: $pointsA," +
@@ -404,7 +411,7 @@ class Asocijacije : AppCompatActivity() {
 //                        "pD: $pointsD," +
 //                        "cD: $openedCluesD," +
 //                        "uP: $userPoints",Toast.LENGTH_LONG).show()
-                val message = "$secondsRemaining     $messageScore: $totalScore"
+                val message = "$secondsRemaining     $messageScoreSpannable: $totalScore"
                 progressDialog?.setMessage(message)
 
             }
@@ -489,7 +496,15 @@ class Asocijacije : AppCompatActivity() {
             getString(R.string.asocijacije_message_on_create)
         }
 
-        progressDialog = ProgressDialog.show(this, title, message, true, false)
+        val titleSpannable = SpannableString(title).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Asocijacije, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        val messageSpannable = SpannableString(message).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Asocijacije, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        progressDialog = ProgressDialog.show(this, titleSpannable, messageSpannable, true, false)
 
     }
 
@@ -507,8 +522,12 @@ class Asocijacije : AppCompatActivity() {
             getString(R.string.asocijacije_message_time_up)
         }
 
+        val messageSpannable = SpannableString(message).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Asocijacije, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle(message)
+        progressDialog!!.setTitle(messageSpannable)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()
@@ -528,8 +547,12 @@ class Asocijacije : AppCompatActivity() {
             getString(R.string.asocijacije_message_on_finish)
         }
 
+        val messageSpannable = SpannableString(message).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Asocijacije, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle(message)
+        progressDialog!!.setTitle(messageSpannable)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()
@@ -548,8 +571,12 @@ class Asocijacije : AppCompatActivity() {
             getString(R.string.asocijacije_message_on_round_starting)
         }
 
+        val messageSpannable = SpannableString(message).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Asocijacije, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle(message)
+        progressDialog!!.setTitle(messageSpannable)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()
@@ -678,7 +705,7 @@ class Asocijacije : AppCompatActivity() {
         val sslSocketFactory = sslContext.socketFactory
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.1.9:8080/api/slagalica/")
+            .baseUrl("https://192.168.31.66:8080/api/slagalica/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -761,14 +788,24 @@ class Asocijacije : AppCompatActivity() {
             getString(R.string.no)
         }
 
+        val yesSpannable = SpannableString(yes).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Asocijacije, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        val noSpannable = SpannableString(no).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Asocijacije, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        val messageSpannable = SpannableString(message).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Asocijacije, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
         AlertDialog.Builder(this)
-            .setMessage(message)
-            .setPositiveButton(yes) { _, _ ->
+            .setMessage(messageSpannable)
+            .setPositiveButton(yesSpannable) { _, _ ->
                 super.onBackPressed()
                 MediaPlayerManager.release()
                 clearTotalScoreFromPreferences()
             }
-            .setNegativeButton(no) { _, _ ->
+            .setNegativeButton(noSpannable) { _, _ ->
                 // Do nothing
             }
             .show()

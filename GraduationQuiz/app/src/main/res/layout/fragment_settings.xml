@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/background1"
     android:padding="16dp"
-    android:background="@color/background_color"
     tools:context=".home.fragments.SettingsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
 
 
         <TextView
@@ -23,58 +24,51 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/change_language"
+            android:textColor="@color/textColor"
             android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"/>
+            android:textStyle="bold" />
 
         <Spinner
             android:id="@+id/spinner_language"
             android:layout_width="250dp"
-            android:layout_gravity="center"
-            android:layout_height="60dp"/>
+            android:layout_height="60dp"
+            android:layout_gravity="center"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_save_changed_language"
-            android:layout_width="150dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:backgroundTint="@color/green_button"
-            android:elevation="0dp"
-            android:textColor="@color/white"
-            android:text="@string/save"
             android:layout_marginTop="24dp"
-            android:enabled="false"/>
+            android:background="@drawable/round_pink"
+            android:enabled="false"
+            android:text="@string/save"
+            android:textColor="@color/textColor" />
 
 
         <TextView
             android:id="@+id/text_view_allow_tutorials"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="104dp"
             android:gravity="center"
             android:text="@string/allow_tutorials"
+            android:textColor="@color/textColor"
             android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginTop="48dp"
-            android:textColor="@color/black"/>
+            android:textStyle="bold" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_allow_tutorials"
-            android:layout_width="150dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:backgroundTint="@color/green_button"
-            android:elevation="0dp"
-            android:textColor="@color/white"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/round_blue"
             android:text="@string/allow"
-            android:layout_marginTop="24dp" />
-
-
+            android:textColor="@color/textColor" />
 
 
     </LinearLayout>
-
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

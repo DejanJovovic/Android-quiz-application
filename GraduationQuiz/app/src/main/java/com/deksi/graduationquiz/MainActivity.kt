@@ -9,7 +9,11 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.deksi.graduationquiz.authentication.LogInActivity
 import com.deksi.graduationquiz.authentication.SignUpActivity
 import com.deksi.graduationquiz.databinding.ActivityMainBinding
@@ -42,13 +46,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupListeners() {
         binding.buttonMainLogin.setOnClickListener {
-            //treba menjati/samo test
             val intent = Intent(this, LogInActivity::class.java)
             startActivity(intent)
         }
 
         binding.buttonMainSignup.setOnClickListener {
-            //treba menjati/samo test
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
@@ -70,7 +72,6 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, HomeActivity::class.java)
         intent.putExtra("loginType", "guest")
         startActivity(intent)
-        Toast.makeText(this@MainActivity, "Welcome $randomUsername", Toast.LENGTH_SHORT).show()
     }
 
 
@@ -118,12 +119,22 @@ class MainActivity : AppCompatActivity() {
             getString(R.string.no)
         }
 
+        val yesSpannable = SpannableString(yes).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@MainActivity, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        val noSpannable = SpannableString(no).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@MainActivity, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        val messageSpannable = SpannableString(message).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@MainActivity, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
         AlertDialog.Builder(this)
-            .setMessage(message)
-            .setPositiveButton(yes) { _, _ ->
+            .setMessage(messageSpannable)
+            .setPositiveButton(yesSpannable) { _, _ ->
                 super.onBackPressed()
             }
-            .setNegativeButton(no) { _, _ ->
+            .setNegativeButton(noSpannable) { _, _ ->
                 // Do nothing
             }
             .show()

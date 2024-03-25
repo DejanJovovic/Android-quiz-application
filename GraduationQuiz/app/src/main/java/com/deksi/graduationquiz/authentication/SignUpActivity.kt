@@ -5,9 +5,13 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.deksi.graduationquiz.R
 import com.deksi.graduationquiz.authentication.api.SignUpService
 import com.deksi.graduationquiz.authentication.model.User
@@ -138,8 +142,6 @@ class SignUpActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            //*** retrofit logic
-
             val trustAllCerts = arrayOf<TrustManager>(
                 object : X509TrustManager {
                     override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
@@ -158,7 +160,7 @@ class SignUpActivity : AppCompatActivity() {
             val sslSocketFactory = sslContext.socketFactory
 
             val retrofit = Retrofit.Builder()
-                .baseUrl("https://192.168.1.9:8080/api/users/")
+                .baseUrl("https://192.168.31.66:8080/api/users/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(
                     OkHttpClient.Builder()
@@ -222,8 +224,15 @@ class SignUpActivity : AppCompatActivity() {
             getString(R.string.signup_message)
         }
 
+        val titleSpannable = SpannableString(title).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@SignUpActivity, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        val messageSpannable = SpannableString(message).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@SignUpActivity, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
         progressDialog =
-            ProgressDialog.show(this, title, message, true, false)
+            ProgressDialog.show(this, titleSpannable, messageSpannable, true, false)
     }
 
     private fun getSavedLanguageBySharedPreferences() {

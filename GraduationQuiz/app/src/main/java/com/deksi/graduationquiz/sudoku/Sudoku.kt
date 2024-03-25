@@ -11,6 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.Gravity
 import android.view.MenuItem
@@ -106,7 +109,7 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
         val sslSocketFactory = sslContext.socketFactory
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.1.9:8080/api/users/")
+            .baseUrl("https://192.168.134.66:8080/api/users/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -189,7 +192,11 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
             getString(R.string.remaining_lives_left)
         }
 
-        binding.textViewSudokuLives.text = "$remainingLivesLeft: $remainingLives"
+        val remainingLivesLeftSpannable = SpannableString(remainingLivesLeft).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Sudoku, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        binding.textViewSudokuLives.text = "$remainingLivesLeftSpannable: $remainingLives"
         
         if (remainingLives == 0) {
             stopTimer()
@@ -239,9 +246,16 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
                     getString(R.string.timer_seconds)
                 }
 
+                val messageTimeSpannable = SpannableString(messageTime).apply {
+                    setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Sudoku, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+                val messageSecondsSpannable = SpannableString(messageSeconds).apply {
+                    setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Sudoku, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+
                 val totalTime = elapsedTime / 1000
                 val secondsRemaining = millisUntilFinished / 1000
-                val message = "$secondsRemaining     $messageTime: $totalTime $messageSeconds"
+                val message = "$secondsRemaining     $messageTimeSpannable: $totalTime $messageSecondsSpannable"
                 progressDialog?.setMessage(message)
 
             }
@@ -283,8 +297,12 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
             getString(R.string.sudoku_message_out_of_lives)
         }
 
+        val messageSpannable = SpannableString(message).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Sudoku, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle(message)
+        progressDialog!!.setTitle(messageSpannable)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = countDownTime.toInt()
         progressDialog!!.show()
@@ -302,8 +320,13 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
             getString(R.string.sudoku_message_congrats)
         }
 
+
+        val messageSpannable = SpannableString(message).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Sudoku, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle(message)
+        progressDialog!!.setTitle(messageSpannable)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = countDownTime.toInt()
         progressDialog!!.show()
@@ -353,14 +376,25 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
             getString(R.string.sudoku_confirmation_message)
         }
 
+        val yesSpannable = SpannableString(yes).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Sudoku, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        val noSpannable = SpannableString(no).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Sudoku, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        val messageSpannable = SpannableString(message).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Sudoku, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+
         val builder = AlertDialog.Builder(this)
-        builder.setMessage(message)
-        builder.setPositiveButton(yes) { _, _ ->
+        builder.setMessage(messageSpannable)
+        builder.setPositiveButton(yesSpannable) { _, _ ->
             onBackPressed()
             MediaPlayerManager.release()
             finish()
         }
-        builder.setNegativeButton(no) { dialog, _ ->
+        builder.setNegativeButton(noSpannable) { dialog, _ ->
             dialog.dismiss()
         }
 
@@ -401,13 +435,23 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
             getString(R.string.no)
         }
 
+        val yesSpannable = SpannableString(yes).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Sudoku, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        val noSpannable = SpannableString(no).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Sudoku, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        val messageSpannable = SpannableString(message).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Sudoku, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
         AlertDialog.Builder(this)
-            .setMessage(message)
-            .setPositiveButton(yes) { _, _ ->
+            .setMessage(messageSpannable)
+            .setPositiveButton(yesSpannable) { _, _ ->
                 super.onBackPressed()
                 finish()
             }
-            .setNegativeButton(no) { _, _ ->
+            .setNegativeButton(noSpannable) { _, _ ->
                 // Do nothing
             }
             .show()

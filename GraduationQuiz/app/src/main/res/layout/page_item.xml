@@ -12,7 +12,7 @@
         android:textSize="20sp"
         android:gravity="center"
         android:fontFamily="sans-serif-medium"
-        android:textColor="@color/black"/>
+        android:textColor="@color/textColor"/>
 
     <TextView
         android:id="@+id/text_view_description_tutorial"
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:textSize="18sp"
-        android:textColor="@color/black"
+        android:textColor="@color/textColor"
         android:fontFamily="sans-serif-light" />
 
 </LinearLayout>

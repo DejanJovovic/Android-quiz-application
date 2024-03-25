@@ -2,18 +2,24 @@
     <!-- Base application theme. -->
     <style name="Theme.GraduationQuiz" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/edit_text_asosijacije</item>
-        <item name="colorPrimaryVariant">@color/blue</item>
+        <item name="colorPrimary">@color/blueButton</item>
+        <item name="colorPrimaryVariant">@color/blueButton</item> <!-- Set your desired action bar color here -->
         <item name="colorOnPrimary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+
         <!-- Customize your theme here. -->
     </style>
     <!-- Base application theme. -->
     <style name="Base.Theme.GraduationQuiz" parent="Theme.Material3.DayNight.NoActionBar">
         windowActionBar = true
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    </style>
+
+    <style name="roundedImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">25dp</item>
+        <item name="color">@color/textColor</item>
+
     </style>
 
     <style name="NoUnderlineEditTextStyle" parent="Widget.AppCompat.EditText">

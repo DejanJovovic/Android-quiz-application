@@ -5,6 +5,10 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.deksi.graduationquiz.R
 import com.deksi.graduationquiz.authentication.LogInActivity
@@ -38,12 +42,22 @@ class LogoutConfirmationDialogFragment: DialogFragment() {
                 getString(R.string.logout_confirmation)
             }
 
+            val yesSpannable = SpannableString(yes).apply {
+                setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            val noSpannable = SpannableString(no).apply {
+                setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            val messageSpannable = SpannableString(message).apply {
+                setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+
             val builder = AlertDialog.Builder(it)
-            builder.setMessage(message)
-                .setPositiveButton(yes) { _, _ ->
+            builder.setMessage(messageSpannable)
+                .setPositiveButton(yesSpannable) { _, _ ->
                     (activity as? HomeActivity)?.logout()
                 }
-                .setNegativeButton(no) { dialog, _ ->
+                .setNegativeButton(noSpannable) { dialog, _ ->
                     dialog.dismiss()
                 }
             builder.create()

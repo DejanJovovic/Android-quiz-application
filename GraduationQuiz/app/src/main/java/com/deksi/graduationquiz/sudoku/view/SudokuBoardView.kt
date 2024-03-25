@@ -41,7 +41,7 @@ class SudokuBoardView(context: Context, atrributeSet: AttributeSet) : View(conte
 
     private val selectedCellPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
-        color = Color.parseColor("#77BDDC")
+        color = Color.parseColor("#c3cccf")
     }
 
     private val conflictingCellPaint = Paint().apply {
@@ -53,6 +53,7 @@ class SudokuBoardView(context: Context, atrributeSet: AttributeSet) : View(conte
         style = Paint.Style.FILL_AND_STROKE
         color = Color.BLACK
         textSize = 62F
+        isFakeBoldText = true
     }
 
 

@@ -7,12 +7,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.Gravity
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.deksi.graduationquiz.R
 import com.deksi.graduationquiz.mediaPlayer.MediaPlayerManager
 import com.deksi.graduationquiz.databinding.ActivitySpojniceBinding
@@ -45,11 +49,11 @@ class Spojnice : AppCompatActivity() {
     private var currentRound = 2
     private val connectedPairs: MutableSet<Pair<String, String>> = mutableSetOf()
     private val correctConnections: List<Pair<String, String>> = listOf(
-        "button_left1" to "button_right5",
-        "button_left2" to "button_right4",
-        "button_left3" to "button_right2",
-        "button_left4" to "button_right3",
-        "button_left5" to "button_right1",
+        "button_left1" to "button_right2",
+        "button_left2" to "button_right3",
+        "button_left3" to "button_right4",
+        "button_left4" to "button_right1",
+        "button_left5" to "button_right5",
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -188,7 +192,7 @@ class Spojnice : AppCompatActivity() {
 
     private fun changeButtonColorToRed(buttonId: String?) {
         val button = findButtonByIdentifier(buttonId)
-        button?.setBackgroundResource(R.drawable.round_red_reveal)
+        button?.setBackgroundResource(R.drawable.round_red)
     }
 
     private fun changeButtonColorToGreen(buttonId: String?) {
@@ -225,10 +229,14 @@ class Spojnice : AppCompatActivity() {
                     getString(R.string.timer_score)
                 }
 
+                val messageScoreSpannable = SpannableString(messageScore).apply {
+                    setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Spojnice, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+
                 val secondsRemaining = millisUntilFinished / 1000
                 // mozda treba izmeniti
                 val score = roundScore + totalScore
-                val message = "$secondsRemaining     $messageScore: $score"
+                val message = "$secondsRemaining     $messageScoreSpannable: $score"
                 progressDialog?.setMessage(message)
 
             }
@@ -262,7 +270,15 @@ class Spojnice : AppCompatActivity() {
             getString(R.string.spojnice_message_on_create)
         }
 
-        progressDialog = ProgressDialog.show(this, title, message, true, false)
+        val titleSpannable = SpannableString(title).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Spojnice, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        val messageSpannable = SpannableString(message).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Spojnice, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        progressDialog = ProgressDialog.show(this, titleSpannable, messageSpannable, true, false)
     }
 
     private fun dismissProgressDialog() {
@@ -279,8 +295,12 @@ class Spojnice : AppCompatActivity() {
             getString(R.string.spojnice_message_time_up)
         }
 
+        val messageSpannable = SpannableString(message).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Spojnice, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle(message)
+        progressDialog!!.setTitle(messageSpannable)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()
@@ -299,8 +319,12 @@ class Spojnice : AppCompatActivity() {
             getString(R.string.spojnice_message_on_finish)
         }
 
+        val messageSpannable = SpannableString(message).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Spojnice, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle(message)
+        progressDialog!!.setTitle(messageSpannable)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()
@@ -318,8 +342,12 @@ class Spojnice : AppCompatActivity() {
             getString(R.string.spojnice_message_on_round_starting)
         }
 
+        val messageSpannable = SpannableString(message).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Spojnice, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle(message)
+        progressDialog!!.setTitle(messageSpannable)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()
@@ -431,7 +459,7 @@ class Spojnice : AppCompatActivity() {
 
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.1.9:8080/api/spojnice/")
+            .baseUrl("https://192.168.31.66:8080/api/spojnice/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -512,14 +540,24 @@ class Spojnice : AppCompatActivity() {
             getString(R.string.no)
         }
 
+        val yesSpannable = SpannableString(yes).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Spojnice, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        val noSpannable = SpannableString(no).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Spojnice, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        val messageSpannable = SpannableString(message).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Spojnice, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
         AlertDialog.Builder(this)
-            .setMessage(message)
-            .setPositiveButton(yes) { _, _ ->
+            .setMessage(messageSpannable)
+            .setPositiveButton(yesSpannable) { _, _ ->
                 super.onBackPressed()
                 MediaPlayerManager.release()
                 clearTotalScoreFromPreferences()
             }
-            .setNegativeButton(no) { _, _ ->
+            .setNegativeButton(noSpannable) { _, _ ->
                 // Do nothing
             }
             .show()

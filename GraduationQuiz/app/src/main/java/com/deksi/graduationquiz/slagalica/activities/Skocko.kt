@@ -9,6 +9,9 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -49,7 +52,7 @@ class Skocko : AppCompatActivity() {
         )
     }
 
-    private val resultViews = Array(7) { arrayOfNulls<ImageView>(4) }
+    private val resultViews = Array(6) { arrayOfNulls<ImageView>(4) }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -199,16 +202,15 @@ class Skocko : AppCompatActivity() {
             arrayOf(binding.result41, binding.results42, binding.results43, binding.result44)
         resultViews[5] =
             arrayOf(binding.result51, binding.results52, binding.results53, binding.result54)
-        resultViews[6] =
-            arrayOf(binding.result71, binding.results72, binding.results73, binding.result74)
     }
 
     // Helper function to set background color based on correct and misplaced signs
-    private fun setSignColor(imageView: ImageView, count: Int) {
+    private fun setSignColor(imageView: ImageView, count: Int, colorString: String) {
+        val color = Color.parseColor(colorString)
         when {
-            count > 0 -> imageView.setBackgroundColor(Color.RED)
-            count == 0 -> imageView.setBackgroundColor(Color.YELLOW)
-            else -> imageView.setBackgroundColor(Color.TRANSPARENT)
+            count > 0 -> imageView.setBackgroundColor(color)
+            count == 0 -> imageView.setBackgroundColor(color)
+            else -> imageView.setBackgroundColor(color)
         }
     }
 
@@ -242,13 +244,13 @@ class Skocko : AppCompatActivity() {
 
             if (i < correct) {
                 // Set color for correct slots
-                setSignColor(imageView, 1)  // 1 represents correct
+                setSignColor(imageView, 1, "#FF0000")  // 1 represents correct
             } else if (i < correct + misplaced) {
                 // Set color for misplaced slots
-                setSignColor(imageView, 0)  // 0 represents misplaced
+                setSignColor(imageView, 0, "#FAEC75")  // 0 represents misplaced
             } else {
                 // Set color for the remaining slots (if any)
-                setSignColor(imageView, -1)
+                setSignColor(imageView, -1, "#00FFFFFF")
             }
         }
 
@@ -312,7 +314,7 @@ class Skocko : AppCompatActivity() {
 
     private fun initTimer() {
         val timerText = binding.textViewTimeLeft
-        timeLeft = object : CountDownTimer(30000, 1000) {
+        timeLeft = object : CountDownTimer(70000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 timerText.text = (millisUntilFinished / 1000).toString()
             }
@@ -338,8 +340,12 @@ class Skocko : AppCompatActivity() {
                     getString(R.string.timer_score)
                 }
 
+                val messageScoreSpannable = SpannableString(messageScore).apply {
+                    setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Skocko, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+
                 val secondsRemaining = millisUntilFinished / 1000
-                val message = "$secondsRemaining     $messageScore: $totalScore"
+                val message = "$secondsRemaining     $messageScoreSpannable: $totalScore"
                 progressDialog?.setMessage(message)
 
             }
@@ -366,8 +372,12 @@ class Skocko : AppCompatActivity() {
             getString(R.string.skocko_message_time_up)
         }
 
+        val messageSpannable = SpannableString(message).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Skocko, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle(message)
+        progressDialog!!.setTitle(messageSpannable)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()
@@ -386,8 +396,12 @@ class Skocko : AppCompatActivity() {
             getString(R.string.skocko_message_on_finish)
         }
 
+        val messageSpannable = SpannableString(message).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Skocko, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle(message)
+        progressDialog!!.setTitle(messageSpannable)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()
@@ -405,8 +419,12 @@ class Skocko : AppCompatActivity() {
             getString(R.string.skocko_message_on_round_starting)
         }
 
+        val messageSpannable = SpannableString(message).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Skocko, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setTitle(message)
+        progressDialog!!.setTitle(messageSpannable)
         progressDialog!!.setCancelable(false)
         progressDialog!!.max = totalTime.toInt()
         progressDialog!!.show()
@@ -507,14 +525,24 @@ class Skocko : AppCompatActivity() {
             getString(R.string.no)
         }
 
+        val yesSpannable = SpannableString(yes).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Skocko, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        val noSpannable = SpannableString(no).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Skocko, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        val messageSpannable = SpannableString(message).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Skocko, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
         AlertDialog.Builder(this)
-            .setMessage(message)
-            .setPositiveButton(yes) { _, _ ->
+            .setMessage(messageSpannable)
+            .setPositiveButton(yesSpannable) { _, _ ->
                 super.onBackPressed()
                 MediaPlayerManager.release()
                 clearTotalScoreFromPreferences()
             }
-            .setNegativeButton(no) { _, _ ->
+            .setNegativeButton(noSpannable) { _, _ ->
                 // Do nothing
             }
             .show()

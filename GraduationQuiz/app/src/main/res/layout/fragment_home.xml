@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
+    android:background="@drawable/background4"
     android:padding="16dp"
     tools:context=".home.fragments.HomeFragment">
 
@@ -19,22 +19,21 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_slagalica"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="150dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/edit_text_asosijacije"
+            android:background="@drawable/round_blue"
             android:text="@string/slagalica"
-            android:textColor="@color/white" />
+            android:textColor="@color/textColor" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_sudoku"
-            android:layout_marginTop="24dp"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="150dp"
+            android:layout_marginTop="32dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/edit_text_asosijacije"
+            android:background="@drawable/round_pink"
+            android:textColor="@color/textColor"
             android:text="@string/sudoku" />
 
         <Spinner

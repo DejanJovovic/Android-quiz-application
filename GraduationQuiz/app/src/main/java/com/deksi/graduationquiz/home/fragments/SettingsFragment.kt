@@ -9,6 +9,9 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
 import android.os.Handler
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -18,6 +21,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.deksi.graduationquiz.MainActivity
 import com.deksi.graduationquiz.R
@@ -25,6 +29,7 @@ import com.deksi.graduationquiz.authentication.LogInActivity
 import com.deksi.graduationquiz.authentication.viewModel.UsernameViewModel
 import com.deksi.graduationquiz.databinding.FragmentSettingsBinding
 import com.deksi.graduationquiz.home.HomeActivity
+import com.deksi.graduationquiz.home.adapter.SpinnerArrayAdapter
 import java.util.Locale
 
 
@@ -102,7 +107,7 @@ class SettingsFragment : Fragment() {
             resources.getStringArray(R.array.languages)
         }
 
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, languages)
+        val adapter = SpinnerArrayAdapter(requireContext(), languages)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
 
@@ -182,18 +187,31 @@ class SettingsFragment : Fragment() {
             getString(R.string.settings_confirmation_message)
         }
 
+        val yesSpannable = SpannableString(yes).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        val noSpannable = SpannableString(no).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        val messageSpannable = SpannableString(message).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        val titleSpannable = SpannableString(title).apply {
+            setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
 
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle(title)
-        builder.setMessage(message)
-        builder.setPositiveButton(yes) { _, _ ->
+        builder.setTitle(titleSpannable)
+        builder.setMessage(messageSpannable)
+        builder.setPositiveButton(yesSpannable) { _, _ ->
             selectedLanguage?.let { setLanguage(it) }
             val intent = Intent(requireContext(), MainActivity::class.java)
             startActivity(intent)
 
             requireActivity().finish()
         }
-        builder.setNegativeButton(no) { dialog, _ ->
+        builder.setNegativeButton(noSpannable) { dialog, _ ->
             dialog.dismiss()
         }
 

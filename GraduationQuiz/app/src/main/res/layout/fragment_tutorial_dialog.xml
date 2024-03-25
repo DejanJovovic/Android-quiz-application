@@ -8,7 +8,9 @@
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:background="@color/background_color"
+        android:layout_height="300dp"
+        />
 
     <ImageView
         android:id="@+id/image_view_close_button"
@@ -20,5 +22,5 @@
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
         android:src="@drawable/x_icon"
-        app:tint="@color/black" />
+        app:tint="@color/textColor" />
 </RelativeLayout>
