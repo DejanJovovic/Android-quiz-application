@@ -48,9 +48,9 @@ class SudokuGame(
 
     private fun getBlankCellCount(): Int {
         return when (difficulty.toLowerCase(Locale.getDefault())) {
-            "easy" -> 30
-            "medium" -> 40
-            "hard" -> 50
+            "easy", "lako", "fácil" -> 30
+            "medium", "srednje", "medio" -> 40
+            "hard", "teško", "difícil" -> 50
             else -> 30 // Default to easy if the difficulty is not recognized
         }
     }
