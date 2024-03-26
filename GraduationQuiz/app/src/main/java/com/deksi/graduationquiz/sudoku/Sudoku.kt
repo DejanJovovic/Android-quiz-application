@@ -209,7 +209,6 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
         stopTimer()
         showProgressDialogOnGameFinished()
         moveToNextActivityWithDelay()
-
     }
 
 
@@ -228,6 +227,25 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
     }
 
     private fun startTimerProgressDialog() {
+        countDownTimer = object : CountDownTimer(countDownTime, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                progressDialog?.progress = (countDownTime - millisUntilFinished).toInt()
+
+                val secondsRemaining = millisUntilFinished / 1000
+                val message = "$secondsRemaining"
+                progressDialog?.setMessage(message)
+
+            }
+
+            override fun onFinish() {
+                dismissProgressDialog()
+            }
+        }
+
+        (countDownTimer as CountDownTimer).start()
+    }
+
+    private fun startTimerProgressDialogOnGameFinish() {
         countDownTimer = object : CountDownTimer(countDownTime, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 progressDialog?.progress = (countDownTime - millisUntilFinished).toInt()
@@ -331,7 +349,7 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
         progressDialog!!.max = countDownTime.toInt()
         progressDialog!!.show()
 
-        startTimerProgressDialog()
+        startTimerProgressDialogOnGameFinish()
     }
 
     private fun getSavedLanguageBySharedPreferences() {

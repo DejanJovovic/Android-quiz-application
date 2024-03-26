@@ -38,6 +38,7 @@ class Skocko : AppCompatActivity() {
     private var progressDialog: ProgressDialog? = null
     private var countDownTimer: CountDownTimer? = null
     private val totalTime: Long = 5000
+    private var roundScore: Int = 0
     private var totalScore = 0
     private var currentRound = 2
 
@@ -274,11 +275,11 @@ class Skocko : AppCompatActivity() {
 
     private fun showScore() {
         if (row / 2 == 0) {
-            totalScore = 20
+            roundScore += 20
         } else if (row / 2 == 1) {
-            totalScore = 15
+            roundScore += 15
         } else if (row / 2 == 2) {
-            totalScore = 10
+            roundScore += 10
         }
     }
 
@@ -344,8 +345,9 @@ class Skocko : AppCompatActivity() {
                     setSpan(ForegroundColorSpan(ContextCompat.getColor(this@Skocko, R.color.textColor)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
 
+                val score = roundScore + totalScore
                 val secondsRemaining = millisUntilFinished / 1000
-                val message = "$secondsRemaining     $messageScoreSpannable: $totalScore"
+                val message = "$secondsRemaining     $messageScoreSpannable: $score"
                 progressDialog?.setMessage(message)
 
             }
