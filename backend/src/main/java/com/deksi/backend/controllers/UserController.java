@@ -10,6 +10,11 @@ import com.deksi.backend.repository.SudokuUserTimeRepository;
 import com.deksi.backend.repository.UserScoreRepository;
 import com.deksi.backend.security.TokenUtils;
 import com.deksi.backend.service.UserService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +28,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -50,6 +56,10 @@ public class UserController {
 
     @Autowired
     private SudokuUserTimeRepository sudokuUserTimeRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
+
 
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody UserDTO userDTO) {
@@ -82,15 +92,50 @@ public class UserController {
     }
 
     @PutMapping("/update-password")
-    public ResponseEntity<String> updatePassword(@RequestParam String email, @RequestParam String newPassword) {
+    public ResponseEntity<String> updatePassword(HttpServletRequest request, @RequestParam String newPassword) {
         try {
+            // Extract token from request headers
+            String token = extractTokenFromHeader(request);
+            logger.info("Token extracted: {}", token);
+
+            // Validate and decode token
+            String username = validateAndExtractUsernameFromToken(token);
+            logger.info("Username extracted from token: {}", username);
+
+            // Update password for the authenticated user
             String encodedNewPassword = passwordEncoder.encode(newPassword);
-            userService.updatePassword(email, encodedNewPassword);
-            System.out.println("Password changed to: " + newPassword);
+            logger.info("Updating password for user: {}", username);
+            userService.updatePassword(username, encodedNewPassword);
+            logger.info("Password updated successfully for user: {}", username);
+
             return ResponseEntity.ok("Password updated successfully");
         } catch (Exception e) {
+            logger.error("Error updating password", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating password");
         }
+    }
+
+    private String extractTokenFromHeader(HttpServletRequest request) {
+        // Extract token from Authorization header
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
+    }
+
+    private String validateAndExtractUsernameFromToken(String token) {
+        // Extract username from token payload without validating the token
+        if (token != null) {
+            try {
+                // Parse JWT token and extract username using the secret key
+                Claims claims = Jwts.parser().setSigningKey(tokenUtils.getTokenSecret()).parseClaimsJws(token).getBody();
+                return claims.getSubject();
+            } catch (JwtException e) {
+                throw new RuntimeException("Failed to parse JWT token", e);
+            }
+        }
+        throw new RuntimeException("Token is missing");
     }
 
     @PostMapping("/update-score")
