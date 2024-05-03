@@ -19,4 +19,7 @@ public class SudokuUserTime {
     @Column(name = "total_time")
     private int totalTime;
 
+    @Column(name = "difficulty")
+    private String difficulty;
+
 }

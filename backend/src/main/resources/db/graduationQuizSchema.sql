@@ -10,6 +10,23 @@ password VARCHAR(255) NOT NULL,
 PRIMARY KEY(id)
 );
 
+CREATE TABLE user_score (
+    id BIGINT AUTO_INCREMENT NOT NULL,
+    username VARCHAR(255) NOT NULL,
+    total_points INT NOT NULL DEFAULT 0,
+    PRIMARY KEY (id),
+    FOREIGN KEY (username) REFERENCES user(username)
+);
+
+CREATE TABLE sudoku_user_time (
+    id BIGINT AUTO_INCREMENT NOT NULL,
+    username VARCHAR(255) NOT NULL,
+    total_time INT NOT NULL DEFAULT 0,
+    difficulty VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (username) REFERENCES user(username)
+);
+
 Create table asocijacije (
 id bigint AUTO_INCREMENT NOT NULL,
 a1 VARCHAR(255) NOT NULL,

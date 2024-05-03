@@ -12,5 +12,6 @@ import java.io.Serializable;
 public class SudokuUserTimeDTO implements Serializable {
     private final String username;
     private final int totalTime;
+    private final String difficulty;
 
 }

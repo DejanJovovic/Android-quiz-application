@@ -76,12 +76,15 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
         startBackgroundMusic()
 
 
+
     }
 
     private fun saveUsernameAndTotalTime() {
 
         val usernameSharedPreferences = getSharedPreferences("UsernamePref", Context.MODE_PRIVATE)
         val username = usernameSharedPreferences.getString("username", "")
+        val sudokuDifficulty = intent.getStringExtra("difficulty") ?:"lako"
+
 
         val trustAllCerts = arrayOf<TrustManager>(
             object : X509TrustManager {
@@ -109,7 +112,7 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
         val sslSocketFactory = sslContext.socketFactory
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://192.168.134.66:8080/api/users/")
+            .baseUrl("https://192.168.1.10:8080/api/users/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -121,7 +124,7 @@ class Sudoku : AppCompatActivity(), SudokuBoardView.OnTouchListener, SudokuGame.
 
         val sudokuUserTimeService = retrofit.create(SudokuUserTimeService::class.java)
         val time = elapsedTime / 1000
-        val userTime = SudokuUserTime(username!!, time)
+        val userTime = SudokuUserTime(username!!, time, sudokuDifficulty)
 
         val call = sudokuUserTimeService.updateTime(userTime)
 

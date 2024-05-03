@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GraduationQuiz</string>
+    <string name="app_name">QQ quiz</string>
     <string name="a1">A1</string>
     <string name="a2">A2</string>
     <string name="a3">A3</string>
@@ -202,9 +202,10 @@
     <string name="remaining_lives_left">Remaining lives left</string>
     <string name="ranking_list">Slagalica ranking list</string>
     <string name="points">Points</string>
-    <string name="position">Position</string>
+    <string name="position">Pos.</string>
     <string name="sudoku_ranking_list">Sudoku ranking list</string>
     <string name="time">Time(s)</string>
+    <string name="difficulty">Difficulty</string>
 
 
 </resources>

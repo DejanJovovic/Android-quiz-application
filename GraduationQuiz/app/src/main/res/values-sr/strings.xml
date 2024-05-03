@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Maturski kviz</string>
+    <string name="app_name">QQ quiz</string>
     <string name="a1">A1</string>
     <string name="a2">A2</string>
     <string name="a3">A3</string>
@@ -203,9 +203,11 @@
     <string name="remaining_lives_left">Preostali životi</string>
     <string name="ranking_list">Slagalica rang lista</string>
     <string name="points">Poeni</string>
-    <string name="position">Pozicija</string>
+    <string name="position">Poz.</string>
     <string name="sudoku_ranking_list">Sudoku rang lista</string>
     <string name="time">Vreme(s)</string>
+    <string name="difficulty">Težina</string>
+
 
 
 

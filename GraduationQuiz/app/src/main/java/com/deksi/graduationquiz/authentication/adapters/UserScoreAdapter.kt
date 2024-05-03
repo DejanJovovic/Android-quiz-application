@@ -9,21 +9,43 @@ import com.deksi.graduationquiz.R
 import com.deksi.graduationquiz.authentication.model.UserScore
 
 class UserScoreAdapter(private val userScores: List<UserScore>) :
-    RecyclerView.Adapter<UserScoreAdapter.UserScoreViewHolder>() {
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserScoreViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_user_score, parent, false)
-        return UserScoreViewHolder(view)
+    companion object {
+        private const val VIEW_TYPE_HEADER = 0
+        private const val VIEW_TYPE_ITEM = 1
     }
 
-    override fun onBindViewHolder(holder: UserScoreViewHolder, position: Int) {
-        val userScore = userScores[position]
-        holder.bind(userScore, position + 1)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return if (viewType == VIEW_TYPE_HEADER) {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_user_score_header, parent, false)
+            HeaderViewHolder(view)
+        } else {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_user_score, parent, false)
+            UserScoreViewHolder(view)
+        }
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is UserScoreAdapter.UserScoreViewHolder) {
+            val userScore = userScores[position - 1]
+            holder.bind(userScore, position)
+        }
     }
 
     override fun getItemCount(): Int {
-        return userScores.size
+        // Add 1 for the header row
+        return userScores.size + 1
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (position == 0) {
+            VIEW_TYPE_HEADER
+        } else {
+            VIEW_TYPE_ITEM
+        }
     }
 
     inner class UserScoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -36,5 +58,9 @@ class UserScoreAdapter(private val userScores: List<UserScore>) :
             usernameTextView.text = userScore.username
             pointsTextView.text = userScore.totalPoints.toString()
         }
+    }
+
+    inner class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        // No need to bind anything for the header
     }
 }

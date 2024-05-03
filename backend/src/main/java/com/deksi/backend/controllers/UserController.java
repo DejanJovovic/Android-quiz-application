@@ -122,6 +122,7 @@ public class UserController {
 
         if (existingUserTime != null) {
             existingUserTime.setTotalTime(sudokuUserTime.getTotalTime());
+            existingUserTime.setDifficulty(sudokuUserTime.getDifficulty());
             sudokuUserTimeRepository.save(existingUserTime);
             return ResponseEntity.ok("Time updated successfully");
         } else {
