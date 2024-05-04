@@ -2,7 +2,10 @@ package com.deksi.backend.service.impl;
 
 import com.deksi.backend.model.User;
 import com.deksi.backend.repository.UserRepository;
+import com.deksi.backend.repository.VerificationCodeRepository;
 import com.deksi.backend.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,8 +20,10 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
-    public UserServiceImpl(UserRepository userRepository){
+    private final VerificationCodeService verificationCodeService;
+    public UserServiceImpl(UserRepository userRepository, VerificationCodeService verificationCodeService){
         this.userRepository = userRepository;
+        this.verificationCodeService = verificationCodeService;
     }
 
     @Override
@@ -36,18 +41,30 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepository.findByEmail(email);
     }
 
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
     @Override
-    public void updatePassword(String email, String newPassword) {
-        User user = userRepository.findByEmail(email);
-        if (user != null) {
-            user.setPassword(newPassword);
-            userRepository.save(user);
+    public void updatePassword(String email, String newPassword, String verificationCode) {
+        logger.info("Received request to update password for email: {}", email);
+        logger.info("Received verification code: {}", verificationCode);
+
+        if (verificationCodeService.verifyVerificationCode(email, verificationCode)) {
+            User user = userRepository.findByEmail(email);
+            if (user != null) {
+                user.setPassword(newPassword);
+                userRepository.save(user);
+                logger.info("Password updated successfully for email: {}", email);
+            } else {
+                // Handle case when user with given email is not found
+                logger.error("User not found for email: {}", email);
+                throw new UserNotFoundException("User not found for email: " + email);
+            }
         } else {
-            // Handle case when user with given email is not found
-            throw new UserNotFoundException("User not found for email: " + email);
+            // Handle case when verification code is invalid
+            logger.error("Invalid verification code for email: {}", email);
+            throw new RuntimeException("Invalid verification code");
         }
     }
-
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

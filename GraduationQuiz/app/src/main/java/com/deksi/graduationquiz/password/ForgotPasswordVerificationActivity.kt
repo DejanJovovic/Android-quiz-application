@@ -73,7 +73,12 @@ class ForgotPasswordVerificationActivity : AppCompatActivity() {
             // Codes match, proceed with password reset
             stopTimer()
             val intent = Intent(this@ForgotPasswordVerificationActivity, ResetPasswordActivity::class.java)
-            intent.putExtra("email", email) // Pass the email to ResetPasswordActivity
+            intent.putExtras(
+                Bundle().apply {
+                    putString("email", email)
+                    putString("verificationCode", enteredCode)
+                }
+            )
             startActivity(intent)
             finish()
         } else {

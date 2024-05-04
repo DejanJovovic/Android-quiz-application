@@ -4,6 +4,7 @@ import com.deksi.backend.model.User;
 import com.deksi.backend.repository.UserRepository;
 import com.deksi.backend.service.UserService;
 import com.deksi.backend.service.impl.EmailSenderService;
+import com.deksi.backend.service.impl.VerificationCodeService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class ForgotPasswordController {
     @Autowired
     private EmailSenderService emailService;
 
+    @Autowired
+    private VerificationCodeService verificationCodeService;
+
     @PostMapping("/change-password")
     public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> request) {
         String email = request.get("email");
@@ -37,15 +41,18 @@ public class ForgotPasswordController {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email not registered");
         }
-        // Email exists, generate verification code and send email
         String verificationCode = generateVerificationCode();
         try {
             emailService.sendVerificationCode(email, verificationCode);
         } catch (MessagingException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send verification code");
         }
+        try {
+            verificationCodeService.saveVerificationCode(email, verificationCode);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to save verification code to the database");
+        }
 
-        // Convert response map to JSON string
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             String responseJson = objectMapper.writeValueAsString(Collections.singletonMap("verificationCode", verificationCode));

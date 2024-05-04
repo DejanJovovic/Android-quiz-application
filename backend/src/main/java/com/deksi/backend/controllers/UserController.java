@@ -6,10 +6,15 @@ import com.deksi.backend.dto.UserScoresDTO;
 import com.deksi.backend.model.SudokuUserTime;
 import com.deksi.backend.model.User;
 import com.deksi.backend.model.UserScore;
+import com.deksi.backend.model.VerificationCode;
 import com.deksi.backend.repository.SudokuUserTimeRepository;
 import com.deksi.backend.repository.UserScoreRepository;
 import com.deksi.backend.security.TokenUtils;
 import com.deksi.backend.service.UserService;
+import com.deksi.backend.service.impl.UserNotFoundException;
+import com.deksi.backend.service.impl.VerificationCodeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +56,12 @@ public class UserController {
     @Autowired
     private SudokuUserTimeRepository sudokuUserTimeRepository;
 
+    @Autowired
+    private VerificationCodeService verificationCodeService;
+
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
+
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody UserDTO userDTO) {
         try {
@@ -82,13 +93,40 @@ public class UserController {
     }
 
     @PutMapping("/update-password")
-    public ResponseEntity<String> updatePassword(@RequestParam String email, @RequestParam String newPassword) {
+    public ResponseEntity<String> updatePassword(@RequestParam String email,
+                                                 @RequestParam String newPassword,
+                                                 @RequestParam String verificationCode) {
         try {
+            // Log request details
+            logger.info("Received request to update password for email: {}", email);
+
+            // Retrieve verification code from the database
+            VerificationCode savedVerificationCode = verificationCodeService.getVerificationCodeByEmail(email);
+
+            // Check if the saved verification code matches the one provided
+            if (savedVerificationCode == null || !savedVerificationCode.getCode().equals(verificationCode)) {
+                // If verification code is invalid, return a bad request response
+                logger.error("Invalid verification code for email: {}", email);
+                return ResponseEntity.badRequest().body("Invalid verification code");
+            }
+
             String encodedNewPassword = passwordEncoder.encode(newPassword);
-            userService.updatePassword(email, encodedNewPassword);
-            System.out.println("Password changed to: " + newPassword);
+            userService.updatePassword(email, encodedNewPassword, verificationCode);
+
+            // If no exceptions are thrown, the password was successfully updated
+            logger.info("Password changed to: {}", newPassword);
             return ResponseEntity.ok("Password updated successfully");
+        } catch (UserNotFoundException e) {
+            // Handle case when user with given email is not found
+            logger.error("User not found for email: {}", email, e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (RuntimeException e) {
+            // Handle case when verification code is invalid
+            logger.error("Invalid verification code for email: {}", email, e);
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
+            // Handle other exceptions
+            logger.error("Error updating password for email: {}", email, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating password");
         }
     }

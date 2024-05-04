@@ -18,6 +18,9 @@ CREATE TABLE user_score (
     FOREIGN KEY (username) REFERENCES user(username)
 );
 
+CREATE INDEX verification_code_email ON verification_code(email);
+CREATE INDEX verification_code_ibfk_1 on user(email);
+
 CREATE TABLE sudoku_user_time (
     id BIGINT AUTO_INCREMENT NOT NULL,
     username VARCHAR(255) NOT NULL,
@@ -25,6 +28,12 @@ CREATE TABLE sudoku_user_time (
     difficulty VARCHAR(255) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (username) REFERENCES user(username)
+);
+
+CREATE TABLE verification_code (
+    email VARCHAR(255) PRIMARY KEY,
+    code VARCHAR(255) NOT NULL,
+    FOREIGN KEY (email) REFERENCES user(email)
 );
 
 Create table asocijacije (

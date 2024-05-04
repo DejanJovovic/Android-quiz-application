@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -33,6 +34,7 @@ class ResetPasswordActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityResetPasswordBinding
     private lateinit var email: String
+    private lateinit var verificationCode: String
     private var progressDialog: ProgressDialog? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +48,7 @@ class ResetPasswordActivity : AppCompatActivity() {
 
     private fun getEmail() {
         email = intent.getStringExtra("email") ?: ""
+        verificationCode = intent.getStringExtra("verificationCode") ?: ""
     }
 
     private fun setUpActionBar() {
@@ -114,11 +117,15 @@ class ResetPasswordActivity : AppCompatActivity() {
             }
 
             onResetPasswordProgressDialog()
-            updatePasswordInDatabase(email, newPassword)
+            updatePasswordInDatabase(email, newPassword, verificationCode)
         }
+
+
     }
 
-    private fun updatePasswordInDatabase(email: String, newPassword: String) {
+    private fun updatePasswordInDatabase(email: String, newPassword: String, verificationCode: String) {
+
+        Log.d("VerificationCode", "Verification code: $verificationCode")
 
         val trustAllCerts = arrayOf<TrustManager>(
             object : X509TrustManager {
@@ -156,7 +163,7 @@ class ResetPasswordActivity : AppCompatActivity() {
             .build()
 
         val updatePasswordService = retrofit.create(UpdatePasswordApiService::class.java)
-        val call = updatePasswordService.updatePassword(email, newPassword)
+        val call = updatePasswordService.updatePassword(email, newPassword, verificationCode)
 
         call.enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
