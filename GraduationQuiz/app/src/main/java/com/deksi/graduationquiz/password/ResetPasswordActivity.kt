@@ -120,68 +120,61 @@ class ResetPasswordActivity : AppCompatActivity() {
 
     private fun updatePasswordInDatabase(email: String, newPassword: String) {
 
-        val sharedPrefs = getSharedPreferences("AuthToken", Context.MODE_PRIVATE)
-        val token = sharedPrefs.getString("transferObject", null)
-
-        if (token != null) {
-            val trustAllCerts = arrayOf<TrustManager>(
-                object : X509TrustManager {
-                    override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {
-                    }
-
-                    override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {
-                    }
-
-                    override fun getAcceptedIssuers(): Array<X509Certificate> {
-                        return arrayOf()
-                    }
+        val trustAllCerts = arrayOf<TrustManager>(
+            object : X509TrustManager {
+                override fun checkClientTrusted(
+                    chain: Array<out X509Certificate>?,
+                    authType: String?
+                ) {
                 }
+
+                override fun checkServerTrusted(
+                    chain: Array<out X509Certificate>?,
+                    authType: String?
+                ) {
+                }
+
+                override fun getAcceptedIssuers(): Array<X509Certificate> {
+                    return arrayOf()
+                }
+            }
+        )
+
+        val sslContext = SSLContext.getInstance("SSL")
+        sslContext.init(null, trustAllCerts, SecureRandom())
+
+        val sslSocketFactory = sslContext.socketFactory
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://192.168.1.10:8080/api/users/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(
+                OkHttpClient.Builder()
+                    .sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
+                    .hostnameVerifier { _, _ -> true }
+                    .build()
             )
+            .build()
 
-            val sslContext = SSLContext.getInstance("SSL")
-            sslContext.init(null, trustAllCerts, SecureRandom())
+        val updatePasswordService = retrofit.create(UpdatePasswordApiService::class.java)
+        val call = updatePasswordService.updatePassword(email, newPassword)
 
-            val sslSocketFactory = sslContext.socketFactory
-            val retrofit = Retrofit.Builder()
-                .baseUrl("https://192.168.1.10:8080/api/users/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(
-                    OkHttpClient.Builder()
-                        .sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
-                        .hostnameVerifier { _, _ -> true }
-                        .addInterceptor { chain ->
-                            val request = chain.request().newBuilder()
-                                .addHeader("Authorization", "Bearer $token")
-                                .build()
-                            chain.proceed(request)
-                        }
-                        .build()
-                )
-                .build()
-
-            val updatePasswordService = retrofit.create(UpdatePasswordApiService::class.java)
-            val call = updatePasswordService.updatePassword(email, newPassword)
-
-            call.enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        Toast.makeText(this@ResetPasswordActivity, "Password updated successfully", Toast.LENGTH_SHORT).show()
-                        finish()
-                        dismissProgressDialog()
-                    } else {
-                        Toast.makeText(this@ResetPasswordActivity, "Failed to update password", Toast.LENGTH_SHORT).show()
-                        dismissProgressDialog()
-                    }
+        call.enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    Toast.makeText(this@ResetPasswordActivity, "Password updated successfully", Toast.LENGTH_SHORT).show()
+                    finish()
+                    dismissProgressDialog()
+                } else {
+                    Toast.makeText(this@ResetPasswordActivity, "Failed to update password", Toast.LENGTH_SHORT).show()
+                    dismissProgressDialog()
                 }
+            }
 
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    Toast.makeText(this@ResetPasswordActivity, "Network error", Toast.LENGTH_SHORT).show()
-                }
-            })
-        } else {
-            Toast.makeText(this@ResetPasswordActivity, "User not logged in", Toast.LENGTH_SHORT).show()
-            dismissProgressDialog()
-        }
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Toast.makeText(this@ResetPasswordActivity, "Network error", Toast.LENGTH_SHORT).show()
+            }
+        })
+
     }
 
     private fun onResetPasswordProgressDialog() {

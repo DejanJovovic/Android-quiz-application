@@ -32,10 +32,6 @@ public class TokenUtils {
         return username;
     }
 
-    public String getTokenSecret() {
-        return this.secret;
-    }
-
     private Claims getClaimsFromToken(String token) {
         Claims claims;
         try {

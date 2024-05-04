@@ -37,14 +37,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void updatePassword(String username, String newPassword) {
-        User user = userRepository.findUserByUsername(username);
+    public void updatePassword(String email, String newPassword) {
+        User user = userRepository.findByEmail(email);
         if (user != null) {
             user.setPassword(newPassword);
             userRepository.save(user);
         } else {
             // Handle case when user with given email is not found
-            throw new UserNotFoundException("User not found for username: " + username);
+            throw new UserNotFoundException("User not found for email: " + email);
         }
     }
 

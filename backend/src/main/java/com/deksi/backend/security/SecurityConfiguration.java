@@ -62,7 +62,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/users/signup").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users/change-password").permitAll()
-                .antMatchers(HttpMethod.PUT, "/api/users/update-password").authenticated()
+                .antMatchers(HttpMethod.PUT, "/api/users/update-password").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users/update-score").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/users/user-scores").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users/sudoku-update-time").permitAll()
